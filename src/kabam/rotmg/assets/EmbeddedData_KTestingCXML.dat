@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<Objects>
+   <Object type="0x222" id="Hearticles">
+      <Class>GameObject</Class>
+      <Effect color="0xCC0000" color2="0xFF0066" minRadius="0.2" maxRadius="3" rise="1.8" life="4.5" amount="60">Heart</Effect>
+      <Texture>
+         <File>invisible</File>
+         <Index>0</Index>
+      </Texture>
+      <Size>0</Size>
+   </Object>
+   <Object type="0x0752" id="Stat Baloon">
+      <Class>Character</Class>
+      <Enemy/>
+      <AnimatedTexture>
+         <File>chars16x16dEncounters2</File>
+         <Index>54</Index>
+      </AnimatedTexture>
+      <Size>120</Size>
+      <XpMult>0.0</XpMult>
+      <MaxHitPoints>4000</MaxHitPoints>
+      <Z>0.3</Z>
+      <ShadowSize>50</ShadowSize>
+   </Object>
+   <Object type="0x0d0e" id="Head">
+      <DisplayId>Willem's Head</DisplayId>
+      <Class>Character</Class>
+      <Enemy/>
+      <AnimatedTexture>
+         <File>chars16x16dEncounters2</File>
+         <Index>58</Index>
+      </AnimatedTexture>
+      <AltTexture id="1">
+         <AnimatedTexture>
+            <File>chars16x16dEncounters2</File>
+            <Index>59</Index>
+         </AnimatedTexture>
+      </AltTexture>
+      <AltTexture id="2">
+         <AnimatedTexture>
+            <File>chars16x16dEncounters2</File>
+            <Index>60</Index>
+         </AnimatedTexture>
+      </AltTexture>
+      <MaxHitPoints>400000</MaxHitPoints>
+      <Defense>50</Defense>
+      <XpMult>100</XpMult>
+      <Size>120</Size>
+      <ShadowSize>60</ShadowSize>
+      <Z>0.3</Z>
+      <Flying/>
+      <Projectile id="0">
+         <ObjectId>Invisible</ObjectId>
+         <Speed>0</Speed>
+         <Damage>0</Damage>
+      </Projectile>
+      <Projectile id="1">
+         <ObjectId>Rainbow Blaster</ObjectId>
+         <Speed>25</Speed>
+         <Damage>200</Damage>
+         <Size>80</Size>
+         <LifetimeMS>10000</LifetimeMS>
+         <MultiHit/>
+         <ArmorPiercing/>
+      </Projectile>
+      <Projectile id="2">
+         <ObjectId>Green Spinner</ObjectId>
+         <Speed>60</Speed>
+         <Damage>0</Damage>
+         <Size>80</Size>
+         <LifetimeMS>5000</LifetimeMS>
+         <MultiHit/>
+         <ConditionEffect duration="60">Slowed</ConditionEffect>
+      </Projectile>
+   </Object>
+   <Object type="0x97a" id="Admin Blade">
+      <Class>Projectile</Class>
+      <Texture>
+         <File>d3LofiObjEmbed</File>
+         <Index>0xf0</Index>
+      </Texture>
+      <AngleCorrection>1</AngleCorrection>
+   </Object>
+   <Object type="0x97b" id="Admin Magic">
+      <Class>Projectile</Class>
+      <Texture>
+         <File>d3LofiObjEmbed</File>
+         <Index>0xf1</Index>
+      </Texture>
+      <AngleCorrection>1</AngleCorrection>
+   </Object>
+   <Object type="0x97c" id="Admin Arrow">
+      <Class>Projectile</Class>
+      <Texture>
+         <File>d3LofiObjEmbed</File>
+         <Index>0xf2</Index>
+      </Texture>
+      <AngleCorrection>1</AngleCorrection>
+   </Object>
+   <Object type="0x97d" id="Admin Stab">
+      <Class>Projectile</Class>
+      <Texture>
+         <File>d3LofiObjEmbed</File>
+         <Index>0xf3</Index>
+      </Texture>
+   </Object>
+   <Object type="0x97e" id="Admin Missile">
+      <Class>Projectile</Class>
+      <Texture>
+         <File>d3LofiObjEmbed</File>
+         <Index>0xf4</Index>
+      </Texture>
+      <AngleCorrection>1</AngleCorrection>
+   </Object>
+   <Object type="0x97f" id="Admin Slash">
+      <Class>Projectile</Class>
+      <Texture>
+         <File>d3LofiObjEmbed</File>
+         <Index>0xf5</Index>
+      </Texture>
+      <AngleCorrection>1</AngleCorrection>
+   </Object>
+   <Object type="0x9d4" id="Admin Sword">
+      <Class>Equipment</Class>
+      <Item/>
+      <Texture>
+         <File>d3LofiObjEmbed</File>
+         <Index>0xe0</Index>
+      </Texture>
+      <SlotType>1</SlotType>
+      <Description>The sacred blade of the Cult of Admin. Not to be trifled with.</Description>
+      <RateOfFire>1.5</RateOfFire>
+      <OldSound>weapon/fire_dagger</OldSound>
+      <OldSound>bladeSwing</OldSound>
+      <Soulbound/>
+      <Projectile>
+         <ObjectId>Admin Blade</ObjectId>
+         <Speed>120</Speed>
+         <MinDamage>2000</MinDamage>
+         <MaxDamage>2000</MaxDamage>
+         <LifetimeMS>600</LifetimeMS>
+      </Projectile>
+      <BagType>6</BagType>
+      <feedPower>100000</feedPower>
+      <Soulbound/>
+   </Object>
+   <Object type="0x9d6" id="Admin Wand">
+      <Class>Equipment</Class>
+      <Item/>
+      <Texture>
+         <File>d3LofiObjEmbed</File>
+         <Index>0xe1</Index>
+      </Texture>
+      <SlotType>8</SlotType>
+      <Description>Only advanced acolytes of the Cult of Admin may wield this weapon.</Description>
+      <RateOfFire>1.5</RateOfFire>
+      <Sound>weapon/wand_of_death</Sound>
+      <OldSound>magicShoot</OldSound>
+      <Projectile>
+         <ObjectId>Admin Magic</ObjectId>
+         <Speed>150</Speed>
+         <LifetimeMS>600</LifetimeMS>
+         <MinDamage>3000</MinDamage>
+         <MaxDamage>3000</MaxDamage>
+         <MultiHit/>
+      </Projectile>
+      <BagType>6</BagType>
+      <feedPower>100000</feedPower>
+      <Soulbound/>
+   </Object>
+   <Object type="0x9d7" id="Admin Bow">
+      <Class>Equipment</Class>
+      <Item/>
+      <Texture>
+         <File>d3LofiObjEmbed</File>
+         <Index>0xe2</Index>
+      </Texture>
+      <SlotType>3</SlotType>
+      <Description>The Cult of Admin is always on the hunt for the unworthy.</Description>
+      <RateOfFire>1.2</RateOfFire>
+      <Sound>weapon/golden_bow</Sound>
+      <OldSound>arrowShoot</OldSound>
+      <Projectile>
+         <ObjectId>Admin Arrow</ObjectId>
+         <Speed>160</Speed>
+         <MinDamage>1000</MinDamage>
+         <MaxDamage>1000</MaxDamage>
+         <LifetimeMS>600</LifetimeMS>
+         <MultiHit/>
+      </Projectile>
+      <NumProjectiles>5</NumProjectiles>
+      <ArcGap>8</ArcGap>
+      <BagType>6</BagType>
+      <feedPower>100000</feedPower>
+      <Soulbound/>
+   </Object>
+   <Object type="0x9d8" id="Admin Dagger">
+      <Class>Equipment</Class>
+      <Item/>
+      <Texture>
+         <File>d3LofiObjEmbed</File>
+         <Index>0xe3</Index>
+      </Texture>
+      <SlotType>2</SlotType>
+      <Description>A cursed dagger imbued with the infinite power of the Cult of Admin.</Description>
+      <RateOfFire>1.2</RateOfFire>
+      <Sound>weapon/fire_dagger</Sound>
+      <OldSound>daggerSwing</OldSound>
+      <Projectile>
+         <ObjectId>Admin Stab</ObjectId>
+         <Speed>150</Speed>
+         <MinDamage>2000</MinDamage>
+         <MaxDamage>2000</MaxDamage>
+         <LifetimeMS>600</LifetimeMS>
+      </Projectile>
+      <NumProjectiles>3</NumProjectiles>
+      <ArcGap>90</ArcGap>
+      <BagType>6</BagType>
+      <feedPower>100000</feedPower>
+      <Soulbound/>
+   </Object>
+   <Object type="0x9d3" id="Admin Staff">
+      <Class>Equipment</Class>
+      <Item/>
+      <Texture>
+         <File>d3LofiObjEmbed</File>
+         <Index>0xe4</Index>
+      </Texture>
+      <SlotType>17</SlotType>
+      <Description>A godly weapon belonging to the Cult of Admin.</Description>
+      <RateOfFire>1.2</RateOfFire>
+      <Sound>monster/djinn_hit</Sound>
+      <OldSound>magicShoot</OldSound>
+      <Projectile>
+         <ObjectId>Admin Missile</ObjectId>
+         <Speed>180</Speed>
+         <MinDamage>2000</MinDamage>
+         <MaxDamage>2000</MaxDamage>
+         <LifetimeMS>600</LifetimeMS>
+         <Amplitude>0.5</Amplitude>
+         <Frequency>2</Frequency>
+         <PassesCover/>
+      </Projectile>
+      <NumProjectiles>2</NumProjectiles>
+      <ArcGap>0</ArcGap>
+      <BagType>6</BagType>
+      <feedPower>100000</feedPower>
+      <Soulbound/>
+   </Object>
+   <Object type="0x9c2" id="Admin Katana">
+      <Class>Equipment</Class>
+      <Item/>
+      <Texture>
+         <File>d3LofiObjEmbed</File>
+         <Index>0xe5</Index>
+      </Texture>
+      <SlotType>24</SlotType>
+      <Description>The finest katana, forged by the Cult of Admin. Its blade cuts anything.</Description>
+      <RateOfFire>1.2</RateOfFire>
+      <Sound>weapon/long_sword</Sound>
+      <OldSound>bladeSwing</OldSound>
+      <Projectile>
+         <ObjectId>Admin Slash</ObjectId>
+         <Speed>150</Speed>
+         <LifetimeMS>500</LifetimeMS>
+         <MinDamage>2000</MinDamage>
+         <MaxDamage>2000</MaxDamage>
+         <MultiHit/>
+      </Projectile>
+      <NumProjectiles>2</NumProjectiles>
+      <ArcGap>2</ArcGap>
+      <BagType>6</BagType>
+      <feedPower>100000</feedPower>
+      <Soulbound/>
+   </Object>
+</Objects>
