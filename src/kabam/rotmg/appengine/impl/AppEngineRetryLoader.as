@@ -2,10 +2,10 @@
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.events.SecurityErrorEvent;
-import flash.net.URLLoader;
 import flash.net.URLLoaderDataFormat;
 import flash.net.URLRequest;
 import flash.net.URLRequestMethod;
+import flash.net.URLStream;
 import flash.net.URLVariables;
 import flash.utils.ByteArray;
 import flash.utils.getTimer;
@@ -23,10 +23,11 @@ public class AppEngineRetryLoader implements RetryLoader {
     private var url:String;
     private var params:Object;
     private var urlRequest:URLRequest;
-    private var urlLoader:URLLoader;
+    private var urlStream:URLStream;
     private var retriesLeft:int;
     private var inProgress:Boolean;
-
+	private var data:ByteArray;
+    
     public function AppEngineRetryLoader() {
         this.inProgress = false;
         this.maxRetries = 0;
@@ -60,8 +61,9 @@ public class AppEngineRetryLoader implements RetryLoader {
     private function internalSendRequest():void {
         this.cancelPendingRequest();
         this.urlRequest = this.makeUrlRequest();
-        this.urlLoader = this.makeUrlLoader();
-        this.urlLoader.load(this.urlRequest);
+        this.urlStream = this.makeUrlStream();
+        this.data = new ByteArray();
+        this.urlStream.load(this.urlRequest);
     }
 
     private function makeUrlRequest():URLRequest {
@@ -81,9 +83,8 @@ public class AppEngineRetryLoader implements RetryLoader {
         return (_local1);
     }
 
-    private function makeUrlLoader():URLLoader {
-        var _local1:URLLoader = new URLLoader();
-        _local1.dataFormat = this.dataFormat;
+    private function makeUrlStream():URLStream {
+        var _local1:URLStream = new URLStream();
         _local1.addEventListener(IOErrorEvent.IO_ERROR, this.onIOError);
         _local1.addEventListener(SecurityErrorEvent.SECURITY_ERROR, this.onSecurityError);
         _local1.addEventListener(Event.COMPLETE, this.onComplete);
@@ -92,10 +93,16 @@ public class AppEngineRetryLoader implements RetryLoader {
 
     private function onIOError(_arg1:IOErrorEvent):void {
         this.inProgress = false;
-        var _local2:String = this.urlLoader.data;
+        
+        var _local2:String;
         if (_local2.length == 0) {
             _local2 = "Unable to contact server";
         }
+        else {
+            this.urlStream.readBytes(this.data, 0, this.urlStream.bytesAvailable);
+            _local2 = this.data.readUTFBytes(this.data.length);
+        }
+        
         this.retryOrReportError(_local2);
     }
 
@@ -115,11 +122,19 @@ public class AppEngineRetryLoader implements RetryLoader {
 
     private function onComplete(_arg1:Event):void {
         this.inProgress = false;
+        
+        this.urlStream.readBytes(this.data, 0, this.urlStream.bytesAvailable);
+        try {
+            this.data.inflate();
+        }
+        catch (e:Error) {}
+        this.data.position = 0;
+        
         if (this.dataFormat == URLLoaderDataFormat.TEXT) {
-            this.handleTextResponse(this.urlLoader.data);
+            this.handleTextResponse(this.data.readUTFBytes(this.data.length));
         }
         else {
-            this.cleanUpAndComplete(true, ByteArray(this.urlLoader.data));
+            this.cleanUpAndComplete(true, this.data);
         }
     }
 
@@ -151,18 +166,18 @@ public class AppEngineRetryLoader implements RetryLoader {
     }
 
     private function cancelPendingRequest():void {
-        if (this.urlLoader) {
-            this.urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, this.onIOError);
-            this.urlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, this.onSecurityError);
-            this.urlLoader.removeEventListener(Event.COMPLETE, this.onComplete);
+        if (this.urlStream) {
+            this.urlStream.removeEventListener(IOErrorEvent.IO_ERROR, this.onIOError);
+            this.urlStream.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, this.onSecurityError);
+            this.urlStream.removeEventListener(Event.COMPLETE, this.onComplete);
             this.closeLoader();
-            this.urlLoader = null;
+            this.urlStream = null;
         }
     }
 
     private function closeLoader():void {
         try {
-            this.urlLoader.close();
+            this.urlStream.close();
         }
         catch (e:Error) {
         }
