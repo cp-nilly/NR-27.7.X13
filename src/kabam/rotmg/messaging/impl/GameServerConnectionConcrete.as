@@ -1010,12 +1010,6 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local2.key_.length = 0;
         ((!((key_ == null))) && (_local2.key_.writeBytes(key_)));
         _local2.mapJSON_ = (((mapJSON_ == null)) ? "" : mapJSON_);
-        _local2.entrytag_ = _local1.getEntryTag();
-        _local2.gameNet = _local1.gameNetwork();
-        _local2.gameNetUserId = _local1.gameNetworkUserId();
-        _local2.playPlatform = _local1.playPlatform();
-        _local2.platformToken = _local1.getPlatformToken();
-        _local2.userToken = _local1.getToken();
         serverConnection.sendMessage(_local2);
     }
 
