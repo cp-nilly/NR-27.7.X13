@@ -13,6 +13,7 @@ public class Parameters {
 
     public static const BUILD_VERSION:String = "27.7";
     public static const MINOR_VERSION:String = "X13";
+    public static const FULL_BUILD:String = BUILD_VERSION + "." + MINOR_VERSION;
     public static const ENABLE_ENCRYPTION:Boolean = true;
     public static const PORT:int = 2050;
     public static const ALLOW_SCREENSHOT_MODE:Boolean = false;

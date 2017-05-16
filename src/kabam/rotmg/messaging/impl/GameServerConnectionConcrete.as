@@ -2060,11 +2060,31 @@ public class GameServerConnectionConcrete extends GameServerConnection {
             case Failure.EMAIL_VERIFICATION_NEEDED:
                 this.handleEmailVerificationNeeded(_arg1);
                 return;
+            case Failure.JSON_DIALOG:
+                this.handleJsonDialog(_arg1);
+                return;
             default:
                 this.handleDefaultFailure(_arg1);
         }
     }
 
+    private function handleJsonDialog(_arg1:Failure):void {
+        var errorMsg = JSON.parse(_arg1.errorDescription_);
+        var dlg:Dialog;
+        
+        // check for correct client version
+        if (Parameters.FULL_BUILD != errorMsg.build) {
+            handleIncorrectVersionFailureBasic(errorMsg.build);
+            return;
+        }
+        
+        // correct version, display custom json dialog
+        dlg = new Dialog(errorMsg.title, errorMsg.description, "Ok", null, null);
+        dlg.addEventListener(Dialog.LEFT_BUTTON, this.onDoClientUpdate);
+        gs_.stage.addChild(dlg);
+        this.retryConnection_ = false;
+    }
+    
     private function handleEmailVerificationNeeded(_arg1:Failure):void {
         this.retryConnection_ = false;
         gs_.closed.dispatch();
@@ -2090,10 +2110,14 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     }
 
     private function handleIncorrectVersionFailure(_arg1:Failure):void {
+        handleIncorrectVersionFailureBasic(_arg1.errorDescription_);
+    }
+    
+    private function handleIncorrectVersionFailureBasic(description:String):void {
         var _local2:Dialog = new Dialog(TextKey.CLIENT_UPDATE_TITLE, "", TextKey.CLIENT_UPDATE_LEFT_BUTTON, null, "/clientUpdate");
         _local2.setTextParams(TextKey.CLIENT_UPDATE_DESCRIPTION, {
             "client": Parameters.BUILD_VERSION,
-            "server": _arg1.errorDescription_
+            "server": description
         });
         _local2.addEventListener(Dialog.LEFT_BUTTON, this.onDoClientUpdate);
         gs_.stage.addChild(_local2);
