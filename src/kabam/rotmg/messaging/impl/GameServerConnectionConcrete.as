@@ -1001,7 +1001,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         this.addTextLine.dispatch(ChatMessage.make(Parameters.CLIENT_CHAT_NAME, TextKey.CHAT_CONNECTED));
         this.encryptConnection();
         var _local2:Hello = (this.messages.require(HELLO) as Hello);
-        _local2.buildVersion_ = ((Parameters.BUILD_VERSION + ".") + "0");
+        _local2.buildVersion_ = Parameters.FULL_BUILD;
         _local2.gameId_ = gameId_;
         _local2.guid_ = this.rsaEncrypt(_local1.getUserId());
         _local2.password_ = this.rsaEncrypt(_local1.getPassword());
