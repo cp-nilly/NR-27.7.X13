@@ -558,8 +558,8 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         var _local1:ICipher;
         var _local2:ICipher;
         if (Parameters.ENABLE_ENCRYPTION) {
-            _local1 = Crypto.getCipher("rc4", MoreStringUtil.hexStringToByteArray("311f80691451c71d09a13a2a6e"));
-            _local2 = Crypto.getCipher("rc4", MoreStringUtil.hexStringToByteArray("72c5583cafb6818995cdd74b80"));
+            _local1 = Crypto.getCipher("rc4", MoreStringUtil.hexStringToByteArray(Parameters.RANDOM1));
+            _local2 = Crypto.getCipher("rc4", MoreStringUtil.hexStringToByteArray(Parameters.RANDOM2));
             serverConnection.setOutgoingCipher(_local1);
             serverConnection.setIncomingCipher(_local2);
         }

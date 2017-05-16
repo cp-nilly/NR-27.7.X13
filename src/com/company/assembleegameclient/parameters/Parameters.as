@@ -36,9 +36,13 @@ public class Parameters {
     public static const TERMS_OF_USE_URL:String = "http://legal.decagames.io/tos";
     public static const PRIVACY_POLICY_URL:String = "http://legal.decagames.io/privacy";
     public static const USER_GENERATED_CONTENT_TERMS:String = "/UGDTermsofUse.html";
-    public static const RANDOM1:String = "311f80691451c71b09a13a2a6e";
-    public static const RANDOM2:String = "72c5583cafb6818995cbd74b80";
-    public static const RSA_PUBLIC_KEY:String = ((((("-----BEGIN PUBLIC KEY-----\n" + "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDCKFctVrhfF3m2Kes0FBL/JFeO") + "cmNg9eJz8k/hQy1kadD+XFUpluRqa//Uxp2s9W2qE0EoUCu59ugcf/p7lGuL99Uo") + "SGmQEynkBvZct+/M40L0E0rZ4BVgzLOJmIbXMp0J4PnPcb6VLZvxazGcmSfjauC7") + "F3yWYqUbZd/HCBtawwIDAQAB\n") + "-----END PUBLIC KEY-----");
+    public static const RANDOM1:String = "B1A5ED";
+    public static const RANDOM2:String = "612a806cac78114ba5013cb531";
+    public static const RSA_PUBLIC_KEY:String = 
+        "-----BEGIN PUBLIC KEY-----\n" + 
+        "MFswDQYJKoZIhvcNAQEBBQADSgAwRwJAeyjMOLhcK4o2AnFRhn8vPteUy5Fux/cX" +
+        "N/J+wT/zYIEUINo02frn+Kyxx0RIXJ3CvaHkwmueVL8ytfqo8Ol/OwIDAQAB\n" +
+        "-----END PUBLIC KEY-----";
     public static const skinTypes16:Vector.<int> = new <int>[1027, 0x0404, 1029, 1030, 10973];
     public static const itemTypes16:Vector.<int> = new <int>[5473, 5474, 5475, 5476, 10939];
 
