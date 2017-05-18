@@ -95,7 +95,7 @@ public class AppEngineRetryLoader implements RetryLoader {
         this.inProgress = false;
         
         var _local2:String;
-        if (_local2.length == 0) {
+        if (this.urlStream.bytesAvailable == 0) {
             _local2 = "Unable to contact server";
         }
         else {
