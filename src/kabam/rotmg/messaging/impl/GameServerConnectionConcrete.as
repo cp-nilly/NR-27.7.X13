@@ -821,6 +821,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
             _local4 = _arg2.y_;
         }
         var _local5:Move = (this.messages.require(MOVE) as Move);
+        _local5.objectId_ = _arg2.objectId_;
         _local5.tickId_ = _arg1;
         _local5.time_ = gs_.lastUpdate_;
         _local5.newPosition_.x_ = _local3;

@@ -6,6 +6,7 @@ import kabam.rotmg.messaging.impl.data.WorldPosData;
 
 public class Move extends OutgoingMessage {
 
+    public var objectId_:int;
     public var tickId_:int;
     public var time_:int;
     public var newPosition_:WorldPosData;
@@ -18,6 +19,7 @@ public class Move extends OutgoingMessage {
     }
 
     override public function writeToOutput(_arg1:IDataOutput):void {
+        _arg1.writeInt(this.objectId_);
         _arg1.writeInt(this.tickId_);
         _arg1.writeInt(this.time_);
         this.newPosition_.writeToOutput(_arg1);
@@ -30,7 +32,7 @@ public class Move extends OutgoingMessage {
     }
 
     override public function toString():String {
-        return (formatToString("MOVE", "tickId_", "time_", "newPosition_", "records_"));
+        return (formatToString("MOVE", "objectId_", "tickId_", "time_", "newPosition_", "records_"));
     }
 
 
