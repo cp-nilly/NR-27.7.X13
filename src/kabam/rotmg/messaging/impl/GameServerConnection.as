@@ -105,12 +105,12 @@ public class GameServerConnection {
     public static const QUEST_REDEEM_RESPONSE:int = 88;
     
     // not implemented in server
-    public static const PET_CHANGE_FORM_MSG:int = 21;
-    public static const KEY_INFO_REQUEST:int = 94;
-    public static const KEY_INFO_RESPONSE:int = 24;
-    public static const CLAIM_LOGIN_REWARD_MSG:int = 85;
-    public static const LOGIN_REWARD_MSG:int = 77;
-    public static const QUEST_ROOM_MSG:int = 10;
+    public static const PET_CHANGE_FORM_MSG:int = 150;
+    public static const KEY_INFO_REQUEST:int = 151;
+    public static const KEY_INFO_RESPONSE:int = 152;
+    public static const CLAIM_LOGIN_REWARD_MSG:int = 153;
+    public static const LOGIN_REWARD_MSG:int = 154;
+    public static const QUEST_ROOM_MSG:int = 155;
 
     // server pkts not implemented in clinet
     public static const MARKET_COMMAND = 0;
