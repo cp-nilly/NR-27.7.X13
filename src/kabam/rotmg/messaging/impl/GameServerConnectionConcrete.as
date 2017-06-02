@@ -1649,6 +1649,12 @@ public class GameServerConnectionConcrete extends GameServerConnection {
                 case StatData.NEW_CON_STAT:
                     _arg1.condition_[ConditionEffect.CE_SECOND_BATCH] = _local8;
                     break;
+                case StatData.RANK:
+                    _local4.rank_ = _local8;
+                    break;
+                case StatData.ADMIN:
+                    _local4.admin_ = _local8 == 1 ? true : false;
+                    break;
             }
         }
     }

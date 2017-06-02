@@ -117,6 +117,8 @@ public class Player extends Character {
     public var maxHPMax_:int = 0;
     public var maxMPMax_:int = 0;
     public var hasBackpack_:Boolean = false;
+    public var rank_:int = 0;
+    public var admin_:Boolean = false;
     public var starred_:Boolean = false;
     public var ignored_:Boolean = false;
     public var distSqFromThisPlayer_:Number = 0;
