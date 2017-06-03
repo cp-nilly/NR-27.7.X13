@@ -59,6 +59,7 @@ import robotlegs.bender.framework.api.LogLevel;
 
 public class WebMain extends Sprite {
 
+    public static var ENV:String;
     public static var STAGE:Stage;
 
     protected var context:IContext;
@@ -78,6 +79,7 @@ public class WebMain extends Sprite {
     }
 
     private function setup():void {
+        this.setEnvironment();
         this.hackParameters();
         this.createContext();
         new AssetLoader().load();
@@ -86,6 +88,14 @@ public class WebMain extends Sprite {
         this.configureForAirIfDesktopPlayer();
         STAGE = stage;
         UIUtils.toggleQuality(Parameters.data_.uiQuality);
+    }
+    
+    private function setEnvironment():void {
+        ENV = stage.loaderInfo.parameters["env"];
+        if (ENV == null)
+            ENV = "localhost";
+        
+        //ENV = "nrtest";
     }
 
     private function hackParameters():void {
@@ -103,7 +113,6 @@ public class WebMain extends Sprite {
                 .configure(BuildConfig)
                 .configure(StartupConfig)
                 .configure(NetConfig)
-                .configure(AssetsConfig)
                 .configure(DialogsConfig)
                 .configure(EnvironmentConfig)
                 .configure(ApplicationConfig)
@@ -114,6 +123,7 @@ public class WebMain extends Sprite {
                 .configure(ErrorConfig)
                 .configure(CoreConfig)
                 .configure(ApplicationSpecificConfig)
+                .configure(AssetsConfig)
                 .configure(DeathConfig)
                 .configure(CharactersConfig)
                 .configure(ServersConfig)

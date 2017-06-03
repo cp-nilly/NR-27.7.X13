@@ -14,6 +14,7 @@ public class MapInfo extends IncomingMessage {
     public var showDisplays_:Boolean;
     public var clientXML_:Vector.<String>;
     public var extraXML_:Vector.<String>;
+    public var music:String;
 
     public function MapInfo(_arg1:uint, _arg2:Function) {
         this.clientXML_ = new Vector.<String>();
@@ -24,6 +25,7 @@ public class MapInfo extends IncomingMessage {
     override public function parseFromInput(_arg1:IDataInput):void {
         this.parseProperties(_arg1);
         this.parseXML(_arg1);
+        this.music = _arg1.readUTF();
     }
 
     private function parseProperties(_arg1:IDataInput):void {

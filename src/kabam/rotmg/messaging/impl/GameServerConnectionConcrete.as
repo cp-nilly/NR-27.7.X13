@@ -558,8 +558,8 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         var _local1:ICipher;
         var _local2:ICipher;
         if (Parameters.ENABLE_ENCRYPTION) {
-            _local1 = Crypto.getCipher("rc4", MoreStringUtil.hexStringToByteArray("311f80691451c71d09a13a2a6e"));
-            _local2 = Crypto.getCipher("rc4", MoreStringUtil.hexStringToByteArray("72c5583cafb6818995cdd74b80"));
+            _local1 = Crypto.getCipher("rc4", MoreStringUtil.hexStringToByteArray(Parameters.RANDOM1));
+            _local2 = Crypto.getCipher("rc4", MoreStringUtil.hexStringToByteArray(Parameters.RANDOM2));
             serverConnection.setOutgoingCipher(_local1);
             serverConnection.setIncomingCipher(_local2);
         }
@@ -821,6 +821,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
             _local4 = _arg2.y_;
         }
         var _local5:Move = (this.messages.require(MOVE) as Move);
+        _local5.objectId_ = _arg2.objectId_;
         _local5.tickId_ = _arg1;
         _local5.time_ = gs_.lastUpdate_;
         _local5.newPosition_.x_ = _local3;
@@ -1001,7 +1002,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         this.addTextLine.dispatch(ChatMessage.make(Parameters.CLIENT_CHAT_NAME, TextKey.CHAT_CONNECTED));
         this.encryptConnection();
         var _local2:Hello = (this.messages.require(HELLO) as Hello);
-        _local2.buildVersion_ = ((Parameters.BUILD_VERSION + ".") + "0");
+        _local2.buildVersion_ = Parameters.FULL_BUILD;
         _local2.gameId_ = gameId_;
         _local2.guid_ = this.rsaEncrypt(_local1.getUserId());
         _local2.password_ = this.rsaEncrypt(_local1.getPassword());
@@ -1010,12 +1011,6 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local2.key_.length = 0;
         ((!((key_ == null))) && (_local2.key_.writeBytes(key_)));
         _local2.mapJSON_ = (((mapJSON_ == null)) ? "" : mapJSON_);
-        _local2.entrytag_ = _local1.getEntryTag();
-        _local2.gameNet = _local1.gameNetwork();
-        _local2.gameNetUserId = _local1.gameNetworkUserId();
-        _local2.playPlatform = _local1.playPlatform();
-        _local2.platformToken = _local1.getPlatformToken();
-        _local2.userToken = _local1.getToken();
         serverConnection.sendMessage(_local2);
     }
 
@@ -1654,6 +1649,12 @@ public class GameServerConnectionConcrete extends GameServerConnection {
                 case StatData.NEW_CON_STAT:
                     _arg1.condition_[ConditionEffect.CE_SECOND_BATCH] = _local8;
                     break;
+                case StatData.RANK:
+                    _local4.rank_ = _local8;
+                    break;
+                case StatData.ADMIN:
+                    _local4.admin_ = _local8 == 1 ? true : false;
+                    break;
             }
         }
     }
@@ -2066,11 +2067,31 @@ public class GameServerConnectionConcrete extends GameServerConnection {
             case Failure.EMAIL_VERIFICATION_NEEDED:
                 this.handleEmailVerificationNeeded(_arg1);
                 return;
+            case Failure.JSON_DIALOG:
+                this.handleJsonDialog(_arg1);
+                return;
             default:
                 this.handleDefaultFailure(_arg1);
         }
     }
 
+    private function handleJsonDialog(_arg1:Failure):void {
+        var errorMsg = JSON.parse(_arg1.errorDescription_);
+        var dlg:Dialog;
+        
+        // check for correct client version
+        if (Parameters.FULL_BUILD != errorMsg.build) {
+            handleIncorrectVersionFailureBasic(errorMsg.build);
+            return;
+        }
+        
+        // correct version, display custom json dialog
+        dlg = new Dialog(errorMsg.title, errorMsg.description, "Ok", null, null);
+        dlg.addEventListener(Dialog.LEFT_BUTTON, this.onDoClientUpdate);
+        gs_.stage.addChild(dlg);
+        this.retryConnection_ = false;
+    }
+    
     private function handleEmailVerificationNeeded(_arg1:Failure):void {
         this.retryConnection_ = false;
         gs_.closed.dispatch();
@@ -2096,10 +2117,14 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     }
 
     private function handleIncorrectVersionFailure(_arg1:Failure):void {
+        handleIncorrectVersionFailureBasic(_arg1.errorDescription_);
+    }
+    
+    private function handleIncorrectVersionFailureBasic(description:String):void {
         var _local2:Dialog = new Dialog(TextKey.CLIENT_UPDATE_TITLE, "", TextKey.CLIENT_UPDATE_LEFT_BUTTON, null, "/clientUpdate");
         _local2.setTextParams(TextKey.CLIENT_UPDATE_DESCRIPTION, {
             "client": Parameters.BUILD_VERSION,
-            "server": _arg1.errorDescription_
+            "server": description
         });
         _local2.addEventListener(Dialog.LEFT_BUTTON, this.onDoClientUpdate);
         gs_.stage.addChild(_local2);

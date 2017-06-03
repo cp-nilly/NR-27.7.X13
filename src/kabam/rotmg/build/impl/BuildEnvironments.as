@@ -10,6 +10,8 @@ public final class BuildEnvironments {
     public static const TESTING2:String = "testing2";
     public static const PRODTEST:String = "prodtest";
     public static const PRODUCTION:String = "production";
+    public static const NILLYSREALM:String = "nr";
+    public static const NILLYSREALMTEST:String = "nrtest";
     private static const IP_MATCHER:RegExp = /[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/;
 
 
@@ -37,6 +39,10 @@ public final class BuildEnvironments {
                 return (BuildEnvironment.PRODTEST);
             case PRODUCTION:
                 return (BuildEnvironment.PRODUCTION);
+            case NILLYSREALM:
+                return BuildEnvironment.NILLYSREALM;
+            case NILLYSREALMTEST:
+                return BuildEnvironment.NILLYSREALMTEST;
         }
         return (null);
     }

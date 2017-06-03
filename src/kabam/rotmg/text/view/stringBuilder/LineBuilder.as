@@ -12,7 +12,13 @@ public class LineBuilder implements StringBuilder {
 
 
     public static function fromJSON(_arg1:String):LineBuilder {
-        var _local2:Object = JSON.parse(_arg1);
+        var _local2:Object;
+        try {
+            _local2 = JSON.parse(_arg1);
+        }
+        catch (e:Error) {
+            _local2 = { "key":_arg1, "tokens":null };
+        }
         return (new (LineBuilder)().setParams(_local2.key, _local2.tokens));
     }
 

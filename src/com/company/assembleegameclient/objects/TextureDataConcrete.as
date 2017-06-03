@@ -18,7 +18,9 @@ public class TextureDataConcrete extends TextureData {
     public static var remoteTexturesUsed:Boolean = false;
 
     private var isUsingLocalTextures:Boolean;
-
+    private var remoteTexture:Boolean;
+    private var texId:String;
+    
     public function TextureDataConcrete(_arg1:XML) {
         var _local2:XML;
         super();
@@ -107,13 +109,21 @@ public class TextureDataConcrete extends TextureData {
                 return;
             case "RemoteTexture":
                 texture_ = AssetLibrary.getImageFromSet("lofiObj3", 0xFF);
-                if (this.isUsingLocalTextures) {
+                
+                this.remoteTexture = true;
+                var id:Array = xml.Id.split(":");
+                this.texId = id[0];
+                if (id.length > 1)
+                    this.texId = id[1];
+                
+                /*if (this.isUsingLocalTextures) {
                     remoteTexture = new RemoteTexture(xml.Id, xml.Instance, this.onRemoteTexture);
                     remoteTexture.run();
                     if (!AssetLoader.currentXmlIsTesting) {
                         remoteTexturesUsed = true;
                     }
-                }
+                }*/
+                
                 remoteTextureDir_ = ((xml.hasOwnProperty("Right")) ? AnimatedChar.RIGHT : AnimatedChar.DOWN);
                 return;
             case "RandomTexture":
@@ -131,9 +141,15 @@ public class TextureDataConcrete extends TextureData {
         }
     }
 
-    private function onRemoteTexture(_arg1:BitmapData):void {
+    public function onRemoteTexture(_arg1:BitmapData, _arg2:BitmapData = null):void {
         if (_arg1.width > 16) {
-            AnimatedChars.add("remoteTexture", _arg1, null, (_arg1.width / 7), _arg1.height, _arg1.width, _arg1.height, remoteTextureDir_);
+            var height:int;
+            if (_arg1.height > 16)
+                height = _arg1.height / 3;
+            else
+                height = _arg1.height;
+            
+            AnimatedChars.add("remoteTexture", _arg1, _arg2, (_arg1.width / 7), height, _arg1.width, _arg1.height, remoteTextureDir_);
             animatedChar_ = AnimatedChars.getAnimatedChar("remoteTexture", 0);
             texture_ = animatedChar_.imageFromAngle(0, AnimatedChar.STAND, 0).image_;
         }
@@ -141,7 +157,15 @@ public class TextureDataConcrete extends TextureData {
             texture_ = _arg1;
         }
     }
-
-
+    
+    public function isRemoteTexture():Boolean {
+        return this.remoteTexture;
+    }
+    
+    public function id():String {
+        return this.texId;
+    }
+    
+    
 }
 }

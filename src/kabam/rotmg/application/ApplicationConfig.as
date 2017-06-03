@@ -6,6 +6,8 @@ import kabam.rotmg.application.api.ApplicationSetup;
 import kabam.rotmg.application.api.DebugSetup;
 import kabam.rotmg.application.impl.FixedIPSetup;
 import kabam.rotmg.application.impl.LocalhostSetup;
+import kabam.rotmg.application.impl.NillysRealmSetup;
+import kabam.rotmg.application.impl.NillysRealmTestSetup;
 import kabam.rotmg.application.impl.PrivateSetup;
 import kabam.rotmg.application.impl.ProductionSetup;
 import kabam.rotmg.application.impl.Testing2Setup;
@@ -53,6 +55,10 @@ public class ApplicationConfig implements IConfig {
                 return (new TestingSetup());
             case BuildEnvironment.TESTING2:
                 return (new Testing2Setup());
+            case BuildEnvironment.NILLYSREALM:
+                return new NillysRealmSetup();
+            case BuildEnvironment.NILLYSREALMTEST:
+                return new NillysRealmTestSetup();
             default:
                 return (new ProductionSetup());
         }

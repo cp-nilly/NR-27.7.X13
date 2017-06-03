@@ -14,9 +14,6 @@ public class StatData {
     public static const NEXT_LEVEL_EXP_STAT:int = 5;
     public static const EXP_STAT:int = 6;
     public static const LEVEL_STAT:int = 7;
-    public static const ATTACK_STAT:int = 20;
-    public static const DEFENSE_STAT:int = 21;
-    public static const SPEED_STAT:int = 22;
     public static const INVENTORY_0_STAT:int = 8;
     public static const INVENTORY_1_STAT:int = 9;
     public static const INVENTORY_2_STAT:int = 10;
@@ -29,6 +26,9 @@ public class StatData {
     public static const INVENTORY_9_STAT:int = 17;
     public static const INVENTORY_10_STAT:int = 18;
     public static const INVENTORY_11_STAT:int = 19;
+    public static const ATTACK_STAT:int = 20;
+    public static const DEFENSE_STAT:int = 21;
+    public static const SPEED_STAT:int = 22;
     public static const VITALITY_STAT:int = 26;
     public static const WISDOM_STAT:int = 27;
     public static const DEXTERITY_STAT:int = 28;
@@ -101,6 +101,16 @@ public class StatData {
     public static const PET_THIRDABILITY_TYPE_STAT:int = 95;
     public static const NEW_CON_STAT:int = 96;
     public static const FORTUNE_TOKEN_STAT:int = 97;
+    
+    // unimplemented
+    public static const DAMAGE_MIN:int = 98;
+    public static const DAMAGE_MAX:int = 99;
+    public static const DAMAGE_MIN_BONUS = 100;
+    public static const DAMAGE_MAX_BONUS = 101;
+    public static const LUCK_BONUS = 105;
+    public static const RANK = 103;
+    public static const ADMIN = 104;
+    public static const LUCK = 102;
 
     public var statType_:uint = 0;
     public var statValue_:int;

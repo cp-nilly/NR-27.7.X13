@@ -7,6 +7,7 @@ public class Failure extends IncomingMessage {
     public static const BAD_KEY:int = 5;
     public static const INVALID_TELEPORT_TARGET:int = 6;
     public static const EMAIL_VERIFICATION_NEEDED:int = 7;
+    public static const JSON_DIALOG = 8;
 
     public var errorId_:int;
     public var errorDescription_:String;
