@@ -18,21 +18,7 @@ public class ShowLoadingUICommand {
 
 
     public function execute():void {
-        if (this.domain.isLocalDomainValid()) {
-            this.showLoadingScreen();
-        }
-        else {
-            this.openBadDomainView();
-        }
-    }
-
-    private function showLoadingScreen():void {
         this.setScreen.dispatch(new AccountLoadingScreen());
-    }
-
-    private function openBadDomainView():void {
-        this.logger.debug("bad domain, deny");
-        this.setScreen.dispatch(new BadDomainView());
     }
 
 
