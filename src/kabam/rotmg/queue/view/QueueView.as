@@ -7,9 +7,16 @@ import flash.text.TextFormat;
 public class QueueView extends Sprite {
     
     private const textPrefix:String = "Queue Position: ";
+    private const infoText:String = 
+        "Server is full. You have been queued.\n" +
+        "Using your nexus hotkey will put you back in the queue.\n" +
+        "If you want to avoid it use /nexus instead.\n" +
+        "Please be patient and leave the client open.";
+    
     private static const msgFormat:TextFormat = defaultTextFormat();
     
-    protected var msg_:TextField;
+    protected var queuePosition_:TextField;
+    protected var queueMessage_:TextField;
     
     
     private static function defaultTextFormat():TextFormat {
@@ -27,13 +34,19 @@ public class QueueView extends Sprite {
         doubleClickEnabled = false;
         mouseChildren = false;
         
-        msg_ = new TextField();
-        msg_.defaultTextFormat = msgFormat;
-        msg_.autoSize = TextFieldAutoSize.LEFT;
+        queuePosition_ = new TextField();
+        queuePosition_.defaultTextFormat = msgFormat;
+        queuePosition_.autoSize = TextFieldAutoSize.LEFT;
+        
+        queueMessage_ = new TextField();
+        queueMessage_.defaultTextFormat = msgFormat;
+        queueMessage_.autoSize = TextFieldAutoSize.LEFT;
+        queueMessage_.y = 30;
+        queueMessage_.text = infoText;
     }
     
     public function update(pos:int, cnt:int):void {
-        msg_.text = getPositionText(pos, cnt);
+        queuePosition_.text = getPositionText(pos, cnt);
     }
     
     private function getPositionText(pos:int, cnt:int):String {
@@ -41,7 +54,8 @@ public class QueueView extends Sprite {
     }
     
     public function show():void {
-        addChild(msg_);
+        addChild(queuePosition_);
+        addChild(queueMessage_);
     }
     
     public function remove():void {
