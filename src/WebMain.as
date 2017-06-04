@@ -43,6 +43,7 @@ import kabam.rotmg.pets.PetsConfig;
 import kabam.rotmg.promotions.PromotionsConfig;
 import kabam.rotmg.protip.ProTipConfig;
 import kabam.rotmg.questrewards.QuestRewardsConfig;
+import kabam.rotmg.queue.QueueConfig;
 import kabam.rotmg.servers.ServersConfig;
 import kabam.rotmg.stage3D.Stage3DConfig;
 import kabam.rotmg.startup.StartupConfig;
@@ -148,6 +149,7 @@ public class WebMain extends Sprite {
                 .configure(MysteryBoxConfig)
                 .configure(FortuneConfig)
                 .configure(FriendConfig)
+                .configure(QueueConfig)
                 .configure(this);
         this.context.logLevel = LogLevel.DEBUG;
     }
