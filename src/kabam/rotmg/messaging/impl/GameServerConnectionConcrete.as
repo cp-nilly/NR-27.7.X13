@@ -462,10 +462,6 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     {
         this.injector.getInstance(ShowQueueSignal).dispatch();
         this.injector.getInstance(UpdateQueueSignal).dispatch(_arg1.position_, _arg1.count_);
-        this.addTextLine.dispatch(ChatMessage.make(Parameters.ERROR_CHAT_NAME, "Server is full. You have been queued."));
-        this.addTextLine.dispatch(ChatMessage.make(Parameters.ERROR_CHAT_NAME, "Using your nexus hotkey will put you back in the queue."));
-        this.addTextLine.dispatch(ChatMessage.make(Parameters.ERROR_CHAT_NAME, "If you want to avoid it use /nexus instead."));
-        this.addTextLine.dispatch(ChatMessage.make(Parameters.ERROR_CHAT_NAME, "Please be patient and leave the client open."));
     }
     
     private function HandleQueuePing(_arg1:QueuePing):void
