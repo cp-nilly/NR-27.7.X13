@@ -89,7 +89,10 @@ public class SocketServer {
     }
 
     public function disconnect():void {
-        this.socket.close();
+        try {
+            this.socket.close();
+        }
+        catch (error:Error) { }
         this.removeListeners();
         this.closed.dispatch();
     }
