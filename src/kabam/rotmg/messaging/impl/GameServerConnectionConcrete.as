@@ -85,7 +85,6 @@ import kabam.rotmg.classes.model.ClassesModel;
 import kabam.rotmg.constants.GeneralConstants;
 import kabam.rotmg.constants.ItemConstants;
 import kabam.rotmg.core.StaticInjectorContext;
-import kabam.rotmg.core.view.Layers;
 import kabam.rotmg.dailyLogin.message.ClaimDailyRewardMessage;
 import kabam.rotmg.dailyLogin.message.ClaimDailyRewardResponse;
 import kabam.rotmg.dailyLogin.signal.ClaimDailyRewardResponseSignal;
@@ -217,6 +216,8 @@ import kabam.rotmg.ui.signals.ShowKeySignal;
 import kabam.rotmg.ui.signals.UpdateBackpackTabSignal;
 import kabam.rotmg.ui.view.NotEnoughGoldDialog;
 import kabam.rotmg.ui.view.TitleView;
+
+import org.osflash.signals.Signal;
 
 import org.swiftsuspenders.Injector;
 
@@ -2055,6 +2056,10 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     }
 
     private function onFailure(_arg1:Failure):void {
+        // remove loading screen
+        var hideLoadingScreen:Signal = this.injector.getInstance(HideMapLoadingSignal);
+        hideLoadingScreen && hideLoadingScreen.dispatch();
+
         switch (_arg1.errorId_) {
             case Failure.INCORRECT_VERSION:
                 this.handleIncorrectVersionFailure(_arg1);
@@ -2089,7 +2094,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         // correct version, display custom json dialog
         dlg = new Dialog(errorMsg.title, errorMsg.description, "Ok", null, null);
         dlg.addEventListener(Dialog.LEFT_BUTTON, this.onDoClientUpdate);
-        this.injector.getInstance(Layers).top.addChild(dlg);
+        this.gs_.addChild(dlg);
         this.retryConnection_ = false;
     }
     
@@ -2128,7 +2133,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
             "server": description
         });
         _local2.addEventListener(Dialog.LEFT_BUTTON, this.onDoClientUpdate);
-        this.injector.getInstance(Layers).top.addChild(_local2);
+        this.gs_.addChild(_local2);
         this.retryConnection_ = false;
     }
 
