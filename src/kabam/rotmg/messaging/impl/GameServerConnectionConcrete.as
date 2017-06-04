@@ -137,8 +137,10 @@ import kabam.rotmg.messaging.impl.incoming.PlaySound;
 import kabam.rotmg.messaging.impl.incoming.QuestFetchResponse;
 import kabam.rotmg.messaging.impl.incoming.QuestObjId;
 import kabam.rotmg.messaging.impl.incoming.QuestRedeemResponse;
+import kabam.rotmg.messaging.impl.incoming.QueuePing;
 import kabam.rotmg.messaging.impl.incoming.Reconnect;
 import kabam.rotmg.messaging.impl.incoming.ReskinUnlock;
+import kabam.rotmg.messaging.impl.incoming.ServerFull;
 import kabam.rotmg.messaging.impl.incoming.ServerPlayerShoot;
 import kabam.rotmg.messaging.impl.incoming.ShowEffect;
 import kabam.rotmg.messaging.impl.incoming.TradeAccepted;
@@ -184,6 +186,7 @@ import kabam.rotmg.messaging.impl.outgoing.PlayerHit;
 import kabam.rotmg.messaging.impl.outgoing.PlayerShoot;
 import kabam.rotmg.messaging.impl.outgoing.PlayerText;
 import kabam.rotmg.messaging.impl.outgoing.Pong;
+import kabam.rotmg.messaging.impl.outgoing.QueuePong;
 import kabam.rotmg.messaging.impl.outgoing.RequestTrade;
 import kabam.rotmg.messaging.impl.outgoing.Reskin;
 import kabam.rotmg.messaging.impl.outgoing.SetCondition;
@@ -206,6 +209,8 @@ import kabam.rotmg.pets.controller.UpdatePetYardSignal;
 import kabam.rotmg.pets.data.PetsModel;
 import kabam.rotmg.questrewards.controller.QuestFetchCompleteSignal;
 import kabam.rotmg.questrewards.controller.QuestRedeemCompleteSignal;
+import kabam.rotmg.queue.control.ShowQueueSignal;
+import kabam.rotmg.queue.control.UpdateQueueSignal;
 import kabam.rotmg.servers.api.Server;
 import kabam.rotmg.text.model.TextKey;
 import kabam.rotmg.text.view.stringBuilder.LineBuilder;
@@ -446,6 +451,26 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.map(QUEST_REDEEM_RESPONSE).toMessage(QuestRedeemResponse).toMethod(this.onQuestRedeemResponse);
         _local1.map(KEY_INFO_RESPONSE).toMessage(KeyInfoResponse).toMethod(this.onKeyInfoResponse);
         _local1.map(LOGIN_REWARD_MSG).toMessage(ClaimDailyRewardResponse).toMethod(this.onLoginRewardResponse);
+        
+        // server queue messages
+        _local1.map(QUEUE_PONG).toMessage(QueuePong);
+        _local1.map(SERVER_FULL).toMessage(ServerFull).toMethod(this.HandleServerFull);
+        _local1.map(QUEUE_PING).toMessage(QueuePing).toMethod(this.HandleQueuePing);
+    }
+    
+    private function HandleServerFull(_arg1:ServerFull):void
+    {
+        this.injector.getInstance(ShowQueueSignal).dispatch();
+        this.injector.getInstance(UpdateQueueSignal).dispatch(_arg1.position_, _arg1.count_);
+    }
+    
+    private function HandleQueuePing(_arg1:QueuePing):void
+    {
+        this.injector.getInstance(UpdateQueueSignal).dispatch(_arg1.position_, _arg1.count_);
+        var qp:QueuePong = (this.messages.require(QUEUE_PONG) as QueuePong);
+        qp.serial_ = _arg1.serial_;
+        qp.time_ = getTimer();
+        serverConnection.sendMessage(qp);
     }
 
     private function onHatchPet(_arg1:HatchPetMessage):void {
@@ -552,6 +577,9 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.unmap(FILE);
         _local1.unmap(INVITEDTOGUILD);
         _local1.unmap(PLAYSOUND);
+        _local1.unmap(SERVER_FULL);
+        _local1.unmap(QUEUE_PING);
+        _local1.unmap(QUEUE_PONG);
     }
 
     private function encryptConnection():void {

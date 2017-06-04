@@ -103,6 +103,9 @@ public class GameServerConnection {
     public static const QUEST_REDEEM:int = 37;
     public static const QUEST_FETCH_RESPONSE:int = 65;
     public static const QUEST_REDEEM_RESPONSE:int = 88;
+    public static const SERVER_FULL = 110;
+    public static const QUEUE_PING = 111;
+    public static const QUEUE_PONG = 112;
     
     // not implemented in server
     public static const PET_CHANGE_FORM_MSG:int = 150;
@@ -122,9 +125,6 @@ public class GameServerConnection {
     public static const CHEATING = 0;
     public static const SELL_ITEM = 0;
     public static const SET_FOCUS = 0;
-    public static const SERVER_FULL = 0;
-    public static const QUEUE_PING = 0;
-    public static const QUEUE_PONG = 0;
     
     public static var instance:GameServerConnection;
 
