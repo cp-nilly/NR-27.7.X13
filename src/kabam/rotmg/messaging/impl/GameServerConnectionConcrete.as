@@ -85,6 +85,7 @@ import kabam.rotmg.classes.model.ClassesModel;
 import kabam.rotmg.constants.GeneralConstants;
 import kabam.rotmg.constants.ItemConstants;
 import kabam.rotmg.core.StaticInjectorContext;
+import kabam.rotmg.core.view.Layers;
 import kabam.rotmg.dailyLogin.message.ClaimDailyRewardMessage;
 import kabam.rotmg.dailyLogin.message.ClaimDailyRewardResponse;
 import kabam.rotmg.dailyLogin.signal.ClaimDailyRewardResponseSignal;
@@ -2088,7 +2089,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         // correct version, display custom json dialog
         dlg = new Dialog(errorMsg.title, errorMsg.description, "Ok", null, null);
         dlg.addEventListener(Dialog.LEFT_BUTTON, this.onDoClientUpdate);
-        gs_.stage.addChild(dlg);
+        this.injector.getInstance(Layers).top.addChild(dlg);
         this.retryConnection_ = false;
     }
     
@@ -2127,7 +2128,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
             "server": description
         });
         _local2.addEventListener(Dialog.LEFT_BUTTON, this.onDoClientUpdate);
-        gs_.stage.addChild(_local2);
+        this.injector.getInstance(Layers).top.addChild(_local2);
         this.retryConnection_ = false;
     }
 
