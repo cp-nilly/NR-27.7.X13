@@ -222,6 +222,8 @@ import kabam.rotmg.ui.signals.UpdateBackpackTabSignal;
 import kabam.rotmg.ui.view.NotEnoughGoldDialog;
 import kabam.rotmg.ui.view.TitleView;
 
+import org.osflash.signals.Signal;
+
 import org.swiftsuspenders.Injector;
 
 import robotlegs.bender.framework.api.ILogger;
@@ -2082,6 +2084,10 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     }
 
     private function onFailure(_arg1:Failure):void {
+        // remove loading screen
+        var hideLoadingScreen:Signal = this.injector.getInstance(HideMapLoadingSignal);
+        hideLoadingScreen && hideLoadingScreen.dispatch();
+
         switch (_arg1.errorId_) {
             case Failure.INCORRECT_VERSION:
                 this.handleIncorrectVersionFailure(_arg1);
@@ -2116,7 +2122,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         // correct version, display custom json dialog
         dlg = new Dialog(errorMsg.title, errorMsg.description, "Ok", null, null);
         dlg.addEventListener(Dialog.LEFT_BUTTON, this.onDoClientUpdate);
-        gs_.stage.addChild(dlg);
+        this.gs_.addChild(dlg);
         this.retryConnection_ = false;
     }
     
@@ -2155,7 +2161,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
             "server": description
         });
         _local2.addEventListener(Dialog.LEFT_BUTTON, this.onDoClientUpdate);
-        gs_.stage.addChild(_local2);
+        this.gs_.addChild(_local2);
         this.retryConnection_ = false;
     }
 
