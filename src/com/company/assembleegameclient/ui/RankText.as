@@ -19,7 +19,7 @@ public class RankText extends Sprite {
     private var waiter:SignalWaiter;
     private var icon:Sprite;
 
-    public function RankText(_arg1:int, _arg2:Boolean, _arg3:Boolean) {
+    public function RankText(_arg1:int, _arg2:Boolean, _arg3:Boolean, rank:int = 0) {
         this.waiter = new SignalWaiter();
         super();
         this.largeText_ = _arg2;
@@ -32,7 +32,7 @@ public class RankText extends Sprite {
         }
         mouseEnabled = false;
         mouseChildren = false;
-        this.draw(_arg1);
+        this.draw(_arg1, rank);
     }
 
     public function makeText():TextFieldDisplayConcrete {
@@ -43,7 +43,7 @@ public class RankText extends Sprite {
         return (_local2);
     }
 
-    public function draw(numStars:int):void {
+    public function draw(numStars:int, rank:int):void {
         var text:TextFieldDisplayConcrete;
         var onTextChanged:Function;
         onTextChanged = function ():void {
@@ -71,7 +71,7 @@ public class RankText extends Sprite {
         this.background = new Sprite();
         text = this.makeText();
         text.setVerticalAlign(TextFieldDisplayConcrete.BOTTOM);
-        text.setStringBuilder(new StaticStringBuilder(this.numStars_.toString()));
+        text.setStringBuilder(new StaticStringBuilder(this.numStars_.toString() + (rank ? " - " + rank : "")));
         text.filters = [new DropShadowFilter(0, 0, 0, 1, 4, 4, 2)];
         this.background.addChild(text);
         this.icon = ((this.largeText_) ? FameUtil.numStarsToBigImage(this.numStars_) : FameUtil.numStarsToImage(this.numStars_));
