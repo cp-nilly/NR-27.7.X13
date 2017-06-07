@@ -120,7 +120,7 @@ public class NameChangerPanel extends Panel {
         _local3.setStringBuilder(new LineBuilder().setParams(TextKey.NAME_CHANGER_REQUIRE_RANK));
         _local3.filters = [new DropShadowFilter(0, 0, 0)];
         _local2.addChild(_local3);
-        _local4 = new RankText(_arg1, false, false);
+        _local4 = new RankText(_arg1, false, false, 0);
         _local4.x = (_local3.width + 4);
         _local4.y = ((_local3.height / 2) - (_local4.height / 2));
         _local2.addChild(_local4);
