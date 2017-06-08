@@ -53,7 +53,7 @@ public class AccountScreen extends Sprite {
 
     private function makeGuildText():void {
         this.guildText = new GuildText(this.guildName, this.guildRank);
-        this.guildText.x = 92;
+        this.guildText.x = 36 + this.rankText.width + 6;
         this.guildText.y = 6;
         while (this.guildLayer.numChildren > 0) {
             this.guildLayer.removeChildAt(0);

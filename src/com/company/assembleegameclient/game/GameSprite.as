@@ -357,7 +357,7 @@ public class GameSprite extends AGameSprite {
 
     private function showGuildText():void {
         this.guildText_ = new GuildText("", -1);
-        this.guildText_.x = 64;
+        this.guildText_.x = 36 + this.rankText_.width + 6;
         this.guildText_.y = 6;
         addChild(this.guildText_);
     }
