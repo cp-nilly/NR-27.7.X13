@@ -72,31 +72,32 @@ public class FameUtil {
         var _local2:Sprite = new StarGraphic();
         if (_arg2){
             _local2.transform.colorTransform = greenCT;
+            return (_local2);
         }
         if (_arg1 < ObjectLibrary.playerChars_.length) {
             _local2.transform.colorTransform = lightBlueCT;
         }
-        else {
-            if (_arg1 < (ObjectLibrary.playerChars_.length * 2)) {
-                _local2.transform.colorTransform = darkBlueCT;
-            }
-            else {
-                if (_arg1 < (ObjectLibrary.playerChars_.length * 3)) {
-                    _local2.transform.colorTransform = redCT;
-                }
-                else {
-                    if (_arg1 < (ObjectLibrary.playerChars_.length * 4)) {
-                        _local2.transform.colorTransform = orangeCT;
-                    }
-                    else {
-                        if (_arg1 < (ObjectLibrary.playerChars_.length * 5)) {
-                            _local2.transform.colorTransform = yellowCT;
-                        }
-                    }
-                }
-            }
+        if(ObjectLibrary.playerChars_.length)
+        {
+           _local2.transform.colorTransform = lightBlueCT;
         }
-        return (_local2);
+        else if(ObjectLibrary.playerChars_.length * 2)
+        {
+            _local2.transform.colorTransform = darkBlueCT;
+        }
+        else if(ObjectLibrary.playerChars_.length * 3)
+        {
+            _local2.transform.colorTransform = redCT;
+        }
+        else if(ObjectLibrary.playerChars_.length * 4)
+        {
+            _local2.transform.colorTransform = orangeCT;
+        }
+        else if(ObjectLibrary.playerChars_.length * 5)
+        {
+            _local2.transform.colorTransform = yellowCT;
+        }
+        return _local2;
     }
 
     public static function numStarsToIcon(_arg1:int, _arg2:Boolean):Sprite {
