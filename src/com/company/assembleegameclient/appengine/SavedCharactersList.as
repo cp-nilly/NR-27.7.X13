@@ -49,6 +49,7 @@ public class SavedCharactersList extends Event {
     public var hasPlayerDied:Boolean = false;
     public var classAvailability:Object;
     public var isAgeVerified:Boolean;
+    public var rank_:int;
     private var account:Account;
 
     public function SavedCharactersList(_arg1:String) {
@@ -101,7 +102,9 @@ public class SavedCharactersList extends Event {
         this.nameChosen_ = _arg1.hasOwnProperty("NameChosen");
         this.converted_ = _arg1.hasOwnProperty("Converted");
         this.isAdmin_ = _arg1.hasOwnProperty("Admin");
+        this.rank_ = int(_arg1.Rank);
         Player.isAdmin = this.isAdmin_;
+        Player.rank = this.rank_;
         Player.isMod = _arg1.hasOwnProperty("Mod");
         this.canMapEdit_ = _arg1.hasOwnProperty("MapEditor");
         this.totalFame_ = int(_arg1.Stats.TotalFame);

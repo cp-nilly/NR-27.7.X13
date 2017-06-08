@@ -67,6 +67,7 @@ public class Player extends Character {
     private static const MIN_ATTACK_MULT:Number = 0.5;
     private static const MAX_ATTACK_MULT:Number = 2;
 
+    public static var rank:int = 0;
     public static var isAdmin:Boolean = false;
     public static var isMod:Boolean = false;
     private static var newP:Point = new Point();
