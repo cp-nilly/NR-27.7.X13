@@ -363,7 +363,7 @@ public class GameSprite extends AGameSprite {
     }
 
     private function showRankText():void {
-        this.rankText_ = new RankText(-1, true, false, 0);
+        this.rankText_ = new RankText(-1, true, false, 0, false);
         this.rankText_.x = 8;
         this.rankText_.y = this.displaysPosY;
         this.displaysPosY = (this.displaysPosY + UIUtils.NOTIFICATION_SPACE);
@@ -485,7 +485,7 @@ public class GameSprite extends AGameSprite {
             this.creditDisplay_.draw(_local5.credits_, _local5.fame_, _local5.tokens_);
             this.drawCharacterWindow.dispatch(_local5);
             if (this.evalIsNotInCombatMapArea()) {
-                this.rankText_.draw(_local5.numStars_, _local5.rank_);
+                this.rankText_.draw(_local5.numStars_, _local5.rank_, _local5.admin_);
                 this.guildText_.draw(_local5.guildName_, _local5.guildRank_);
             }
             if (_local5.isPaused()) {

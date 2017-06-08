@@ -22,6 +22,7 @@ public class AccountScreen extends Sprite {
     private var guildRank:int;
     private var stars:int;
     private var rank:int;
+    private var admin:Boolean;
     private var rankText:RankText;
     private var guildText:GuildText;
     private var accountInfo:AccountInfoView;
@@ -60,14 +61,15 @@ public class AccountScreen extends Sprite {
         this.guildLayer.addChild(this.guildText);
     }
 
-    public function setRank(_arg1:int, _arg2:int):void {
+    public function setRank(_arg1:int, _arg2:int, _arg3:Boolean):void {
         this.stars = _arg1;
         this.rank = _arg2;
+        this.admin = _arg3;
         this.makeRankText();
     }
 
     private function makeRankText():void {
-        this.rankText = new RankText(this.stars, true, false, this.rank);
+        this.rankText = new RankText(this.stars, true, false, this.rank, this.admin);
         this.rankText.x = 36;
         this.rankText.y = 4;
         this.rankText.mouseEnabled = true;

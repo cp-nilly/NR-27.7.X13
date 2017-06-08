@@ -618,7 +618,7 @@ public class Player extends Character {
         var _local1:StringBuilder = new StaticStringBuilder(name_);
         var _local2:BitmapTextFactory = StaticInjectorContext.getInjector().getInstance(BitmapTextFactory);
         var _local3:BitmapData = _local2.make(_local1, 16, this.getNameColor(), true, NAME_OFFSET_MATRIX, true);
-        _local3.draw(FameUtil.numStarsToIcon(this.numStars_), RANK_OFFSET_MATRIX);
+        _local3.draw(FameUtil.numStarsToIcon(this.numStars_, this.admin_), RANK_OFFSET_MATRIX);
         return (_local3);
     }
 

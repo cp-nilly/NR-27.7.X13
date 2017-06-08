@@ -80,7 +80,7 @@ public class SellableObjectPanel extends Panel implements TooltipAble {
         requiredText = new TextFieldDisplayConcrete().setSize(16).setColor(0xFFFFFF).setBold(true).setAutoSize(TextFieldAutoSize.CENTER);
         requiredText.filters = [new DropShadowFilter(0, 0, 0)];
         rankReqText.addChild(requiredText);
-        rankText = new RankText(rankReq, false, false, 0);
+        rankText = new RankText(rankReq, false, false, 0, false);
         rankReqText.addChild(rankText);
         requiredText.textChanged.addOnce(function ():void {
             rankText.x = ((requiredText.width * 0.5) + 4);

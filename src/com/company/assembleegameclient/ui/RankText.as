@@ -16,11 +16,12 @@ public class RankText extends Sprite {
     public var largeText_:Boolean;
     private var numStars_:int = -1;
     private var rank_:int = 0;
+    private var admin_:Boolean = false;
     private var prefix_:TextFieldDisplayConcrete = null;
     private var waiter:SignalWaiter;
     private var icon:Sprite;
 
-    public function RankText(_arg1:int, _arg2:Boolean, _arg3:Boolean, _arg4:int) {
+    public function RankText(_arg1:int, _arg2:Boolean, _arg3:Boolean, _arg4:int, _arg5:Boolean) {
         this.waiter = new SignalWaiter();
         super();
         this.largeText_ = _arg2;
@@ -33,7 +34,7 @@ public class RankText extends Sprite {
         }
         mouseEnabled = false;
         mouseChildren = false;
-        this.draw(_arg1, _arg4);
+        this.draw(_arg1, _arg4, _arg5);
     }
 
     public function makeText():TextFieldDisplayConcrete {
@@ -44,7 +45,7 @@ public class RankText extends Sprite {
         return (_local2);
     }
 
-    public function draw(numStars:int, rank:int):void {
+    public function draw(numStars:int, rank:int, admin:Boolean):void {
         var text:TextFieldDisplayConcrete;
         var onTextChanged:Function;
         onTextChanged = function ():void {
@@ -64,6 +65,7 @@ public class RankText extends Sprite {
         }
         this.numStars_ = numStars;
         this.rank_ = rank;
+        this.admin_ = admin;
         if (((!((this.background == null))) && (contains(this.background)))) {
             removeChild(this.background);
         }
@@ -76,7 +78,7 @@ public class RankText extends Sprite {
         text.setStringBuilder(new StaticStringBuilder(this.numStars_.toString() + (rank ? "-" + rank : "")));
         text.filters = [new DropShadowFilter(0, 0, 0, 1, 4, 4, 2)];
         this.background.addChild(text);
-        this.icon = ((this.largeText_) ? FameUtil.numStarsToBigImage(this.numStars_) : FameUtil.numStarsToImage(this.numStars_));
+        this.icon = ((this.largeText_) ? FameUtil.numStarsToBigImage(this.numStars_, this.admin_) : FameUtil.numStarsToImage(this.numStars_, this.admin_));
         this.background.addChild(this.icon);
         text.textChanged.addOnce(onTextChanged);
         addChild(this.background);

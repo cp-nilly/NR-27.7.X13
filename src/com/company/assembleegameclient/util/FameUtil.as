@@ -16,6 +16,7 @@ public class FameUtil {
     private static const redCT:ColorTransform = new ColorTransform((193 / 0xFF), (39 / 0xFF), (45 / 0xFF));
     private static const orangeCT:ColorTransform = new ColorTransform((247 / 0xFF), (147 / 0xFF), (30 / 0xFF));
     private static const yellowCT:ColorTransform = new ColorTransform((0xFF / 0xFF), (0xFF / 0xFF), (0 / 0xFF));
+    private static const greenCT:ColorTransform = new ColorTransform((0 / 0xFF), (0xfe / 0xFF), (0 / 0xFF));
     public static const COLORS:Vector.<ColorTransform> = new <ColorTransform>[lightBlueCT, darkBlueCT, redCT, orangeCT, yellowCT];
 
 
@@ -59,16 +60,19 @@ public class FameUtil {
         return (_local4);
     }
 
-    public static function numStarsToBigImage(_arg1:int):Sprite {
-        var _local2:Sprite = numStarsToImage(_arg1);
+    public static function numStarsToBigImage(_arg1:int, _arg2:Boolean = false):Sprite {
+        var _local2:Sprite = numStarsToImage(_arg1, _arg2);
         _local2.filters = [new DropShadowFilter(0, 0, 0, 1, 4, 4, 2)];
         _local2.scaleX = 1.4;
         _local2.scaleY = 1.4;
         return (_local2);
     }
 
-    public static function numStarsToImage(_arg1:int):Sprite {
+    public static function numStarsToImage(_arg1:int, _arg2:Boolean):Sprite {
         var _local2:Sprite = new StarGraphic();
+        if (_arg2){
+            _local2.transform.colorTransform = greenCT;
+        }
         if (_arg1 < ObjectLibrary.playerChars_.length) {
             _local2.transform.colorTransform = lightBlueCT;
         }
@@ -95,10 +99,10 @@ public class FameUtil {
         return (_local2);
     }
 
-    public static function numStarsToIcon(_arg1:int):Sprite {
+    public static function numStarsToIcon(_arg1:int, _arg2:Boolean):Sprite {
         var _local2:Sprite;
         var _local3:Sprite;
-        _local2 = numStarsToImage(_arg1);
+        _local2 = numStarsToImage(_arg1, _arg2);
         _local3 = new Sprite();
         _local3.graphics.beginFill(0, 0.4);
         var _local4:int = ((_local2.width / 2) + 2);

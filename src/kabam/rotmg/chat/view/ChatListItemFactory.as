@@ -89,8 +89,9 @@ public class ChatListItemFactory {
 
     private function makeStarsIcon():void {
         var _local1:int = this.message.numStars;
+        var _local2:Boolean = this.message.admin;
         if (_local1 >= 0) {
-            this.buffer.push(FameUtil.numStarsToIcon(_local1));
+            this.buffer.push(FameUtil.numStarsToIcon(_local1, _local2));
         }
     }
 
