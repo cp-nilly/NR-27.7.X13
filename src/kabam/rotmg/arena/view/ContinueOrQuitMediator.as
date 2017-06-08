@@ -7,7 +7,7 @@ import kabam.rotmg.dialogs.control.CloseDialogsSignal;
 import kabam.rotmg.external.command.RequestPlayerCreditsCompleteSignal;
 import kabam.rotmg.game.model.GameModel;
 import kabam.rotmg.messaging.impl.GameServerConnection;
-import kabam.rotmg.messaging.impl.outgoing.arena.EnterArena;
+import kabam.rotmg.messaging.impl.outgoing.EnterArena;
 import kabam.rotmg.ui.model.HUDModel;
 
 import robotlegs.bender.bundles.mvcs.Mediator;

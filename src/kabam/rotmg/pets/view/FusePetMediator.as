@@ -2,7 +2,7 @@
 import com.company.assembleegameclient.ui.dialogs.ErrorDialog;
 
 import kabam.rotmg.dialogs.control.OpenDialogSignal;
-import kabam.rotmg.messaging.impl.PetUpgradeRequest;
+import kabam.rotmg.messaging.impl.outgoing.PetUpgradeRequest;
 import kabam.rotmg.pets.controller.UpgradePetSignal;
 import kabam.rotmg.pets.data.FusePetRequestVO;
 import kabam.rotmg.pets.data.PetSlotsState;

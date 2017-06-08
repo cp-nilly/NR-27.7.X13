@@ -2,7 +2,7 @@
 import kabam.lib.net.api.MessageProvider;
 import kabam.lib.net.impl.SocketServer;
 import kabam.rotmg.messaging.impl.GameServerConnection;
-import kabam.rotmg.messaging.impl.ReskinPet;
+import kabam.rotmg.messaging.impl.outgoing.ReskinPet;
 import kabam.rotmg.pets.data.PetFormModel;
 import kabam.rotmg.pets.data.ReskinPetVO;
 
