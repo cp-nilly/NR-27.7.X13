@@ -918,10 +918,6 @@ public class Player extends Character {
             return;
         }
         var _local2:int = equipment_[0];
-        if (_local2 == -1) {
-            this.addTextLine.dispatch(ChatMessage.make(Parameters.ERROR_CHAT_NAME, TextKey.PLAYER_NO_WEAPON_EQUIPPED));
-            return;
-        }
         var _local3:XML = ObjectLibrary.xmlLibrary_[_local2];
         var _local4:int = getTimer();
         var _local5:Number = Number(_local3.RateOfFire);
