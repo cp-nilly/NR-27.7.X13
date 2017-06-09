@@ -107,6 +107,7 @@ import kabam.rotmg.messaging.impl.data.ObjectData;
 import kabam.rotmg.messaging.impl.data.ObjectStatusData;
 import kabam.rotmg.messaging.impl.data.StatData;
 import kabam.rotmg.messaging.impl.incoming.AccountList;
+import kabam.rotmg.messaging.impl.incoming.ActivePet;
 import kabam.rotmg.messaging.impl.incoming.AllyShoot;
 import kabam.rotmg.messaging.impl.incoming.Aoe;
 import kabam.rotmg.messaging.impl.incoming.BuyResult;
