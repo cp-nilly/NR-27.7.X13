@@ -1618,8 +1618,8 @@ public class GameServerConnectionConcrete extends GameServerConnection {
                 case StatData.NEXT_CLASS_QUEST_FAME_STAT:
                     _local4.nextClassQuestFame_ = _local8;
                     break;
-                case StatData.LEGENDARY_RANK_STAT:
-                    _local4.legendaryRank_ = _local8;
+                case StatData.GLOW_COLOR_STAT:
+                    _local4.glowColor_ = _local8;
                     break;
                 case StatData.SINK_LEVEL_STAT:
                     if (!_arg3) {

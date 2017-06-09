@@ -62,7 +62,7 @@ public class StatData {
     public static const NAME_CHOSEN_STAT:int = 56;
     public static const CURR_FAME_STAT:int = 57;
     public static const NEXT_CLASS_QUEST_FAME_STAT:int = 58;
-    public static const LEGENDARY_RANK_STAT:int = 59;
+    public static const GLOW_COLOR_STAT:int = 59;
     public static const SINK_LEVEL_STAT:int = 60;
     public static const ALT_TEXTURE_STAT:int = 61;
     public static const GUILD_NAME_STAT:int = 62;
