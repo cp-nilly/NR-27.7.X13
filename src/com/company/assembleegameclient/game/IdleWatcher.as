@@ -11,9 +11,9 @@ import kabam.rotmg.game.signals.AddTextLineSignal;
 public class IdleWatcher {
 
     private static const MINUTE_IN_MS:int = (60 * 1000);//60000
-    private static const FIRST_WARNING_MINUTES:int = 10;
-    private static const SECOND_WARNING_MINUTES:int = 15;
-    private static const KICK_MINUTES:int = 20;
+    private static const FIRST_WARNING_MINUTES:int = 2;
+    private static const SECOND_WARNING_MINUTES:int = 4;
+    private static const KICK_MINUTES:int = 5;
 
     public var gs_:GameSprite = null;
     public var idleTime_:int = 0;
