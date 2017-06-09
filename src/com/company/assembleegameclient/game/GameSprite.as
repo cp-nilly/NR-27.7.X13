@@ -363,7 +363,7 @@ public class GameSprite extends AGameSprite {
     }
 
     private function showRankText():void {
-        this.rankText_ = new RankText(-1, true, false, 0, false);
+        this.rankText_ = new RankText(-1, true, false);
         this.rankText_.x = 8;
         this.rankText_.y = this.displaysPosY;
         this.displaysPosY = (this.displaysPosY + UIUtils.NOTIFICATION_SPACE);
