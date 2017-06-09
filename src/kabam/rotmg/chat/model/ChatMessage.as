@@ -11,18 +11,27 @@ public class ChatMessage {
     public var isWhisper:Boolean;
     public var tokens:Object;
 
-    public static function make(_arg1:String, _arg2:String, _arg3:int = -1, _arg4:int = -1, _arg5:String = "", _arg6:Boolean = false, _arg7:Object = null, _arg8:Boolean = false, _arg11:Boolean = false):ChatMessage {
-        var _local9:ChatMessage = new (ChatMessage)();
-        _local9.name = _arg1;
-        _local9.text = _arg2;
-        _local9.objectId = _arg3;
-        _local9.numStars = _arg4;
-        _local9.admin = _arg11;
-        _local9.recipient = _arg5;
-        _local9.isToMe = _arg6;
-        _local9.isWhisper = _arg8;
-        _local9.tokens = (((_arg7 == null)) ? {} : _arg7);
-        return (_local9);
+    public static function make(
+            name:String,
+            text:String,
+            objId:int = -1,
+            numStars:int = -1,
+            recipient:String = "",
+            isToMe:Boolean = false,
+            tokens:Object = null,
+            isWhisper:Boolean = false,
+            isAdmin:Boolean = false):ChatMessage {
+        var msg:ChatMessage = new ChatMessage();
+        msg.name = name;
+        msg.text = text;
+        msg.objectId = objId;
+        msg.numStars = numStars;
+        msg.admin = isAdmin;
+        msg.recipient = recipient;
+        msg.isToMe = isToMe;
+        msg.isWhisper = isWhisper;
+        msg.tokens = tokens == null ? {} : tokens;
+        return (msg);
     }
 
 

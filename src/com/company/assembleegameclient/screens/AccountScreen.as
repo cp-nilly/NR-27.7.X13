@@ -61,10 +61,10 @@ public class AccountScreen extends Sprite {
         this.guildLayer.addChild(this.guildText);
     }
 
-    public function setRank(_arg1:int, _arg2:int, _arg3:Boolean):void {
-        this.stars = _arg1;
-        this.rank = _arg2;
-        this.admin = _arg3;
+    public function setRank(numStars:int, rank:int, isAdmin:Boolean):void {
+        this.stars = numStars;
+        this.rank = rank;
+        this.admin = isAdmin;
         this.makeRankText();
     }
 
