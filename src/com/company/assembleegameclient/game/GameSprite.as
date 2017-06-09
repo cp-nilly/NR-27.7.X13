@@ -357,7 +357,7 @@ public class GameSprite extends AGameSprite {
 
     private function showGuildText():void {
         this.guildText_ = new GuildText("", -1);
-        this.guildText_.x = 36 + this.rankText_.width + 6;
+        this.guildText_.x = 64;
         this.guildText_.y = 6;
         addChild(this.guildText_);
     }
@@ -487,6 +487,7 @@ public class GameSprite extends AGameSprite {
             if (this.evalIsNotInCombatMapArea()) {
                 this.rankText_.draw(_local5.numStars_, _local5.rank_, _local5.admin_);
                 this.guildText_.draw(_local5.guildName_, _local5.guildRank_);
+                this.guildText_.x = this.rankText_.width + 16;
             }
             if (_local5.isPaused()) {
                 map.filters = [PAUSED_FILTER];
