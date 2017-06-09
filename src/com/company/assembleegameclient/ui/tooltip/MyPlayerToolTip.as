@@ -17,6 +17,7 @@ import kabam.rotmg.classes.model.CharacterSkin;
 import kabam.rotmg.classes.model.ClassesModel;
 import kabam.rotmg.constants.GeneralConstants;
 import kabam.rotmg.core.StaticInjectorContext;
+import kabam.rotmg.core.model.PlayerModel;
 import kabam.rotmg.text.model.TextKey;
 import kabam.rotmg.text.view.TextFieldDisplayConcrete;
 import kabam.rotmg.text.view.stringBuilder.LineBuilder;
@@ -51,6 +52,7 @@ public class MyPlayerToolTip extends ToolTip {
         var _local1:int = int(this.charXML.ObjectType);
         var _local2:XML = ObjectLibrary.xmlLibrary_[_local1];
         this.player_ = Player.fromPlayerXML(this.accountName, this.charXML);
+        this.player_.accountId_ = StaticInjectorContext.getInjector().getInstance(PlayerModel).charList.accountId_;
         var _local3:CharacterClass = this.classes.getCharacterClass(this.player_.objectType_);
         var _local4:CharacterSkin = _local3.skins.getSkin(this.charXML.Texture);
         this.player_.animatedChar_ = this.factory.makeCharacter(_local4.template);
