@@ -21,11 +21,11 @@ public class RankText extends Sprite {
     private var waiter:SignalWaiter;
     private var icon:Sprite;
 
-    public function RankText(_arg1:int, _arg2:Boolean, _arg3:Boolean, _arg4:int, _arg5:Boolean) {
+    public function RankText(numStars:int, largeText:Boolean, showPrefix:Boolean, rank:int = 0, isAdmin:Boolean = false) {
         this.waiter = new SignalWaiter();
         super();
-        this.largeText_ = _arg2;
-        if (_arg3) {
+        this.largeText_ = largeText;
+        if (showPrefix) {
             this.prefix_ = this.makeText();
             this.prefix_.setStringBuilder(new LineBuilder().setParams(TextKey.RANK_TEXT_RANK));
             this.prefix_.filters = [new DropShadowFilter(0, 0, 0)];
@@ -34,7 +34,7 @@ public class RankText extends Sprite {
         }
         mouseEnabled = false;
         mouseChildren = false;
-        this.draw(_arg1, _arg4, _arg5);
+        this.draw(numStars, rank, isAdmin);
     }
 
     public function makeText():TextFieldDisplayConcrete {
@@ -78,7 +78,9 @@ public class RankText extends Sprite {
         text.setStringBuilder(new StaticStringBuilder(this.numStars_.toString() + (rank ? "-" + rank : "")));
         text.filters = [new DropShadowFilter(0, 0, 0, 1, 4, 4, 2)];
         this.background.addChild(text);
-        this.icon = ((this.largeText_) ? FameUtil.numStarsToBigImage(this.numStars_, this.admin_) : FameUtil.numStarsToImage(this.numStars_, this.admin_));
+        this.icon = this.largeText_ ?
+                FameUtil.numStarsToBigImage(this.numStars_, this.admin_) :
+                FameUtil.numStarsToImage(this.numStars_, this.admin_);
         this.background.addChild(this.icon);
         text.textChanged.addOnce(onTextChanged);
         addChild(this.background);
