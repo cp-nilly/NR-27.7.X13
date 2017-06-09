@@ -27,6 +27,7 @@ public class GameObjectListItem extends Sprite {
     private var objname:String;
     private var type:int;
     private var level:int;
+    private var accountId:String;
     private var positionClassBelow:Boolean;
 
     public function GameObjectListItem(_arg1:uint, _arg2:Boolean, _arg3:GameObject, _arg4:Boolean = false) {
@@ -79,6 +80,11 @@ public class GameObjectListItem extends Sprite {
         this.objname = this.go.name_;
         this.level = this.go.level_;
         this.type = this.go.objectType_;
+        if(this.go is Player)
+        {
+            var player:Player = this.go as Player;
+            this.accountId = player.accountId_;
+        }
     }
 
     private function redraw():void {
@@ -109,10 +115,10 @@ public class GameObjectListItem extends Sprite {
         var _local2:Object = {};
         if (this.isNameDefined()) {
             if (this.positionClassBelow) {
-                _local1 = "<b>{name}</b>\n({type}{level})";
+                _local1 = "<b>{name}</b>\n({type}{level})\n<b>Account ID:</b> {accountId}";
             }
             else {
-                _local1 = "<b>{name}</b> ({type}{level})";
+                _local1 = "<b>{name}</b> ({type}{level})\n<b>Account ID:</b> {accountId}";
             }
             if ((((this.go.name_.length > 8)) && (!(this.positionClassBelow)))) {
                 _local2.name = (this.go.name_.slice(0, 6) + "...");
@@ -122,6 +128,10 @@ public class GameObjectListItem extends Sprite {
             }
             _local2.type = ObjectLibrary.typeToDisplayId_[this.type];
             _local2.level = (((this.level < 1)) ? "" : (" " + this.level));
+            if(this.accountId)
+            {
+                _local2.accountId = this.accountId;
+            }
         }
         else {
             _local1 = "<b>{name}</b>";
