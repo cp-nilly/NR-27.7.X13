@@ -132,6 +132,7 @@ import kabam.rotmg.messaging.impl.incoming.NewAbilityMessage;
 import kabam.rotmg.messaging.impl.incoming.NewTick;
 import kabam.rotmg.messaging.impl.incoming.Notification;
 import kabam.rotmg.messaging.impl.incoming.PasswordPrompt;
+import kabam.rotmg.messaging.impl.incoming.PetYard;
 import kabam.rotmg.messaging.impl.incoming.Pic;
 import kabam.rotmg.messaging.impl.incoming.Ping;
 import kabam.rotmg.messaging.impl.incoming.PlaySound;
