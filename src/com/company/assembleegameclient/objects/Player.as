@@ -918,6 +918,9 @@ public class Player extends Character {
             return;
         }
         var _local2:int = equipment_[0];
+        if (_local2 == -1)
+            return;
+
         var _local3:XML = ObjectLibrary.xmlLibrary_[_local2];
         var _local4:int = getTimer();
         var _local5:Number = Number(_local3.RateOfFire);
