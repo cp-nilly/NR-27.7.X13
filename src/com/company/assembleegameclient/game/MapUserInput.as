@@ -564,7 +564,13 @@ public class MapUserInput {
         if (this.tabStripModel.currentSelection == TabStripModel.BACKPACK) {
             _arg1 = (_arg1 + GeneralConstants.NUM_INVENTORY_SLOTS);
         }
-        GameServerConnection.instance.useItem_new(this.gs_.map.player_, _arg1);
+        var slotIndex:int = ObjectLibrary.getMatchingSlotIndex(this.gs_.map.player_.equipment_[_arg1], this.gs_.map.player_);
+        if (slotIndex != -1) {
+            GameServerConnection.instance.invSwap(this.gs_.map.player_, this.gs_.map.player_, _arg1, this.gs_.map.player_.equipment_[_arg1], this.gs_.map.player_, slotIndex, this.gs_.map.player_.equipment_[slotIndex]);
+        }
+        else {
+            GameServerConnection.instance.useItem_new(this.gs_.map.player_, _arg1);
+        }
     }
 
     private function togglePerformanceStats():void {
