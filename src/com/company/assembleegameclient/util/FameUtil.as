@@ -16,7 +16,7 @@ public class FameUtil {
     private static const redCT:ColorTransform = new ColorTransform((193 / 0xFF), (39 / 0xFF), (45 / 0xFF));
     private static const orangeCT:ColorTransform = new ColorTransform((247 / 0xFF), (147 / 0xFF), (30 / 0xFF));
     private static const yellowCT:ColorTransform = new ColorTransform((0xFF / 0xFF), (0xFF / 0xFF), (0 / 0xFF));
-    private static const greenCT:ColorTransform = new ColorTransform((0 / 0xFF), (0xfe / 0xFF), (0 / 0xFF));
+    private static const greenCT:ColorTransform = new ColorTransform((0 / 0xFF), (0xFF / 0xFF), (0 / 0xFF));
     public static const COLORS:Vector.<ColorTransform> = new <ColorTransform>[lightBlueCT, darkBlueCT, redCT, orangeCT, yellowCT];
 
 
