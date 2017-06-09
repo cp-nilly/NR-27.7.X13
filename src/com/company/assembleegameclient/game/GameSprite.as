@@ -485,8 +485,9 @@ public class GameSprite extends AGameSprite {
             this.creditDisplay_.draw(_local5.credits_, _local5.fame_, _local5.tokens_);
             this.drawCharacterWindow.dispatch(_local5);
             if (this.evalIsNotInCombatMapArea()) {
-                this.rankText_.draw(_local5.numStars_);
+                this.rankText_.draw(_local5.numStars_, _local5.rank_, _local5.admin_);
                 this.guildText_.draw(_local5.guildName_, _local5.guildRank_);
+                this.guildText_.x = this.rankText_.width + 16;
             }
             if (_local5.isPaused()) {
                 map.filters = [PAUSED_FILTER];

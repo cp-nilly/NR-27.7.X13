@@ -146,6 +146,7 @@ public class TextHandler {
         _local2.name = _arg1.name_;
         _local2.objectId = _arg1.objectId_;
         _local2.numStars = _arg1.numStars_;
+        _local2.admin = _arg1.admin_;
         _local2.recipient = _arg1.recipient_;
         _local2.isWhisper = ((_arg1.recipient_) && (!(this.isSpecialRecipientChat(_arg1.recipient_))));
         _local2.isToMe = (_arg1.recipient_ == this.model.player.name_);
