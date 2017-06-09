@@ -67,6 +67,7 @@ public class Player extends Character {
     private static const MIN_ATTACK_MULT:Number = 0.5;
     private static const MAX_ATTACK_MULT:Number = 2;
 
+    public static var rank:int = 0;
     public static var isAdmin:Boolean = false;
     public static var isMod:Boolean = false;
     private static var newP:Point = new Point();
@@ -163,7 +164,7 @@ public class Player extends Character {
     public static function fromPlayerXML(_arg1:String, _arg2:XML):Player {
         var _local3:int = int(_arg2.ObjectType);
         var _local4:XML = ObjectLibrary.xmlLibrary_[_local3];
-        var _local5:Player = new (Player)(_local4);
+        var _local5:Player = new Player(_local4);
         _local5.name_ = _arg1;
         _local5.level_ = int(_arg2.Level);
         _local5.exp_ = int(_arg2.Exp);
@@ -617,7 +618,7 @@ public class Player extends Character {
         var _local1:StringBuilder = new StaticStringBuilder(name_);
         var _local2:BitmapTextFactory = StaticInjectorContext.getInjector().getInstance(BitmapTextFactory);
         var _local3:BitmapData = _local2.make(_local1, 16, this.getNameColor(), true, NAME_OFFSET_MATRIX, true);
-        _local3.draw(FameUtil.numStarsToIcon(this.numStars_), RANK_OFFSET_MATRIX);
+        _local3.draw(FameUtil.numStarsToIcon(this.numStars_, this.admin_), RANK_OFFSET_MATRIX);
         return (_local3);
     }
 

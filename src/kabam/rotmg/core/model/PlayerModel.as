@@ -171,6 +171,10 @@ public class PlayerModel {
         return (this.charList.savedChars_[_arg1]);
     }
 
+    public function getRank():int {
+        return (this.charList.rank_);
+    }
+
     public function isAdmin():Boolean {
         return (this.charList.isAdmin_);
     }

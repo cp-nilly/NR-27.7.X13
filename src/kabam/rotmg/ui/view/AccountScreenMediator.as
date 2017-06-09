@@ -34,7 +34,7 @@ public class AccountScreenMediator extends Mediator {
 
     override public function initialize():void {
         this.view.tooltip.add(this.onTooltip);
-        this.view.setRank(this.playerModel.getNumStars());
+        this.view.setRank(this.playerModel.getNumStars(), this.playerModel.getRank(), this.playerModel.isAdmin());
         this.view.setGuild(this.playerModel.getGuildName(), this.playerModel.getGuildRank());
         this.view.setAccountInfo(this.getInfoView());
     }
