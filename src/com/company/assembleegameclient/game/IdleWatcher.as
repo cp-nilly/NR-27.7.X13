@@ -11,8 +11,7 @@ import kabam.rotmg.game.signals.AddTextLineSignal;
 public class IdleWatcher {
 
     private static const MINUTE_IN_MS:int = (60 * 1000);//60000
-    private static const FIRST_WARNING_MINUTES:int = 2;
-    private static const SECOND_WARNING_MINUTES:int = 4;
+    private static const FIRST_WARNING_MINUTES:int = 4;
     private static const KICK_MINUTES:int = 5;
 
     public var gs_:GameSprite = null;
@@ -40,12 +39,8 @@ public class IdleWatcher {
             this.addTextLine.dispatch(this.makeFirstWarning());
             return (false);
         }
-        if ((((this.idleTime_ >= (SECOND_WARNING_MINUTES * MINUTE_IN_MS))) && ((_local2 < (SECOND_WARNING_MINUTES * MINUTE_IN_MS))))) {
-            this.addTextLine.dispatch(this.makeSecondWarning());
-            return (false);
-        }
         if ((((this.idleTime_ >= (KICK_MINUTES * MINUTE_IN_MS))) && ((_local2 < (KICK_MINUTES * MINUTE_IN_MS))))) {
-            this.addTextLine.dispatch(this.makeThirdWarning());
+            this.addTextLine.dispatch(this.makeFinalWarning());
             return (true);
         }
         return (false);
@@ -58,14 +53,7 @@ public class IdleWatcher {
         return (_local1);
     }
 
-    private function makeSecondWarning():ChatMessage {
-        var _local1:ChatMessage = new ChatMessage();
-        _local1.name = Parameters.ERROR_CHAT_NAME;
-        _local1.text = ((((("You have been idle for " + SECOND_WARNING_MINUTES) + " minutes, you will be disconnected if you are idle for ") + "more than ") + KICK_MINUTES) + " minutes.");
-        return (_local1);
-    }
-
-    private function makeThirdWarning():ChatMessage {
+    private function makeFinalWarning():ChatMessage {
         var _local1:ChatMessage = new ChatMessage();
         _local1.name = Parameters.ERROR_CHAT_NAME;
         _local1.text = (("You have been idle for " + KICK_MINUTES) + " minutes, disconnecting.");
