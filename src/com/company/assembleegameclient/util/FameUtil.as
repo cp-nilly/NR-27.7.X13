@@ -60,60 +60,54 @@ public class FameUtil {
         return (_local4);
     }
 
-    public static function numStarsToBigImage(_arg1:int, _arg2:Boolean = false):Sprite {
-        var _local2:Sprite = numStarsToImage(_arg1, _arg2);
-        _local2.filters = [new DropShadowFilter(0, 0, 0, 1, 4, 4, 2)];
-        _local2.scaleX = 1.4;
-        _local2.scaleY = 1.4;
-        return (_local2);
+    public static function numStarsToBigImage(numStars:int, isAdmin:Boolean = false):Sprite {
+        var starGfx:Sprite = numStarsToImage(numStars, isAdmin);
+        starGfx.filters = [new DropShadowFilter(0, 0, 0, 1, 4, 4, 2)];
+        starGfx.scaleX = 1.4;
+        starGfx.scaleY = 1.4;
+        return starGfx;
     }
 
-    public static function numStarsToImage(_arg1:int, _arg2:Boolean):Sprite {
-        var _local2:Sprite = new StarGraphic();
-        if (_arg2){
-            _local2.transform.colorTransform = greenCT;
-            return (_local2);
+    public static function numStarsToImage(numStars:int, isAdmin:Boolean):Sprite {
+        var starGfx:Sprite = new StarGraphic();
+
+        if (isAdmin) {
+            starGfx.transform.colorTransform = greenCT;
+            return starGfx;
         }
-        if (_arg1 < ObjectLibrary.playerChars_.length) {
-            _local2.transform.colorTransform = lightBlueCT;
+
+        if (numStars < ObjectLibrary.playerChars_.length) {
+            starGfx.transform.colorTransform = lightBlueCT;
         }
-        if(ObjectLibrary.playerChars_.length)
-        {
-           _local2.transform.colorTransform = lightBlueCT;
+        else if (numStars < ObjectLibrary.playerChars_.length * 2) {
+            starGfx.transform.colorTransform = darkBlueCT;
         }
-        else if(ObjectLibrary.playerChars_.length * 2)
-        {
-            _local2.transform.colorTransform = darkBlueCT;
+        else if (numStars < ObjectLibrary.playerChars_.length * 3) {
+            starGfx.transform.colorTransform = redCT;
         }
-        else if(ObjectLibrary.playerChars_.length * 3)
-        {
-            _local2.transform.colorTransform = redCT;
+        else if (numStars < ObjectLibrary.playerChars_.length * 4) {
+            starGfx.transform.colorTransform = orangeCT;
         }
-        else if(ObjectLibrary.playerChars_.length * 4)
-        {
-            _local2.transform.colorTransform = orangeCT;
+        else if (numStars < ObjectLibrary.playerChars_.length * 5) {
+            starGfx.transform.colorTransform = yellowCT;
         }
-        else if(ObjectLibrary.playerChars_.length * 5)
-        {
-            _local2.transform.colorTransform = yellowCT;
-        }
-        return _local2;
+        return starGfx;
     }
 
-    public static function numStarsToIcon(_arg1:int, _arg2:Boolean):Sprite {
-        var _local2:Sprite;
-        var _local3:Sprite;
-        _local2 = numStarsToImage(_arg1, _arg2);
-        _local3 = new Sprite();
-        _local3.graphics.beginFill(0, 0.4);
-        var _local4:int = ((_local2.width / 2) + 2);
-        var _local5:int = ((_local2.height / 2) + 2);
-        _local3.graphics.drawCircle(_local4, _local5, _local4);
-        _local2.x = 2;
-        _local2.y = 1;
-        _local3.addChild(_local2);
-        _local3.filters = [new DropShadowFilter(0, 0, 0, 0.5, 6, 6, 1)];
-        return (_local3);
+    public static function numStarsToIcon(numStars:int, isAdmin:Boolean):Sprite {
+        var starGfx:Sprite;
+        var icon:Sprite;
+        starGfx = numStarsToImage(numStars, isAdmin);
+        icon = new Sprite();
+        icon.graphics.beginFill(0, 0.4);
+        var x:int = starGfx.width / 2 + 2;
+        var y:int = starGfx.height / 2 + 2;
+        icon.graphics.drawCircle(x, y, x);
+        starGfx.x = 2;
+        starGfx.y = 1;
+        icon.addChild(starGfx);
+        icon.filters = [new DropShadowFilter(0, 0, 0, 0.5, 6, 6, 1)];
+        return icon;
     }
 
     public static function getFameIcon():BitmapData {
