@@ -10,10 +10,9 @@ import kabam.rotmg.game.signals.AddTextLineSignal;
 
 public class IdleWatcher {
 
-    private static const MINUTE_IN_MS:int = (60 * 1000);//60000
-    private static const FIRST_WARNING_MINUTES:int = 10;
-    private static const SECOND_WARNING_MINUTES:int = 15;
-    private static const KICK_MINUTES:int = 20;
+    private static const MINUTE_IN_MS:int = 60 * 1000;//60000
+    private static const FIRST_WARNING_MINUTES:int = 4;
+    private static const KICK_MINUTES:int = 5;
 
     public var gs_:GameSprite = null;
     public var idleTime_:int = 0;
@@ -23,53 +22,45 @@ public class IdleWatcher {
         this.addTextLine = StaticInjectorContext.getInjector().getInstance(AddTextLineSignal);
     }
 
-    public function start(_arg1:GameSprite):void {
-        this.gs_ = _arg1;
+    public function start(gs:GameSprite):void {
+        this.gs_ = gs;
         this.idleTime_ = 0;
         this.gs_.stage.addEventListener(MouseEvent.MOUSE_MOVE, this.onMouseMove);
         this.gs_.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.onKeyDown);
     }
 
-    public function update(_arg1:int):Boolean {
-        var _local2:int = this.idleTime_;
-        this.idleTime_ = (this.idleTime_ + _arg1);
-        if (this.idleTime_ < (FIRST_WARNING_MINUTES * MINUTE_IN_MS)) {
-            return (false);
+    public function update(elapsedMS:int):Boolean {
+        var idleTime:int = this.idleTime_;
+        this.idleTime_ = this.idleTime_ + elapsedMS;
+        if (this.idleTime_ < FIRST_WARNING_MINUTES * MINUTE_IN_MS) {
+            return false;
         }
-        if ((((this.idleTime_ >= (FIRST_WARNING_MINUTES * MINUTE_IN_MS))) && ((_local2 < (FIRST_WARNING_MINUTES * MINUTE_IN_MS))))) {
+        if (this.idleTime_ >= FIRST_WARNING_MINUTES * MINUTE_IN_MS && idleTime < FIRST_WARNING_MINUTES * MINUTE_IN_MS) {
             this.addTextLine.dispatch(this.makeFirstWarning());
-            return (false);
+            return false;
         }
-        if ((((this.idleTime_ >= (SECOND_WARNING_MINUTES * MINUTE_IN_MS))) && ((_local2 < (SECOND_WARNING_MINUTES * MINUTE_IN_MS))))) {
-            this.addTextLine.dispatch(this.makeSecondWarning());
-            return (false);
+        if (this.idleTime_ >= KICK_MINUTES * MINUTE_IN_MS && idleTime < KICK_MINUTES * MINUTE_IN_MS) {
+            this.addTextLine.dispatch(this.makeFinalWarning());
+            return true;
         }
-        if ((((this.idleTime_ >= (KICK_MINUTES * MINUTE_IN_MS))) && ((_local2 < (KICK_MINUTES * MINUTE_IN_MS))))) {
-            this.addTextLine.dispatch(this.makeThirdWarning());
-            return (true);
-        }
-        return (false);
+        return false;
     }
 
     private function makeFirstWarning():ChatMessage {
-        var _local1:ChatMessage = new ChatMessage();
-        _local1.name = Parameters.ERROR_CHAT_NAME;
-        _local1.text = ((((("You have been idle for " + FIRST_WARNING_MINUTES) + " minutes, you will be disconnected if you are idle for ") + "more than ") + KICK_MINUTES) + " minutes.");
-        return (_local1);
+        var msg:ChatMessage = new ChatMessage();
+        msg.name = Parameters.ERROR_CHAT_NAME;
+        msg.text =
+                "You have been idle for " + FIRST_WARNING_MINUTES +
+                " minutes, you will be disconnected if you are idle for " +
+                "more than " + KICK_MINUTES + " minutes.";
+        return msg;
     }
 
-    private function makeSecondWarning():ChatMessage {
-        var _local1:ChatMessage = new ChatMessage();
-        _local1.name = Parameters.ERROR_CHAT_NAME;
-        _local1.text = ((((("You have been idle for " + SECOND_WARNING_MINUTES) + " minutes, you will be disconnected if you are idle for ") + "more than ") + KICK_MINUTES) + " minutes.");
-        return (_local1);
-    }
-
-    private function makeThirdWarning():ChatMessage {
-        var _local1:ChatMessage = new ChatMessage();
-        _local1.name = Parameters.ERROR_CHAT_NAME;
-        _local1.text = (("You have been idle for " + KICK_MINUTES) + " minutes, disconnecting.");
-        return (_local1);
+    private function makeFinalWarning():ChatMessage {
+        var msg:ChatMessage = new ChatMessage();
+        msg.name = Parameters.ERROR_CHAT_NAME;
+        msg.text = "You have been idle for " + KICK_MINUTES + " minutes, disconnecting.";
+        return msg;
     }
 
     public function stop():void {

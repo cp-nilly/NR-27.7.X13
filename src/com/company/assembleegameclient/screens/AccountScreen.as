@@ -21,6 +21,8 @@ public class AccountScreen extends Sprite {
     private var guildName:String;
     private var guildRank:int;
     private var stars:int;
+    private var rank:int;
+    private var admin:Boolean;
     private var rankText:RankText;
     private var guildText:GuildText;
     private var accountInfo:AccountInfoView;
@@ -51,7 +53,7 @@ public class AccountScreen extends Sprite {
 
     private function makeGuildText():void {
         this.guildText = new GuildText(this.guildName, this.guildRank);
-        this.guildText.x = 92;
+        this.guildText.x = 36 + this.rankText.width + 6;
         this.guildText.y = 6;
         while (this.guildLayer.numChildren > 0) {
             this.guildLayer.removeChildAt(0);
@@ -59,13 +61,15 @@ public class AccountScreen extends Sprite {
         this.guildLayer.addChild(this.guildText);
     }
 
-    public function setRank(_arg1:int):void {
-        this.stars = _arg1;
+    public function setRank(numStars:int, rank:int, isAdmin:Boolean):void {
+        this.stars = numStars;
+        this.rank = rank;
+        this.admin = isAdmin;
         this.makeRankText();
     }
 
     private function makeRankText():void {
-        this.rankText = new RankText(this.stars, true, false);
+        this.rankText = new RankText(this.stars, true, false, this.rank, this.admin);
         this.rankText.x = 36;
         this.rankText.y = 4;
         this.rankText.mouseEnabled = true;

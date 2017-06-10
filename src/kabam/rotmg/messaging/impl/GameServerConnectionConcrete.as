@@ -705,26 +705,32 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         serverConnection.sendMessage(_local2);
     }
 
-    override public function invSwap(_arg1:Player, _arg2:GameObject, _arg3:int, _arg4:int, _arg5:GameObject, _arg6:int, _arg7:int):Boolean {
-        if (!gs_) {
-            return (false);
-        }
-        var _local8:InvSwap = (this.messages.require(INVSWAP) as InvSwap);
-        _local8.time_ = gs_.lastUpdate_;
-        _local8.position_.x_ = _arg1.x_;
-        _local8.position_.y_ = _arg1.y_;
-        _local8.slotObject1_.objectId_ = _arg2.objectId_;
-        _local8.slotObject1_.slotId_ = _arg3;
-        _local8.slotObject1_.objectType_ = _arg4;
-        _local8.slotObject2_.objectId_ = _arg5.objectId_;
-        _local8.slotObject2_.slotId_ = _arg6;
-        _local8.slotObject2_.objectType_ = _arg7;
-        serverConnection.sendMessage(_local8);
-        var _local9:int = _arg2.equipment_[_arg3];
-        _arg2.equipment_[_arg3] = _arg5.equipment_[_arg6];
-        _arg5.equipment_[_arg6] = _local9;
+    override public function invSwap(
+            plr:Player,
+            go1:GameObject, go1Slot:int, go1ObjType:int,
+            go2:GameObject, go2Slot:int, go2ObjType:int):Boolean {
+
+        if (!gs_)
+            return false;
+
+        var swap:InvSwap = (this.messages.require(INVSWAP) as InvSwap);
+        swap.time_ = gs_.lastUpdate_;
+        swap.position_.x_ = plr.x_;
+        swap.position_.y_ = plr.y_;
+        swap.slotObject1_.objectId_ = go1.objectId_;
+        swap.slotObject1_.slotId_ = go1Slot;
+        swap.slotObject1_.objectType_ = go1ObjType;
+        swap.slotObject2_.objectId_ = go2.objectId_;
+        swap.slotObject2_.slotId_ = go2Slot;
+        swap.slotObject2_.objectType_ = go2ObjType;
+        serverConnection.sendMessage(swap);
+
+        var temp:int = go1.equipment_[go1Slot];
+        go1.equipment_[go1Slot] = go2.equipment_[go2Slot];
+        go2.equipment_[go2Slot] = temp;
+
         SoundEffectLibrary.play("inventory_move_item");
-        return (true);
+        return true;
     }
 
     override public function invSwapPotion(_arg1:Player, _arg2:GameObject, _arg3:int, _arg4:int, _arg5:GameObject, _arg6:int, _arg7:int):Boolean {

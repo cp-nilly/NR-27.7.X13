@@ -55,7 +55,7 @@ public class PlayerMenu extends Menu {
         this.gs_ = _arg1;
         this.playerName_ = _arg2.name_;
         this.player_ = _arg2;
-        this.playerPanel_ = new GameObjectListItem(0xB3B3B3, true, this.player_, true);
+        this.playerPanel_ = new GameObjectListItem(0xB3B3B3, true, this.player_, false, true);
         this.yOffset = (this.yOffset + 7);
         addChild(this.playerPanel_);
         if (((Player.isAdmin) || (Player.isMod))) {

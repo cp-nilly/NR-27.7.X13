@@ -28,10 +28,10 @@ public class PlayerToolTip extends ToolTip {
         var _local2:int;
         super(0x363636, 0.5, 0xFFFFFF, 1);
         this.player_ = _arg1;
-        this.playerPanel_ = new GameObjectListItem(0xB3B3B3, true, this.player_);
+        this.playerPanel_ = new GameObjectListItem(0xB3B3B3, true, this.player_, false, true);
         addChild(this.playerPanel_);
         _local2 = 34;
-        this.rankText_ = new RankText(this.player_.numStars_, false, true);
+        this.rankText_ = new RankText(this.player_.numStars_, false, true, this.player_.rank_, this.player_.admin_);
         this.rankText_.x = 6;
         this.rankText_.y = _local2;
         addChild(this.rankText_);
@@ -72,7 +72,7 @@ public class PlayerToolTip extends ToolTip {
         this.hpBar_.draw(this.player_.hp_, this.player_.maxHP_, this.player_.maxHPBoost_, this.player_.maxHPMax_);
         this.mpBar_.draw(this.player_.mp_, this.player_.maxMP_, this.player_.maxMPBoost_, this.player_.maxMPMax_);
         this.eGrid.setItems(this.player_.equipment_);
-        this.rankText_.draw(this.player_.numStars_);
+        this.rankText_.draw(this.player_.numStars_, this.player_.rank_, this.player_.admin_);
         super.draw();
     }
 
