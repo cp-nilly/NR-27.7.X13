@@ -978,6 +978,10 @@ public class GameObject extends BasicObject {
             }
             _local3 = _local13;
         }
+        if(this.isInvisible() && !(this is Player))
+        {
+            _local3 = CachingColorTransformer.alphaBitmapData(_local3, 0.7);
+        }
         return (_local3);
     }
 
