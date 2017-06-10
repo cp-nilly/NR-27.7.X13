@@ -1,4 +1,5 @@
 ﻿package kabam.rotmg.minimap.view {
+import com.company.assembleegameclient.util.redrawers.GlowRedrawer;
 import com.company.assembleegameclient.map.AbstractMap;
 import com.company.assembleegameclient.map.GroundLibrary;
 import com.company.assembleegameclient.objects.Character;
@@ -273,7 +274,9 @@ public class MiniMapImp extends MiniMap {
                         _local15 = 0x7F7F7F;
                     }
                     else {
-                        if (_local16.isFellowGuild_) {
+                            _local15 = _local16.glowColor_;
+                        }
+                        else if (_local16.isFellowGuild_) {
                             _local15 = 0xFF00;
                         }
                         else {
