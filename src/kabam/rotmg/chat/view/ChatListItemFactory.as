@@ -197,6 +197,9 @@ public class ChatListItemFactory {
     }
 
     private function getNameColor():uint {
+        if (this.message.nameColor != 1193046) {
+            return this.message.nameColor;
+        }
         if (this.message.name.charAt(0) == "#") {
             return (0xFFA800);
         }
@@ -214,6 +217,9 @@ public class ChatListItemFactory {
 
     private function getTextColor():uint {
         var _local1:String = this.message.name;
+        if (this.message.textColor != 1193046) {
+            return this.message.textColor;
+        }
         if (_local1 == SERVER) {
             return (0xFFFF00);
         }

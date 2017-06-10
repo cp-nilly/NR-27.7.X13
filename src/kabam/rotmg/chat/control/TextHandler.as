@@ -150,6 +150,8 @@ public class TextHandler {
         _local2.recipient = _arg1.recipient_;
         _local2.isWhisper = ((_arg1.recipient_) && (!(this.isSpecialRecipientChat(_arg1.recipient_))));
         _local2.isToMe = (_arg1.recipient_ == this.model.player.name_);
+        _local2.nameColor = _arg1.nameColor_;
+        _local2.textColor = _arg1.textColor_;
         this.addMessageText(_arg1, _local2);
         this.addTextLine.dispatch(_local2);
     }
