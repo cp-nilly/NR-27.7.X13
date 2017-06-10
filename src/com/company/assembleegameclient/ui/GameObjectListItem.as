@@ -29,17 +29,19 @@ public class GameObjectListItem extends Sprite {
     private var level:int;
     private var accountId:String;
     private var positionClassBelow:Boolean;
+    private var showAccId:Boolean;
 
-    public function GameObjectListItem(_arg1:uint, _arg2:Boolean, _arg3:GameObject, _arg4:Boolean = false) {
-        this.positionClassBelow = _arg4;
-        this.isLongVersion = _arg2;
-        this.color = _arg1;
+    public function GameObjectListItem(color:uint, isLongVersion:Boolean, go:GameObject, posClassBelow:Boolean = false, showAccId:Boolean = false) {
+        this.positionClassBelow = posClassBelow;
+        this.showAccId = showAccId;
+        this.isLongVersion = isLongVersion;
+        this.color = color;
         this.portrait = new Bitmap();
         this.portrait.x = -4;
-        this.portrait.y = ((_arg4) ? -1 : -4);
+        this.portrait.y = posClassBelow ? -1 : -4;
         addChild(this.portrait);
-        this.text = new TextFieldDisplayConcrete().setSize(13).setColor(_arg1).setHTML(_arg2);
-        if (!_arg2) {
+        this.text = new TextFieldDisplayConcrete().setSize(13).setColor(color).setHTML(isLongVersion);
+        if (!isLongVersion) {
             this.text.setTextWidth(66).setTextHeight(20).setBold(true);
         }
         this.text.x = 32;
@@ -47,7 +49,7 @@ public class GameObjectListItem extends Sprite {
         this.text.filters = [new DropShadowFilter(0, 0, 0)];
         addChild(this.text);
         this.textReady = this.text.textChanged;
-        this.draw(_arg3);
+        this.draw(go);
     }
 
     public function draw(_arg1:GameObject, _arg2:ColorTransform = null):void {
@@ -71,9 +73,12 @@ public class GameObjectListItem extends Sprite {
     }
 
     private function hasChanged():Boolean {
-        var _local1:Boolean = ((((!((this.go.name_ == this.objname))) || (!((this.go.level_ == this.level))))) || (!((this.go.objectType_ == this.type))));
-        ((_local1) && (this.updateData()));
-        return (_local1);
+        var hasChanged:Boolean =
+                this.go.name_ != this.objname ||
+                this.go.level_ != this.level ||
+                this.go.objectType_ != this.type;
+        hasChanged && this.updateData();
+        return hasChanged;
     }
 
     private function updateData():void {
@@ -111,33 +116,33 @@ public class GameObjectListItem extends Sprite {
     }
 
     private function applyLongTextToBuilder():void {
-        var _local1:String;
-        var _local2:Object = {};
+        var charDesc:String;
+        var tokens:Object = {};
         if (this.isNameDefined()) {
             if (this.positionClassBelow) {
-                _local1 = "<b>{name}</b>\n({type}{level})\n<b>Account ID:</b> {accountId}";
+                charDesc = "<b>{name}</b>\n({type}{level})";
             }
             else {
-                _local1 = "<b>{name}</b> ({type}{level})\n<b>Account ID:</b> {accountId}";
+                charDesc = "<b>{name}</b> ({type}{level})";
             }
-            if ((((this.go.name_.length > 8)) && (!(this.positionClassBelow)))) {
-                _local2.name = (this.go.name_.slice(0, 6) + "...");
+            if (this.showAccId) {
+                charDesc += "{accountId}";
+            }
+            if (this.go.name_.length > 8 && !this.positionClassBelow) {
+                tokens.name = (this.go.name_.slice(0, 6) + "...");
             }
             else {
-                _local2.name = this.go.name_;
+                tokens.name = this.go.name_;
             }
-            _local2.type = ObjectLibrary.typeToDisplayId_[this.type];
-            _local2.level = (((this.level < 1)) ? "" : (" " + this.level));
-            if(this.accountId)
-            {
-                _local2.accountId = this.accountId;
-            }
+            tokens.type = ObjectLibrary.typeToDisplayId_[this.type];
+            tokens.level = this.level < 1 ? "" : " " + this.level;
+            tokens.accountId = this.accountId ? "\n<b>Account ID:</b> " + this.accountId : "";
         }
         else {
-            _local1 = "<b>{name}</b>";
-            _local2.name = ObjectLibrary.typeToDisplayId_[this.type];
+            charDesc = "<b>{name}</b>";
+            tokens.name = ObjectLibrary.typeToDisplayId_[this.type];
         }
-        this.builder.setTemplate(_local1, _local2);
+        this.builder.setTemplate(charDesc, tokens);
     }
 
     private function isNameDefined():Boolean {
