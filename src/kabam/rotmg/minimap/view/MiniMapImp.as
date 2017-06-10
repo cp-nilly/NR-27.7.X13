@@ -1,5 +1,4 @@
 ﻿package kabam.rotmg.minimap.view {
-import com.company.assembleegameclient.util.redrawers.GlowRedrawer;
 import com.company.assembleegameclient.map.AbstractMap;
 import com.company.assembleegameclient.map.GroundLibrary;
 import com.company.assembleegameclient.objects.Character;

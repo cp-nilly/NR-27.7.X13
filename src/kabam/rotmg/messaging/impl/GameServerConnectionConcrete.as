@@ -1632,7 +1632,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
                     break;
                 case StatData.GLOW_COLOR_STAT:
                     _local4.glowColor_ = _local8;
-                    _local4.texturingCache_ = new Dictionary();
+                    _local4.clearCache();
                     break;
                 case StatData.SINK_LEVEL_STAT:
                     if (!_arg3) {

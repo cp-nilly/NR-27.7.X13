@@ -88,7 +88,7 @@ public class GameObject extends BasicObject {
     public var animations_:Animations = null;
     public var dead_:Boolean = false;
     protected var portrait_:BitmapData = null;
-    public var texturingCache_:Dictionary = null;
+    protected var texturingCache_:Dictionary = null;
     public var maxHP_:int = 200;
     public var hp_:int = 200;
     public var size_:int = 100;
@@ -280,8 +280,7 @@ public class GameObject extends BasicObject {
             return;
         }
         this.tex1Id_ = _arg1;
-        this.texturingCache_ = new Dictionary();
-        this.portrait_ = null;
+        this.clearCache();
     }
 
     public function setTex2(_arg1:int):void {
@@ -289,17 +288,18 @@ public class GameObject extends BasicObject {
             return;
         }
         this.tex2Id_ = _arg1;
-        this.texturingCache_ = new Dictionary();
-        this.portrait_ = null;
+        this.clearCache();
     }
-
-    public function setSize(param1:int) : void
-    {
-        if(param1 == this.size_)
-        {
+    
+    public function setSize(size:int):void {
+        if (size == this.size_) {
             return;
         }
-        this.size_ = param1;
+        this.size_ = size;
+        this.clearCache();
+    }
+
+    public function clearCache():void {
         this.texturingCache_ = new Dictionary();
         this.portrait_ = null;
     }
