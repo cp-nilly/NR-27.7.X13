@@ -274,6 +274,7 @@ public class MiniMapImp extends MiniMap {
                         _local15 = 0x7F7F7F;
                     }
                     else {
+                        if (_local16.glowColor_ != 0 && _local16.rank_ >= 70) {
                             _local15 = _local16.glowColor_;
                         }
                         else if (_local16.isFellowGuild_) {
