@@ -39,6 +39,9 @@ public class GameObjectListItem extends Sprite {
         this.portrait = new Bitmap();
         this.portrait.x = -4;
         this.portrait.y = posClassBelow ? -1 : -4;
+        if (showAccId) {
+            this.portrait.y = -2;
+        }
         addChild(this.portrait);
         this.text = new TextFieldDisplayConcrete().setSize(13).setColor(color).setHTML(isLongVersion);
         if (!isLongVersion) {
