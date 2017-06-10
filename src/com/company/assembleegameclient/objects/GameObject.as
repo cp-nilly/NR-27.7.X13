@@ -88,7 +88,7 @@ public class GameObject extends BasicObject {
     public var animations_:Animations = null;
     public var dead_:Boolean = false;
     protected var portrait_:BitmapData = null;
-    protected var texturingCache_:Dictionary = null;
+    public var texturingCache_:Dictionary = null;
     public var maxHP_:int = 200;
     public var hp_:int = 200;
     public var size_:int = 100;
@@ -289,6 +289,17 @@ public class GameObject extends BasicObject {
             return;
         }
         this.tex2Id_ = _arg1;
+        this.texturingCache_ = new Dictionary();
+        this.portrait_ = null;
+    }
+
+    public function setSize(param1:int) : void
+    {
+        if(param1 == this.size_)
+        {
+            return;
+        }
+        this.size_ = param1;
         this.texturingCache_ = new Dictionary();
         this.portrait_ = null;
     }

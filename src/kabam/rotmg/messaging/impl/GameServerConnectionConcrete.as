@@ -63,6 +63,7 @@ import flash.events.TimerEvent;
 import flash.geom.Point;
 import flash.net.FileReference;
 import flash.utils.ByteArray;
+import flash.utils.Dictionary;
 import flash.utils.Timer;
 import flash.utils.getTimer;
 
@@ -1471,7 +1472,12 @@ public class GameServerConnectionConcrete extends GameServerConnection {
                     _arg1.hp_ = _local8;
                     break;
                 case StatData.SIZE_STAT:
-                    _arg1.size_ = _local8;
+                    if (_arg1 is Player) {
+                        (_arg1 as Player).setSize(_local8);
+                    }
+                    else {
+                        _arg1.size_ = _local8;
+                    }
                     break;
                 case StatData.MAX_MP_STAT:
                     _local4.maxMP_ = _local8;
@@ -1626,6 +1632,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
                     break;
                 case StatData.GLOW_COLOR_STAT:
                     _local4.glowColor_ = _local8;
+                    _local4.texturingCache_ = new Dictionary();
                     break;
                 case StatData.SINK_LEVEL_STAT:
                     if (!_arg3) {
