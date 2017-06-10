@@ -10,6 +10,8 @@ public class ChatMessage {
     public var isToMe:Boolean;
     public var isWhisper:Boolean;
     public var tokens:Object;
+    public var nameColor:int = 1193046;
+    public var textColor:int = 1193046;
 
     public static function make(
             name:String,
@@ -20,6 +22,8 @@ public class ChatMessage {
             isToMe:Boolean = false,
             tokens:Object = null,
             isWhisper:Boolean = false,
+            nameColor:int = 1193046,
+            textColor:int = 1193046,
             isAdmin:Boolean = false):ChatMessage {
         var msg:ChatMessage = new ChatMessage();
         msg.name = name;
@@ -31,6 +35,8 @@ public class ChatMessage {
         msg.isToMe = isToMe;
         msg.isWhisper = isWhisper;
         msg.tokens = tokens == null ? {} : tokens;
+        msg.nameColor = nameColor;
+        msg.textColor = textColor;
         return (msg);
     }
 
