@@ -27,7 +27,7 @@ public class Parameters {
     public static const HELP_CHAT_NAME:String = "*Help*";
     public static const GUILD_CHAT_NAME:String = "*Guild*";
     public static const NEWS_TIMESTAMP_DEFAULT:Number = 1.1;
-    public static const NAME_CHANGE_PRICE:int = 1000;
+    public static const NAME_CHANGE_PRICE:int = 5000;
     public static const GUILD_CREATION_PRICE:int = 1000;
     public static const TUTORIAL_GAMEID:int = -1;
     public static const NEXUS_GAMEID:int = -2;
