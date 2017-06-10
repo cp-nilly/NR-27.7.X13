@@ -77,7 +77,7 @@ public class NameChangerPanel extends Panel {
         this.title_.setStringBuilder(this.makeNameText(_arg1));
         this.title_.y = 0;
         addChild(this.title_);
-        var _local2:LegacyBuyButton = new LegacyBuyButton(TextKey.NAME_CHANGER_CHANGE, 16, Parameters.NAME_CHANGE_PRICE, Currency.GOLD);
+        var _local2:LegacyBuyButton = new LegacyBuyButton(TextKey.NAME_CHANGER_CHANGE, 16, Parameters.NAME_CHANGE_PRICE, Currency.FAME);
         _local2.readyForPlacement.addOnce(this.positionButton);
         this.button_ = _local2;
         addChild(this.button_);
