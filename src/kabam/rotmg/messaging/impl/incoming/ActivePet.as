@@ -1,4 +1,4 @@
-﻿package kabam.rotmg.messaging.impl {
+﻿package kabam.rotmg.messaging.impl.incoming {
 import flash.utils.IDataInput;
 
 import kabam.rotmg.messaging.impl.incoming.IncomingMessage;
