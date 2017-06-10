@@ -131,6 +131,7 @@ public class GameObject extends BasicObject {
     private var iconPaths_:Vector.<GraphicsPath> = null;
     protected var shadowGradientFill_:GraphicsGradientFill = null;
     protected var shadowPath_:GraphicsPath = null;
+    protected var glowColor_:int = 0;
 
     public function GameObject(_arg1:XML) {
         var _local4:int;
@@ -280,8 +281,7 @@ public class GameObject extends BasicObject {
             return;
         }
         this.tex1Id_ = _arg1;
-        this.texturingCache_ = new Dictionary();
-        this.portrait_ = null;
+        this.clearCache();
     }
 
     public function setTex2(_arg1:int):void {
@@ -289,6 +289,24 @@ public class GameObject extends BasicObject {
             return;
         }
         this.tex2Id_ = _arg1;
+        this.clearCache();
+    }
+
+    public function setSize(size:int):void {
+        this.size_ = size;
+        if (this is Player)
+            this.clearCache();
+    }
+
+    public function setGlow(glow:int):void {
+        if (this.glowColor_ == glow) {
+            return;
+        }
+        this.glowColor_ = glow;
+        this.clearCache();
+    }
+
+    public function clearCache():void {
         this.texturingCache_ = new Dictionary();
         this.portrait_ = null;
     }
@@ -499,6 +517,11 @@ public class GameObject extends BasicObject {
 
     public function isCursedImmune():Boolean {
         return (!(((this.condition_[ConditionEffect.CE_SECOND_BATCH] & ConditionEffect.CURSE_IMMUNE_BIT) == 0)));
+    }
+
+    public function isHidden() : Boolean
+    {
+        return (this.condition_[ConditionEffect.CE_SECOND_BATCH] & ConditionEffect.HIDDEN_BIT) != 0;
     }
 
     public function isSafe(_arg1:int = 20):Boolean {
@@ -972,6 +995,9 @@ public class GameObject extends BasicObject {
                 this.texturingCache_[_local3] = _local13;
             }
             _local3 = _local13;
+        }
+        if (this.isInvisible() && !(this is Player)) {
+            _local3 = CachingColorTransformer.alphaBitmapData(_local3, 0.7);
         }
         return (_local3);
     }

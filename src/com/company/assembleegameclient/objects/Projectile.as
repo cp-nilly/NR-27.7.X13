@@ -239,6 +239,12 @@ public class Projectile extends BasicObject {
             }
             return (false);
         }
+
+        var ownPlayer:Player = map_.player_;
+        if (ownPlayer != null && ownPlayer.isHidden() && this.ownerId_ == ownPlayer.objectId_) {
+            return true;
+        }
+        
         var _local6:GameObject = this.getHit(_local4.x, _local4.y);
         if (_local6 != null) {
             _local7 = map_.player_;

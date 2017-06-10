@@ -84,7 +84,6 @@ public class Player extends Character {
     public var nameChosen_:Boolean = false;
     public var currFame_:int = 0;
     public var nextClassQuestFame_:int = -1;
-    public var legendaryRank_:int = -1;
     public var guildName_:String = null;
     public var guildRank_:int = -1;
     public var isFellowGuild_:Boolean = false;
@@ -809,7 +808,7 @@ public class Player extends Character {
         }
         var _local9:BitmapData = texturingCache_[_local8];
         if (_local9 == null) {
-            _local9 = GlowRedrawer.outlineGlow(_local8, (((this.legendaryRank_ == -1)) ? 0 : 0xFF0000));
+            _local9 = GlowRedrawer.outlineGlow(_local8, this.glowColor_);
             texturingCache_[_local8] = _local9;
         }
         if (((((isPaused()) || (isStasis()))) || (isPetrified()))) {

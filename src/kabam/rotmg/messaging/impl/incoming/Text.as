@@ -35,7 +35,7 @@ public class Text extends IncomingMessage {
     }
 
     override public function toString():String {
-        return (formatToString("TEXT", "name_", "objectId_", "numStars_", "bubbleTime_", "recipient_", "text_", "cleanText_"));
+        return (formatToString("TEXT", "name_", "objectId_", "numStars_", "bubbleTime_", "recipient_", "text_", "cleanText_", "nameColor_", "textColor_"));
     }
 
 

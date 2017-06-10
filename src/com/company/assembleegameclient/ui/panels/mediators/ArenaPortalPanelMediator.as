@@ -16,7 +16,7 @@ import kabam.rotmg.dialogs.control.OpenDialogSignal;
 import kabam.rotmg.game.model.GameModel;
 import kabam.rotmg.game.signals.ExitGameSignal;
 import kabam.rotmg.messaging.impl.GameServerConnection;
-import kabam.rotmg.messaging.impl.outgoing.arena.EnterArena;
+import kabam.rotmg.messaging.impl.outgoing.EnterArena;
 import kabam.rotmg.text.model.TextKey;
 import kabam.rotmg.ui.view.NotEnoughGoldDialog;
 

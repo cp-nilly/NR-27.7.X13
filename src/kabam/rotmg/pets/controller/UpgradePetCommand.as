@@ -5,7 +5,7 @@ import kabam.rotmg.account.core.Account;
 import kabam.rotmg.account.core.view.RegisterPromptDialog;
 import kabam.rotmg.dialogs.control.OpenDialogSignal;
 import kabam.rotmg.messaging.impl.GameServerConnection;
-import kabam.rotmg.messaging.impl.PetUpgradeRequest;
+import kabam.rotmg.messaging.impl.outgoing.PetUpgradeRequest;
 import kabam.rotmg.pets.data.FeedPetRequestVO;
 import kabam.rotmg.pets.data.FusePetRequestVO;
 import kabam.rotmg.pets.data.IUpgradePetRequestVO;
