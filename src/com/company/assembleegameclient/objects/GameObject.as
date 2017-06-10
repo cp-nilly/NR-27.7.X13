@@ -131,6 +131,7 @@ public class GameObject extends BasicObject {
     private var iconPaths_:Vector.<GraphicsPath> = null;
     protected var shadowGradientFill_:GraphicsGradientFill = null;
     protected var shadowPath_:GraphicsPath = null;
+    protected var glowColor_:int = 0;
 
     public function GameObject(_arg1:XML) {
         var _local4:int;
@@ -290,12 +291,18 @@ public class GameObject extends BasicObject {
         this.tex2Id_ = _arg1;
         this.clearCache();
     }
-    
+
     public function setSize(size:int):void {
-        if (size == this.size_) {
+        this.size_ = size;
+        if (this is Player)
+            this.clearCache();
+    }
+
+    public function setGlow(glow:int):void {
+        if (this.glowColor_ == glow) {
             return;
         }
-        this.size_ = size;
+        this.glowColor_ = glow;
         this.clearCache();
     }
 

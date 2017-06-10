@@ -84,7 +84,6 @@ public class Player extends Character {
     public var nameChosen_:Boolean = false;
     public var currFame_:int = 0;
     public var nextClassQuestFame_:int = -1;
-    public var glowColor_:int = -1;
     public var guildName_:String = null;
     public var guildRank_:int = -1;
     public var isFellowGuild_:Boolean = false;
