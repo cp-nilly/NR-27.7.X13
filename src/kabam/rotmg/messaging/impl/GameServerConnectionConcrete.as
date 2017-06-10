@@ -2198,14 +2198,13 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     }
 
     private function setFocus(packet:SetFocus) :void {
-        var _loc3_:GameObject = null;
-        var _loc2_:Dictionary = this.gs_.map.goDict_;
-        if(_loc2_)
-        {
-            _loc3_ = _loc2_[packet.objectId_];
-            gs_.setFocus(_loc3_);
-            gs_.hudView.setMiniMapFocus(_loc3_);
-            this.player.commune = this.playerId_ == packet.objectId_?null:_loc3_;
+        var obj:GameObject = null;
+        var dict:Dictionary = this.gs_.map.goDict_;
+        if (dict) {
+            obj = dict[packet.objectId_];
+            gs_.setFocus(obj);
+            gs_.hudView.setMiniMapFocus(obj);
+            this.player.commune = this.playerId_ == packet.objectId_?null:obj;
         }
     }
 

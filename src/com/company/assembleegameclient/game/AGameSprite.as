@@ -37,7 +37,7 @@ public class AGameSprite extends Sprite {
     public function initialize():void {
     }
 
-    public function setFocus(_arg1:GameObject, _arg2:Boolean = false):void {
+    public function setFocus(obj:GameObject, bool:Boolean = false):void {
     }
 
     public function applyMapInfo(_arg1:MapInfo):void {

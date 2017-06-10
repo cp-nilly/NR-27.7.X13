@@ -169,9 +169,8 @@ public class HUDView extends Sprite implements UnFocusAble {
         }
     }
 
-    public function setMiniMapFocus(Object:GameObject) : void
-    {
-        this.miniMap.setFocus(Object);
+    public function setMiniMapFocus(object:GameObject) : void {
+        this.miniMap.setFocus(object);
     }
 
 }

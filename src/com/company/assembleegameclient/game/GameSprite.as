@@ -145,12 +145,11 @@ public class GameSprite extends AGameSprite {
         mui_.onMouseUp(_arg1);
     }
 
-    override public function setFocus(_arg1:GameObject, _arg2:Boolean = false):void {
-        _arg1 = ((_arg1) || (map.player_));
-        this.focus = _arg1;
-        if (_arg2)
-        {
-            map.spectatePlayer = _arg1 as Player;
+    override public function setFocus(obj:GameObject, bool:Boolean = false):void {
+        obj = ((obj) || (map.player_));
+        this.focus = obj;
+        if (bool) {
+            map.spectatePlayer = obj as Player;
         }
     }
 
