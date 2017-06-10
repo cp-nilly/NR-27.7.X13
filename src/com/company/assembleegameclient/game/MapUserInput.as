@@ -560,11 +560,23 @@ public class MapUserInput {
         }
     }
 
-    private function useItem(_arg1:int):void {
+    private function useItem(slot:int):void {
         if (this.tabStripModel.currentSelection == TabStripModel.BACKPACK) {
-            _arg1 = (_arg1 + GeneralConstants.NUM_INVENTORY_SLOTS);
+            slot = slot + GeneralConstants.NUM_INVENTORY_SLOTS;
         }
-        GameServerConnection.instance.useItem_new(this.gs_.map.player_, _arg1);
+        var slotIndex:int =
+                ObjectLibrary.getMatchingSlotIndex(this.gs_.map.player_.equipment_[slot], this.gs_.map.player_);
+        if (slotIndex != -1) {
+            GameServerConnection.instance.invSwap(
+                    this.gs_.map.player_,
+                    this.gs_.map.player_, slot,
+                    this.gs_.map.player_.equipment_[slot],
+                    this.gs_.map.player_, slotIndex,
+                    this.gs_.map.player_.equipment_[slotIndex]);
+        }
+        else {
+            GameServerConnection.instance.useItem_new(this.gs_.map.player_, slot);
+        }
     }
 
     private function togglePerformanceStats():void {
