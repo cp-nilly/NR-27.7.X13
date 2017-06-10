@@ -56,7 +56,7 @@ public class MyPlayerToolTip extends ToolTip {
         var _local3:CharacterClass = this.classes.getCharacterClass(this.player_.objectType_);
         var _local4:CharacterSkin = _local3.skins.getSkin(this.charXML.Texture);
         this.player_.animatedChar_ = this.factory.makeCharacter(_local4.template);
-        this.playerPanel_ = new GameObjectListItem(0xB3B3B3, true, this.player_);
+        this.playerPanel_ = new GameObjectListItem(0xB3B3B3, true, this.player_, false, true);
         addChild(this.playerPanel_);
         this.hpBar_ = new StatusBar(176, 16, 14693428, 0x545454, TextKey.STATUS_BAR_HEALTH_POINTS);
         this.hpBar_.x = 6;

@@ -28,7 +28,7 @@ public class PlayerToolTip extends ToolTip {
         var _local2:int;
         super(0x363636, 0.5, 0xFFFFFF, 1);
         this.player_ = _arg1;
-        this.playerPanel_ = new GameObjectListItem(0xB3B3B3, true, this.player_);
+        this.playerPanel_ = new GameObjectListItem(0xB3B3B3, true, this.player_, false, true);
         addChild(this.playerPanel_);
         _local2 = 34;
         this.rankText_ = new RankText(this.player_.numStars_, false, true);
