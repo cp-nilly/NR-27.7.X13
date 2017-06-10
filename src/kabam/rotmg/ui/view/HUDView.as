@@ -1,6 +1,7 @@
 ﻿package kabam.rotmg.ui.view {
 import com.company.assembleegameclient.game.AGameSprite;
 import com.company.assembleegameclient.game.GameSprite;
+import com.company.assembleegameclient.objects.GameObject;
 import com.company.assembleegameclient.objects.Player;
 import com.company.assembleegameclient.ui.TradePanel;
 import com.company.assembleegameclient.ui.panels.InteractPanel;
@@ -168,6 +169,10 @@ public class HUDView extends Sprite implements UnFocusAble {
         }
     }
 
+    public function setMiniMapFocus(Object:GameObject) : void
+    {
+        this.miniMap.setFocus(Object);
+    }
 
 }
 }

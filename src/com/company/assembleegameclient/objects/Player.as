@@ -72,6 +72,7 @@ public class Player extends Character {
     public static var isMod:Boolean = false;
     private static var newP:Point = new Point();
 
+    public var commune:com.company.assembleegameclient.objects.GameObject;
     public var xpTimer:int;
     public var skinId:int;
     public var skin:AnimatedChar;
