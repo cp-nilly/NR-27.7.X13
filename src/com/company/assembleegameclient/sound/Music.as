@@ -25,6 +25,7 @@ public class Music {
     private static var musicSelection:String = "";
     public static var musicTrack:String = "";
 
+    public static function load(song:String = "sorc"):void {
         musicSelection = song;
         if (musicTrack == musicSelection || !Parameters.data_.playMusic) {
             return;
