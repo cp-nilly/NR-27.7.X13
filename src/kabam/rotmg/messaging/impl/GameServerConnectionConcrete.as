@@ -56,6 +56,7 @@ import com.hurlant.crypto.rsa.RSAKey;
 import com.hurlant.crypto.symmetric.ICipher;
 import com.hurlant.util.Base64;
 import com.hurlant.util.der.PEM;
+import com.company.assembleegameclient.sound.Music;
 
 import flash.display.BitmapData;
 import flash.events.Event;
@@ -469,6 +470,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     {
         this.injector.getInstance(ShowQueueSignal).dispatch();
         this.injector.getInstance(UpdateQueueSignal).dispatch(_arg1.position_, _arg1.count_);
+        Music.load("Wait");
     }
     
     private function HandleQueuePing(_arg1:QueuePing):void
@@ -1839,6 +1841,9 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         else {
             this.load();
         }
+        if (_arg1.music != null) {
+            Music.load(_arg1.music);
+        }
     }
 
     private function onPic(_arg1:Pic):void {
@@ -1846,6 +1851,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     }
 
     private function onDeath(_arg1:Death):void {
+        Music.load("Death");
         this.death = _arg1;
         var _local2:BitmapData = new BitmapDataSpy(gs_.stage.stageWidth, gs_.stage.stageHeight);
         _local2.draw(gs_);

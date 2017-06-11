@@ -4,10 +4,12 @@ import com.company.assembleegameclient.map.Camera;
 import com.company.assembleegameclient.map.Map;
 import com.company.assembleegameclient.map.serialization.MapDecoder;
 import com.company.util.IntPoint;
+import com.company.assembleegameclient.sound.Music;
 
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.geom.Rectangle;
+import flash.ui.MouseCursor;
 import flash.utils.ByteArray;
 import flash.utils.getTimer;
 
@@ -44,6 +46,12 @@ public class MapBackground extends Sprite {
     }
 
     private function onEnterFrame(_arg1:Event):void {
+        if (Music.musicTrack != "Menu2") {
+            if (Music.musicTrack != "Dead") {
+                Music.load();
+            }
+        }
+        Music.UpdateFade();
         this.time = getTimer();
         xVal = (xVal + ((this.time - this.lastUpdate) * TO_MILLISECONDS));
         if (xVal > (mapSize.x_ + BORDER)) {

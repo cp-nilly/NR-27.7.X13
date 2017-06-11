@@ -17,6 +17,7 @@ import com.company.util.CachingColorTransformer;
 import com.company.util.MoreColorUtil;
 import com.company.util.MoreObjectUtil;
 import com.company.util.PointUtil;
+import com.company.assembleegameclient.sound.Music;
 
 import flash.display.DisplayObject;
 import flash.display.Sprite;
@@ -459,6 +460,7 @@ public class GameSprite extends AGameSprite {
         var _local7:Number;
         var _local2:int = getTimer();
         var _local3:int = (_local2 - lastUpdate_);
+        Music.UpdateFade();
         if (this.idleWatcher_.update(_local3)) {
             closed.dispatch();
             return;
