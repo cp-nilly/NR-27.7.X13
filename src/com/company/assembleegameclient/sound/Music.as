@@ -22,6 +22,8 @@ public class Music {
         if(currentSongName == songName)
             return;
         currentSongName = songName;
+        if(fadeOutSong)
+            fadeOutSong.stop();
         fadeOutSong = currentSong;
         currentSong = new Song(songName, 0.0);
         currentSong.play();
