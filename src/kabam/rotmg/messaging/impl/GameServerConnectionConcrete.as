@@ -147,6 +147,7 @@ import kabam.rotmg.messaging.impl.incoming.ReskinUnlock;
 import kabam.rotmg.messaging.impl.incoming.ServerFull;
 import kabam.rotmg.messaging.impl.incoming.ServerPlayerShoot;
 import kabam.rotmg.messaging.impl.incoming.ShowEffect;
+import kabam.rotmg.messaging.impl.incoming.SwitchMusic;
 import kabam.rotmg.messaging.impl.incoming.TradeAccepted;
 import kabam.rotmg.messaging.impl.incoming.TradeChanged;
 import kabam.rotmg.messaging.impl.incoming.TradeDone;
@@ -459,6 +460,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.map(QUEST_REDEEM_RESPONSE).toMessage(QuestRedeemResponse).toMethod(this.onQuestRedeemResponse);
         _local1.map(KEY_INFO_RESPONSE).toMessage(KeyInfoResponse).toMethod(this.onKeyInfoResponse);
         _local1.map(LOGIN_REWARD_MSG).toMessage(ClaimDailyRewardResponse).toMethod(this.onLoginRewardResponse);
+        _local1.map(SWITCH_MUSIC).toMessage(SwitchMusic).toMethod(this.switchMusic);
         
         // server queue messages
         _local1.map(QUEUE_PONG).toMessage(QueuePong);
@@ -589,6 +591,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.unmap(SERVER_FULL);
         _local1.unmap(QUEUE_PING);
         _local1.unmap(QUEUE_PONG);
+        _local1.unmap(SWITCH_MUSIC);
     }
 
     private function encryptConnection():void {
@@ -2200,6 +2203,8 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         return (serverConnection.isConnected());
     }
 
-
+    private function switchMusic(packet:SwitchMusic) : void {
+        Music.load(packet.music);
+    }
 }
 }
