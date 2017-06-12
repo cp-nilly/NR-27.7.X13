@@ -1854,7 +1854,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     }
 
     private function onDeath(_arg1:Death):void {
-        Music.load("Death");
+        Music.load("Dead");
         this.death = _arg1;
         var _local2:BitmapData = new BitmapDataSpy(gs_.stage.stageWidth, gs_.stage.stageHeight);
         _local2.draw(gs_);

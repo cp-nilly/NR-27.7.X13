@@ -46,13 +46,13 @@ public class MapBackground extends Sprite {
     }
 
     private function onEnterFrame(_arg1:Event):void {
-        if (Music.musicTrack != "Menu2") {
-            if (Music.musicTrack != "Dead") {
-                Music.load();
+        this.time = getTimer();
+        if (Music.currentSongName != "Menu2") {
+            if (Music.currentSongName != "Dead") {
+                Music.load("Menu2");
             }
         }
-        Music.UpdateFade();
-        this.time = getTimer();
+        Music.updateFade(this.time - this.lastUpdate);
         xVal = (xVal + ((this.time - this.lastUpdate) * TO_MILLISECONDS));
         if (xVal > (mapSize.x_ + BORDER)) {
             xVal = (xVal - mapSize.x_);
