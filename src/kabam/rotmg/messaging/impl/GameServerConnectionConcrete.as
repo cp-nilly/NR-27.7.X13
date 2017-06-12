@@ -56,6 +56,7 @@ import com.hurlant.crypto.rsa.RSAKey;
 import com.hurlant.crypto.symmetric.ICipher;
 import com.hurlant.util.Base64;
 import com.hurlant.util.der.PEM;
+import com.company.assembleegameclient.sound.Music;
 
 import flash.display.BitmapData;
 import flash.events.Event;
@@ -146,6 +147,7 @@ import kabam.rotmg.messaging.impl.incoming.ReskinUnlock;
 import kabam.rotmg.messaging.impl.incoming.ServerFull;
 import kabam.rotmg.messaging.impl.incoming.ServerPlayerShoot;
 import kabam.rotmg.messaging.impl.incoming.ShowEffect;
+import kabam.rotmg.messaging.impl.incoming.SwitchMusic;
 import kabam.rotmg.messaging.impl.incoming.TradeAccepted;
 import kabam.rotmg.messaging.impl.incoming.TradeChanged;
 import kabam.rotmg.messaging.impl.incoming.TradeDone;
@@ -458,6 +460,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.map(QUEST_REDEEM_RESPONSE).toMessage(QuestRedeemResponse).toMethod(this.onQuestRedeemResponse);
         _local1.map(KEY_INFO_RESPONSE).toMessage(KeyInfoResponse).toMethod(this.onKeyInfoResponse);
         _local1.map(LOGIN_REWARD_MSG).toMessage(ClaimDailyRewardResponse).toMethod(this.onLoginRewardResponse);
+        _local1.map(SWITCH_MUSIC).toMessage(SwitchMusic).toMethod(this.switchMusic);
         
         // server queue messages
         _local1.map(QUEUE_PONG).toMessage(QueuePong);
@@ -469,6 +472,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     {
         this.injector.getInstance(ShowQueueSignal).dispatch();
         this.injector.getInstance(UpdateQueueSignal).dispatch(_arg1.position_, _arg1.count_);
+        Music.load("Wait");
     }
     
     private function HandleQueuePing(_arg1:QueuePing):void
@@ -587,6 +591,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.unmap(SERVER_FULL);
         _local1.unmap(QUEUE_PING);
         _local1.unmap(QUEUE_PONG);
+        _local1.unmap(SWITCH_MUSIC);
     }
 
     private function encryptConnection():void {
@@ -1839,6 +1844,9 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         else {
             this.load();
         }
+        if (_arg1.music != null) {
+            Music.load(_arg1.music);
+        }
     }
 
     private function onPic(_arg1:Pic):void {
@@ -1846,6 +1854,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     }
 
     private function onDeath(_arg1:Death):void {
+        Music.load("Dead");
         this.death = _arg1;
         var _local2:BitmapData = new BitmapDataSpy(gs_.stage.stageWidth, gs_.stage.stageHeight);
         _local2.draw(gs_);
@@ -2194,6 +2203,8 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         return (serverConnection.isConnected());
     }
 
-
+    private function switchMusic(packet:SwitchMusic) : void {
+        Music.load(packet.music);
+    }
 }
 }

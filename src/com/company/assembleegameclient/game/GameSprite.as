@@ -17,6 +17,7 @@ import com.company.util.CachingColorTransformer;
 import com.company.util.MoreColorUtil;
 import com.company.util.MoreObjectUtil;
 import com.company.util.PointUtil;
+import com.company.assembleegameclient.sound.Music;
 
 import flash.display.DisplayObject;
 import flash.display.Sprite;
@@ -458,13 +459,14 @@ public class GameSprite extends AGameSprite {
     private function onEnterFrame(_arg1:Event):void {
         var _local7:Number;
         var _local2:int = getTimer();
-        var _local3:int = (_local2 - lastUpdate_);
-        if (this.idleWatcher_.update(_local3)) {
+        var elapsedTime:int = (_local2 - lastUpdate_);
+        Music.updateFade(elapsedTime);
+        if (this.idleWatcher_.update(elapsedTime)) {
             closed.dispatch();
             return;
         }
         LoopedProcess.runProcesses(_local2);
-        this.frameTimeSum_ = (this.frameTimeSum_ + _local3);
+        this.frameTimeSum_ = (this.frameTimeSum_ + elapsedTime);
         this.frameTimeCount_ = (this.frameTimeCount_ + 1);
         if (this.frameTimeSum_ > 300000) {
             _local7 = int(Math.round(((1000 * this.frameTimeCount_) / this.frameTimeSum_)));
@@ -473,9 +475,9 @@ public class GameSprite extends AGameSprite {
             this.frameTimeSum_ = 0;
         }
         var _local4:int = getTimer();
-        map.update(_local2, _local3);
+        map.update(_local2, elapsedTime);
         this.monitor.dispatch("Map.update", (getTimer() - _local4));
-        camera_.update(_local3);
+        camera_.update(elapsedTime);
         var _local5:Player = map.player_;
         if (this.focus) {
             camera_.configureCamera(this.focus, ((_local5) ? _local5.isHallucinating() : false));

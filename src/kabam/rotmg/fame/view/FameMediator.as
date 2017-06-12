@@ -1,6 +1,7 @@
 ﻿package kabam.rotmg.fame.view {
 import com.company.assembleegameclient.objects.ObjectLibrary;
 import com.company.assembleegameclient.objects.TextureData;
+import com.company.assembleegameclient.sound.Music;
 import com.company.assembleegameclient.util.AnimatedChar;
 import com.company.assembleegameclient.util.MaskedImage;
 import com.company.assembleegameclient.util.TextureRedrawer;
@@ -98,6 +99,7 @@ public class FameMediator extends Mediator {
     }
 
     private function onClosed():void {
+        Music.load("Menu2");
         if (this.isFreshDeath) {
             this.setScreen.dispatch(new LegendsView());
         }
