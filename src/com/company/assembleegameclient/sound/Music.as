@@ -22,8 +22,12 @@ public class Music {
     private static var newMusicChannel:SoundChannel = null;
     private static var newMusicTransform:SoundTransform = null;
     private static var musicDict:Dictionary = new Dictionary();
-    private static var musicSelection:String = "";
+    public static var musicSelection:String = "";
     public static var musicTrack:String = "";
+
+    public function Music() {
+        super();
+    }
 
     public static function load(song:String = "sorc"):void {
         musicSelection = song;
@@ -31,9 +35,8 @@ public class Music {
             return;
         }
         musicTrack = musicSelection;
-        var songDict = "http://core.nillysrealm.com/music/";
-        var songLink = songDict + song + ".mp3";
-        newMusic = musicDict[song];
+        var songLink = "http://core.nillysrealm.com/music/" + song + ".mp3";
+        newMusic = musicDict[songLink];
         if (newMusic == null || newMusic.bytesLoaded <= 0) {
             newMusic = new Sound();
             newMusic.load(new URLRequest(songLink));
