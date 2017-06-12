@@ -31,7 +31,8 @@ public class Music {
             return;
         }
         musicTrack = musicSelection;
-        var songLink:* = "core.nillysrealm.com/music/" + song + ".mp3";
+        var songDict = "http://core.nillysrealm.com/music/";
+        var songLink = songDict + song + ".mp3";
         newMusic = musicDict[song];
         if (newMusic == null || newMusic.bytesLoaded <= 0) {
             newMusic = new Sound();
@@ -56,8 +57,8 @@ public class Music {
         musicChannel = currentMusic.play(0, int.MAX_VALUE, musicTransform);
     }
 
-    public static function setPlayMusic(_arg1:Boolean):void {
-        Parameters.data_.playMusic = _arg1;
+    public static function setPlayMusic(playmusic:Boolean):void {
+        Parameters.data_.playMusic = playmusic;
         Parameters.save();
         load(musicSelection);
         if (!Parameters.data_.playMusic && newMusicChannel != null) {
@@ -68,17 +69,17 @@ public class Music {
         }
     }
 
-    public static function setMusicVolume(_arg1:Number):void {
-        Parameters.data_.musicVolume = _arg1;
+    public static function setMusicVolume(Volume:Number):void {
+        Parameters.data_.musicVolume = Volume;
         Parameters.save();
         if (!Parameters.data_.playMusic) {
             return;
         }
         if (musicTransform != null) {
-            musicTransform.volume = _arg1;
+            musicTransform.volume = Volume;
         }
         else {
-            musicTransform = new SoundTransform(_arg1);
+            musicTransform = new SoundTransform(Volume);
         }
         musicChannel.soundTransform = musicTransform;
     }
