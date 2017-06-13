@@ -493,7 +493,6 @@ public class GameSprite extends AGameSprite {
                 this.guildText_.x = this.rankText_.width + 16;
             }
             if (_local5.isPaused()) {
-                map.filters = [PAUSED_FILTER];
                 hudView.filters = [PAUSED_FILTER];
                 map.mouseEnabled = false;
                 map.mouseChildren = false;
@@ -501,8 +500,7 @@ public class GameSprite extends AGameSprite {
                 hudView.mouseChildren = false;
             }
             else {
-                if (map.filters.length > 0) {
-                    map.filters = [];
+                if (hudView.filters.length > 0) {
                     hudView.filters = [];
                     map.mouseEnabled = true;
                     map.mouseChildren = true;
