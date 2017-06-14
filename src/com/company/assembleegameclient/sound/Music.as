@@ -49,6 +49,11 @@ public class Music {
         if (musicChannel_ != null) {
             musicChannel_.stop();
         }
+
+        if (musicName == null || musicName == "") {
+            return;
+        }
+
         music_ = new Sound();
         music_.load(new URLRequest(url.replace("{SONG}", musicName)));
         musicChannel_ = music_.play(0, int.MAX_VALUE, musicVolumeTransform);
