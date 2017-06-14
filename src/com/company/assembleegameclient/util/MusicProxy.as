@@ -6,7 +6,7 @@ public class MusicProxy implements IMusic {
 
 
     public function load():void {
-        Music.load();
+        Music.init();
     }
 
 
