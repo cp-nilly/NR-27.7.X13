@@ -30,7 +30,7 @@ public class WebLoginDialogForced extends Frame {
     private var registerText:DeprecatedClickableText;
 
     public function WebLoginDialogForced(_arg1:Boolean = false) {
-        super(TextKey.WEB_LOGIN_DIALOG_TITLE, "", TextKey.WEB_LOGIN_DIALOG_RIGHT, "/signIn");
+        super(TextKey.WEB_LOGIN_DIALOG_TITLE, "", TextKey.WEB_LOGIN_DIALOG_RIGHT);
         this.makeUI();
         if (_arg1) {
             addChild(this.getText("Attention!", -165, -85).setColor(0xFF0000));

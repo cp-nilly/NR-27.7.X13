@@ -10,7 +10,7 @@ public class ConfirmDialog extends StaticDialog {
 
     public function ConfirmDialog(_arg1:String, _arg2:String, _arg3:Function) {
         this._callback = _arg3;
-        super(_arg1, _arg2, "Cancel", "OK", null);
+        super(_arg1, _arg2, "Cancel", "OK");
         addEventListener(Dialog.LEFT_BUTTON, this.onCancel);
         addEventListener(Dialog.RIGHT_BUTTON, this.onConfirm);
     }

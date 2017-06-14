@@ -5,7 +5,6 @@ import kabam.rotmg.appengine.impl.AppEngineRequestStats;
 import kabam.rotmg.appengine.impl.AppEngineRetryLoader;
 import kabam.rotmg.appengine.impl.SimpleAppEngineClient;
 import kabam.rotmg.appengine.impl.StatsRecorderAppEngineClient;
-import kabam.rotmg.appengine.impl.TrackingAppEngineClient;
 import kabam.rotmg.application.api.ApplicationSetup;
 
 import org.swiftsuspenders.Injector;
@@ -31,12 +30,7 @@ public class AppEngineConfig implements IConfig {
             this.configureForTesting();
         }
         else {
-            if (this.TRACK_APP_ENGINE_CALLS) {
-                this.configureForTracking();
-            }
-            else {
-                this.configureForSimplicity();
-            }
+            this.configureForSimplicity();
         }
     }
 
@@ -48,11 +42,6 @@ public class AppEngineConfig implements IConfig {
         this.injector.map(AppEngineRequestStats).asSingleton();
         this.injector.map(SimpleAppEngineClient);
         this.injector.map(AppEngineClient).toType(StatsRecorderAppEngineClient);
-    }
-
-    private function configureForTracking():void {
-        this.injector.map(SimpleAppEngineClient);
-        this.injector.map(AppEngineClient).toType(TrackingAppEngineClient);
     }
 
     private function configureForSimplicity():void {

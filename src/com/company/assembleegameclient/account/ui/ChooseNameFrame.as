@@ -17,7 +17,7 @@ public class ChooseNameFrame extends Frame {
     private var nameInput:TextInputField;
 
     public function ChooseNameFrame(_arg1:AGameSprite, _arg2:Boolean) {
-        super(TextKey.CHOOSE_NAME_TITLE, TextKey.FRAME_CANCEL, TextKey.CHOOSE_NAME_CHOOSE, "/chooseName");
+        super(TextKey.CHOOSE_NAME_TITLE, TextKey.FRAME_CANCEL, TextKey.CHOOSE_NAME_CHOOSE);
         this.gameSprite = _arg1;
         this.isPurchase = _arg2;
         this.nameInput = new TextInputField(TextKey.CHOOSE_NAME_NAME, false);

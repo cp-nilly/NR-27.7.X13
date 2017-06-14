@@ -17,7 +17,7 @@ public class WebForgotPasswordDialog extends Frame {
     private var registerText:DeprecatedClickableText;
 
     public function WebForgotPasswordDialog() {
-        super("WebForgotPasswordDialog.title", "WebForgotPasswordDialog.leftButton", "WebForgotPasswordDialog.rightButton", "/forgotPassword");
+        super("WebForgotPasswordDialog.title", "WebForgotPasswordDialog.leftButton", "WebForgotPasswordDialog.rightButton");
         this.emailInput = new TextInputField("WebForgotPasswordDialog.email", false);
         addTextInputField(this.emailInput);
         this.registerText = new DeprecatedClickableText(12, false, "WebForgotPasswordDialog.register");

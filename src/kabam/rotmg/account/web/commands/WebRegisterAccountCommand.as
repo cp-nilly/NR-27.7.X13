@@ -7,9 +7,7 @@ import kabam.lib.tasks.TaskSequence;
 import kabam.rotmg.account.core.services.RegisterAccountTask;
 import kabam.rotmg.account.core.signals.UpdateAccountInfoSignal;
 import kabam.rotmg.account.web.view.WebAccountDetailDialog;
-import kabam.rotmg.core.service.TrackingData;
 import kabam.rotmg.core.signals.TaskErrorSignal;
-import kabam.rotmg.core.signals.TrackEventSignal;
 import kabam.rotmg.dialogs.control.OpenDialogSignal;
 
 public class WebRegisterAccountCommand {
@@ -24,8 +22,6 @@ public class WebRegisterAccountCommand {
     public var updateAccount:UpdateAccountInfoSignal;
     [Inject]
     public var openDialog:OpenDialogSignal;
-    [Inject]
-    public var track:TrackEventSignal;
 
 
     public function execute():void {
@@ -36,7 +32,6 @@ public class WebRegisterAccountCommand {
 
     private function makeSuccess():Task {
         var _local1:TaskSequence = new TaskSequence();
-        _local1.add(new DispatchSignalTask(this.track, this.getTrackingData()));
         _local1.add(new DispatchSignalTask(this.updateAccount));
         _local1.add(new DispatchSignalTask(this.openDialog, new WebAccountDetailDialog()));
         return (_local1);
@@ -44,13 +39,6 @@ public class WebRegisterAccountCommand {
 
     private function makeFailure():DispatchSignalTask {
         return (new DispatchSignalTask(this.taskError, this.task));
-    }
-
-    private function getTrackingData():TrackingData {
-        var _local1:TrackingData = new TrackingData();
-        _local1.category = "account";
-        _local1.action = "accountRegistered";
-        return (_local1);
     }
 
 
