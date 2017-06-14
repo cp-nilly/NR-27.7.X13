@@ -2,7 +2,6 @@
 import com.company.assembleegameclient.game.GameSprite;
 import com.company.assembleegameclient.parameters.Parameters;
 import com.company.assembleegameclient.ui.dialogs.Dialog;
-import com.company.googleanalytics.GA;
 
 import flash.events.Event;
 
@@ -30,7 +29,6 @@ public class LeavePetYard extends PetDialog {
 
     private function onExitToNexus(_arg1:Event):void {
         this.gameSprite.gsc_.escape();
-        GA.global().trackEvent("enterPortal", "Nexus Button");
         Parameters.data_.needsRandomRealm = false;
         Parameters.save();
         this.closeDialogSignal.dispatch();

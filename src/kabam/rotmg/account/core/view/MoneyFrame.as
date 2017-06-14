@@ -22,7 +22,6 @@ import org.osflash.signals.Signal;
 public class MoneyFrame extends Sprite {
 
     private static const TITLE:String = TextKey.MONEY_FRAME_TITLE;//"MoneyFrame.title"
-    private static const TRACKING:String = "/money";
     private static const PAYMENT_SUBTITLE:String = TextKey.MONEY_FRAME_PAYMENT;//"MoneyFrame.payment"
     private static const GOLD_SUBTITLE:String = TextKey.MONEY_FRAME_GOLD;//"MoneyFrame.gold"
     private static const BUY_NOW:String = TextKey.MONEY_FRAME_BUY;//"MoneyFrame.buy"
@@ -46,7 +45,7 @@ public class MoneyFrame extends Sprite {
     public function initialize(_arg1:Offers, _arg2:MoneyConfig):void {
         this.offers = _arg1;
         this.config = _arg2;
-        this.frame = new Frame(TITLE, "", "", TRACKING, WIDTH);
+        this.frame = new Frame(TITLE, "", "", WIDTH);
         ((_arg2.showPaymentMethods()) && (this.addPaymentMethods()));
         this.addOffers();
         this.addBuyNowButton();

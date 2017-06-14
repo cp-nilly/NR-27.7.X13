@@ -9,7 +9,7 @@ public class DebugDialog extends StaticDialog {
     private var f:Function;
 
     public function DebugDialog(_arg1:String, _arg2:String = "Debug", _arg3:Function = null) {
-        super(_arg2, _arg1, "OK", null, null);
+        super(_arg2, _arg1, "OK", null);
         this.f = _arg3;
         addEventListener(Dialog.LEFT_BUTTON, this.onDialogComplete);
     }

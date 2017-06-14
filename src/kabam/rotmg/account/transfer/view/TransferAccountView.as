@@ -38,7 +38,7 @@ public class TransferAccountView extends Frame {
     private var endLink:String = "</a></font>";
 
     public function TransferAccountView(_arg1:String, _arg2:String) {
-        super("Register your account on realmofthemadgod.com", "RegisterWebAccountDialog.leftButton", "RegisterWebAccountDialog.rightButton", "", 326);
+        super("Register your account on realmofthemadgod.com", "RegisterWebAccountDialog.leftButton", "RegisterWebAccountDialog.rightButton", 326);
         this.kbmEmail = _arg1;
         this.kbmPassword = _arg2;
         this.makeUIElements();

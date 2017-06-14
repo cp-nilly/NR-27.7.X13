@@ -1,6 +1,5 @@
 ﻿package com.company.assembleegameclient.account.ui {
 import com.company.assembleegameclient.ui.DeprecatedClickableText;
-import com.company.googleanalytics.GA;
 import com.company.util.GraphicsUtil;
 
 import flash.display.CapsStyle;
@@ -27,7 +26,6 @@ public class Frame extends Sprite {
     public var titleText_:TextFieldDisplayConcrete;
     public var leftButton_:DeprecatedClickableText;
     public var rightButton_:DeprecatedClickableText;
-    public var analyticsPageName_:String;
     public var textInputFields_:Vector.<TextInputField> = new Vector.<TextInputField>();
     public var navigationLinks_:Vector.<DeprecatedClickableText> = new Vector.<DeprecatedClickableText>();
     public var w_:int = 288;
@@ -41,19 +39,18 @@ public class Frame extends Sprite {
 
     private const graphicsData_:Vector.<IGraphicsData> = new <IGraphicsData>[backgroundFill_, path2_, GraphicsUtil.END_FILL, titleFill_, path1_, GraphicsUtil.END_FILL, lineStyle_, path2_, GraphicsUtil.END_STROKE];
 
-    public function Frame(_arg1:String, _arg2:String, _arg3:String, _arg4:String = "", _arg5:int = 288) {
+    public function Frame(title:String, leftBtn:String, rightBtn:String, width:int = 288) {
         super();
-        this.w_ = _arg5;
+        this.w_ = width;
         this.titleText_ = new TextFieldDisplayConcrete().setSize(13).setColor(0xB3B3B3);
-        this.titleText_.setStringBuilder(new LineBuilder().setParams(_arg1));
+        this.titleText_.setStringBuilder(new LineBuilder().setParams(title));
         this.titleText_.filters = [new DropShadowFilter(0, 0, 0)];
         this.titleText_.x = 5;
         this.titleText_.y = 3;
         this.titleText_.filters = [new DropShadowFilter(0, 0, 0, 0.5, 12, 12)];
         addChild(this.titleText_);
-        this.makeAndAddLeftButton(_arg2);
-        this.makeAndAddRightButton(_arg3);
-        this.analyticsPageName_ = _arg4;
+        this.makeAndAddLeftButton(leftBtn);
+        this.makeAndAddRightButton(rightBtn);
         filters = [new DropShadowFilter(0, 0, 0, 0.5, 12, 12)];
         addEventListener(Event.ADDED_TO_STAGE, this.onAddedToStage);
     }
@@ -183,7 +180,6 @@ public class Frame extends Sprite {
         if (this.textInputFields_.length > 0) {
             stage.focus = this.textInputFields_[0].inputText_;
         }
-        ((this.analyticsPageName_) && (GA.global().trackPageview(this.analyticsPageName_)));
     }
 
     protected function draw():void {
