@@ -36,6 +36,7 @@ public class SavedCharactersList extends Event {
     public var tokens_:int = 0;
     public var numStars_:int = 0;
     public var nextCharSlotPrice_:int;
+    public var charSlotCurrency_:int;
     public var guildName_:String;
     public var guildRank_:int;
     public var name_:String = null;
@@ -112,6 +113,7 @@ public class SavedCharactersList extends Event {
         this.credits_ = int(_arg1.Credits);
         this.tokens_ = int(_arg1.FortuneToken);
         this.nextCharSlotPrice_ = int(_arg1.NextCharSlotPrice);
+        this.charSlotCurrency_ = int(_arg1.CharSlotCurrency);
         this.isAgeVerified = ((!((this.accountId_ == ""))) && ((_arg1.IsAgeVerified == 1)));
         this.hasPlayerDied = true;
     }

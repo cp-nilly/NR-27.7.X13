@@ -75,7 +75,7 @@ public class MoneyFrameMediator extends Mediator {
     }
 
     override public function destroy():void {
-        if (this.hudModel.gameSprite.map.name_ == "Arena") {
+        if (this.hudModel.gameSprite != null && this.hudModel.gameSprite.map.name_ == "Arena") {
             this.openDialog.dispatch(new ContinueOrQuitDialog(this.currentArenaRun.costOfContinue, true));
         }
         this.view.buyNow.add(this.onBuyNow);
