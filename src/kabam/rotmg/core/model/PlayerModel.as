@@ -12,8 +12,6 @@ import org.osflash.signals.Signal;
 
 public class PlayerModel {
 
-    public static const CHARACTER_SLOT_PRICES:Array = [600, 800, 1000];
-
     public const creditsChanged:Signal = new Signal(int);
     public const fameChanged:Signal = new Signal(int);
     public const tokensChanged:Signal = new Signal(int);
@@ -89,6 +87,11 @@ public class PlayerModel {
         return (this.charList.fame_);
     }
 
+    public function changeFame(amount:int):void {
+        this.charList.fame_ = this.charList.fame_ + amount;
+        this.fameChanged.dispatch(this.charList.fame_);
+    }
+
     public function setFame(_arg1:int):void {
         if (this.charList.fame_ != _arg1) {
             this.charList.fame_ = _arg1;
@@ -144,9 +147,12 @@ public class PlayerModel {
         return (this.charList.guildRank_);
     }
 
-    public function getNextCharSlotPrice():int {
-        var _local1:int = Math.min((CHARACTER_SLOT_PRICES.length - 1), (this.charList.maxNumChars_ - 1));
-        return (CHARACTER_SLOT_PRICES[_local1]);
+    public function getCharSlotPrice():int {
+        return this.charList.nextCharSlotPrice_;
+    }
+
+    public function getCharSlotCurrency():int { // 0 = gold, 1 = fame
+        return this.charList.charSlotCurrency_;
     }
 
     public function getTotalFame():int {

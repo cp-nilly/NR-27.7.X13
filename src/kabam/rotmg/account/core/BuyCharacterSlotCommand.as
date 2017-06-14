@@ -1,6 +1,7 @@
 ﻿package kabam.rotmg.account.core {
 import com.company.assembleegameclient.screens.CharacterSelectionAndNewsScreen;
 import com.company.assembleegameclient.ui.dialogs.ErrorDialog;
+import com.company.assembleegameclient.ui.dialogs.NotEnoughFameDialog;
 
 import kabam.lib.tasks.BranchingTask;
 import kabam.lib.tasks.DispatchSignalTask;
@@ -42,7 +43,12 @@ public class BuyCharacterSlotCommand {
 
     public function execute():void {
         if (this.isSlotUnaffordable()) {
-            this.promptToGetMoreGold();
+            if (this.model.getCharSlotCurrency() == 0) {
+                this.promptToGetMoreGold();
+            }
+            else {
+                this.promptNotEnoughFame();
+            }
         }
         else {
             this.purchaseSlot();
@@ -50,11 +56,18 @@ public class BuyCharacterSlotCommand {
     }
 
     private function isSlotUnaffordable():Boolean {
-        return ((this.model.getCredits() < this.model.getNextCharSlotPrice()));
+        var tooPoor:Boolean = this.model.getCharSlotCurrency() == 0 ?
+                this.model.getCredits() < this.model.getCharSlotPrice() :
+                this.model.getFame() < this.model.getCharSlotPrice();
+        return tooPoor;
     }
 
     private function promptToGetMoreGold():void {
         this.openDialog.dispatch(new CharacterSlotNeedGoldDialog());
+    }
+
+    private function promptNotEnoughFame():void {
+        this.openDialog.dispatch(new NotEnoughFameDialog());
     }
 
     private function purchaseSlot():void {
