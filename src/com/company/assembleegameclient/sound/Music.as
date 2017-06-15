@@ -26,7 +26,8 @@ public class Music {
         musicName = name;
 
         if (currentSong != null) {
-            stopMusic();
+            if(fadeOutSong)
+                fadeOutSong.stop();
             fadeOutSong = currentSong;
             fadeOutSong.volume = 0;
         }
@@ -34,12 +35,7 @@ public class Music {
         startNewMusic();
     }
 
-    private static function stopMusic(tween:GTween = null):void {
-        if(fadeOutSong)
-            fadeOutSong.stop()
-    }
-
-    private static function startNewMusic(tween:GTween = null):void {
+    private static function startNewMusic():void {
         if (musicName == null || musicName == "") {
             return;
         }
