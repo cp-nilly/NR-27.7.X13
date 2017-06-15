@@ -50,6 +50,8 @@ public class SavedCharactersList extends Event {
     public var classAvailability:Object;
     public var isAgeVerified:Boolean;
     public var rank_:int;
+    public var menuMusic_:String;
+    public var deadMusic_:String;
     private var account:Account;
 
     public function SavedCharactersList(_arg1:String) {
@@ -114,6 +116,8 @@ public class SavedCharactersList extends Event {
         this.nextCharSlotPrice_ = int(_arg1.NextCharSlotPrice);
         this.isAgeVerified = ((!((this.accountId_ == ""))) && ((_arg1.IsAgeVerified == 1)));
         this.hasPlayerDied = true;
+        this.menuMusic_ = _arg1.MenuMusic;
+        this.deadMusic_ = _arg1.DeadMusic;
     }
 
     private function parseBeginnersPackageData(_arg1:XML):void {

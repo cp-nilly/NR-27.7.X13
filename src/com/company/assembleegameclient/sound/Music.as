@@ -15,7 +15,7 @@ public class Music {
     private static var music_:Sound = null;
     private static var musicVolumeTransform:SoundTransform;
     private static var musicChannel_:SoundChannel = null;
-    private static var fadeTime:Number = 2;
+    private static var fadeTime:Number = 3;
     private static var musicName:String;
     private static var gt:GTween;
     private static var url:String;
@@ -27,10 +27,9 @@ public class Music {
         gt.onChange = setTransform;
         var app:ApplicationSetup = StaticInjectorContext.getInjector().getInstance(ApplicationSetup);
         url = app.getAppEngineUrl(true) + "/music/{SONG}.mp3";
-        load();
     }
 
-    public static function load(name:String = "sorc"):void {
+    public static function load(name:String):void {
         if (musicName == name) {
             return;
         }

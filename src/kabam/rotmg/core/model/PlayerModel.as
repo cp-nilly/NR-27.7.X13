@@ -259,6 +259,12 @@ public class PlayerModel {
         return (true);
     }
 
+    public function getMenuMusic():String {
+        return this.charList.menuMusic_;
+    }
 
+    public function getDeadMusic():String {
+        return this.charList.deadMusic_;
+    }
 }
 }
