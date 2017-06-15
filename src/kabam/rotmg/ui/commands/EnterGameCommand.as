@@ -36,17 +36,17 @@ public class EnterGameCommand {
             this.showNoServersDialog();
         }
         else {
-            if (!this.account.isRegistered()) {
-                this.launchGame();
-            }
-            else {
+            //if (!this.account.isRegistered()) {
+            //    this.launchGame();
+            //}
+            //else {
                 if (!this.model.getIsAgeVerified()) {
                     this.showAgeVerificationDialog();
                 }
                 else {
                     this.showCurrentCharacterScreen();
                 }
-            }
+            //}
         }
     }
 
