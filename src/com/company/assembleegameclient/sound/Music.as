@@ -1,42 +1,11 @@
 ﻿package com.company.assembleegameclient.sound {
 import com.company.assembleegameclient.parameters.Parameters;
-import com.gskinner.motion.GTween;
-
-import flash.media.Sound;
-import flash.media.SoundChannel;
-import flash.media.SoundTransform;
-import flash.net.URLRequest;
-
-import kabam.rotmg.application.api.ApplicationSetup;
-import kabam.rotmg.core.StaticInjectorContext;
 
 public class Music {
 
-    private static var music_:Sound = null;
-    private static var fadeTime:Number = 2;
     private static var musicName:String;
-    private static var url:String;
+    private static var song:Song;
 
-    private static var musicVolumeTransform:SoundTransform;
-    private static var musicChannel_:SoundChannel;
-    private static var musicTween:GTween;
-
-    private static var fadeOutVolumeTransform:SoundTransform;
-    private static var fadeOutChannel_:SoundChannel;
-    private static var fadeOutTween:GTween;
-
-
-    public static function init():void {
-        musicVolumeTransform = new SoundTransform(0);
-        musicTween = new GTween(musicVolumeTransform, fadeTime);
-        musicTween.onChange = setMusicVolTransform;
-        fadeOutVolumeTransform = new SoundTransform(0);
-        fadeOutTween = new GTween(fadeOutVolumeTransform, fadeTime);
-        fadeOutTween.onChange = setFadeOutVolTransform;
-        fadeOutTween.onComplete = stopMusic;
-        var app:ApplicationSetup = StaticInjectorContext.getInjector().getInstance(ApplicationSetup);
-        url = app.getAppEngineUrl(true) + "/music/{SONG}.mp3";
-    }
 
     public static function load(name:String):void {
         if (musicName == name) {
@@ -44,66 +13,40 @@ public class Music {
         }
         musicName = name;
 
-        if (musicChannel_ != null) {
-            stopMusic();
-            fadeOutVolumeTransform.volume = musicChannel_.soundTransform.volume;
-            fadeOutChannel_ = musicChannel_;
-            fadeOutChannel_.soundTransform = fadeOutVolumeTransform;
-            fadeOutTween.setValue("volume", 0);
-        }
-
-        startNewMusic();
-    }
-
-    private static function stopMusic(tween:GTween = null):void {
-        if (fadeOutChannel_ != null) {
-            fadeOutChannel_.stop();
-            fadeOutChannel_ = null;
+        if (Parameters.data_.playMusic) {
+            transitionNewMusic();
         }
     }
 
-    private static function startNewMusic(tween:GTween = null):void {
-        musicChannel_ = null;
-
+    private static function transitionNewMusic():void {
+        if (song) {
+            song.stop();
+        }
         if (musicName == null || musicName == "") {
             return;
         }
-
-        music_ = new Sound();
-        music_.load(new URLRequest(url.replace("{SONG}", musicName)));
-        musicChannel_ = music_.play(0, int.MAX_VALUE, musicVolumeTransform);
-        musicTween.setValue("volume", Parameters.data_.playMusic ? Parameters.data_.musicVolume : 0);
+        song = new Song(musicName);
+        song.play(Parameters.data_.musicVolume);
     }
 
-    private static function setMusicVolTransform(tween:GTween):void {
-        if (musicChannel_ != null) {
-            musicChannel_.soundTransform = musicVolumeTransform;
-        }
-    }
-
-    private static function setFadeOutVolTransform(tween:GTween):void {
-        if (fadeOutChannel_ != null) {
-            fadeOutChannel_.soundTransform = fadeOutVolumeTransform;
-        }
-    }
-
-    public static function setPlayMusic(playMusic:Boolean):void {
-        Parameters.data_.playMusic = playMusic;
+    public static function setPlayMusic(play:Boolean):void {
+        Parameters.data_.playMusic = play;
         Parameters.save();
-
-        var vol:Number = playMusic ? Parameters.data_.musicVolume : 0;
-        musicTween.setValue("volume", vol);
-        musicVolumeTransform.volume = vol;
+        if (play) {
+            transitionNewMusic();
+        }
+        else if (song) {
+            song.stop(true);
+            song = null;
+        }
     }
 
     public static function setMusicVolume(newVol:Number):void {
         Parameters.data_.musicVolume = newVol;
         Parameters.save();
-        if (!Parameters.data_.playMusic) {
-            return;
+        if (Parameters.data_.playMusic && song) {
+            song.volume = newVol;
         }
-        musicTween.setValue("volume", newVol);
-        musicVolumeTransform.volume = newVol;
     }
 
 

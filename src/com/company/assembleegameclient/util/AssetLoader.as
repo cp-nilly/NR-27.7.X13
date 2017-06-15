@@ -5,7 +5,6 @@ import com.company.assembleegameclient.map.RegionLibrary;
 import com.company.assembleegameclient.objects.ObjectLibrary;
 import com.company.assembleegameclient.objects.particles.ParticleLibrary;
 import com.company.assembleegameclient.parameters.Parameters;
-import com.company.assembleegameclient.sound.IMusic;
 import com.company.assembleegameclient.sound.SFX;
 import com.company.assembleegameclient.sound.SoundEffectLibrary;
 import com.company.assembleegameclient.ui.options.Options;
@@ -21,12 +20,6 @@ public class AssetLoader {
 
     public static var currentXmlIsTesting:Boolean = false;
 
-    public var music:IMusic;
-
-    public function AssetLoader() {
-        this.music = new MusicProxy();
-        super();
-    }
 
     public function load():void {
         this.addImages();
@@ -39,7 +32,6 @@ public class AssetLoader {
         this.parseRegionFiles();
         Parameters.load();
         Options.refreshCursor();
-        this.music.load();
         SFX.load();
     }
 
