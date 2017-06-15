@@ -12,9 +12,7 @@ import kabam.rotmg.core.StaticInjectorContext;
 
 public class Music {
 
-    private static var fadeTime:Number = 2;
     private static var musicName:String;
-
     private static var currentSong:Song;
     private static var fadeOutSong:Song;
 
