@@ -1,5 +1,9 @@
 ﻿package kabam.rotmg.chat.control {
 import com.company.assembleegameclient.parameters.Parameters;
+import com.company.assembleegameclient.sound.Music;
+
+import flash.display.DisplayObject;
+import flash.events.Event;
 
 import kabam.rotmg.account.core.Account;
 import kabam.rotmg.appengine.api.AppEngineClient;
@@ -29,12 +33,26 @@ public class ParseChatMessageCommand {
 
 
     public function execute():void {
-        switch (this.data) {
-            case "/help":
-                this.addTextLine.dispatch(ChatMessage.make(Parameters.HELP_CHAT_NAME, TextKey.HELP_COMMAND));
-                return;
-            default:
-                this.hudModel.gameSprite.gsc_.playerText(this.data);
+        var text:String = this.data.toLowerCase();
+        if (text == "/help") {
+            this.addTextLine.dispatch(ChatMessage.make(Parameters.HELP_CHAT_NAME, TextKey.HELP_COMMAND));
+        }
+        if (text == "/volume") {
+            this.addTextLine.dispatch(ChatMessage.make("*Help*", "Music Volume: " + Parameters.data_["musicVolume"] * 100 + "% - Usage: /volume <number number in the range [0; 100]>"));
+            return;
+        }
+        var volumeMatch:Array = text.match("/volume (\\d*\\.*\\d+)$");
+        if (volumeMatch != null) {
+            var getVolume:* = Number(volumeMatch[1]);
+            getVolume = getVolume > 0 ? getVolume : 0;
+            getVolume = getVolume < 100 ? getVolume : 100;
+            var newVolume:Number = getVolume / 100;
+            Music.setMusicVolume(newVolume);
+            this.addTextLine.dispatch(ChatMessage.make(Parameters.HELP_CHAT_NAME, "Music volume set to " + getVolume + "%."));
+            return;
+        }
+        else {
+            this.hudModel.gameSprite.gsc_.playerText(this.data);
         }
     }
 
