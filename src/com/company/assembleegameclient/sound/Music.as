@@ -33,7 +33,8 @@ public class Music {
         Parameters.data_.playMusic = playMusic;
         Parameters.save();
         currentSong.volume = Parameters.data_.playMusic ? Parameters.data_.musicVolume : 0.0;
-        fadeOutSong.volume = 0.0;
+        if(fadeOutSong)
+            fadeOutSong.volume = 0.0;
     }
 
     public static function setMusicVolume(volume:Number):void {
