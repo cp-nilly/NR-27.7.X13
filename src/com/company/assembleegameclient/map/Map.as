@@ -270,18 +270,18 @@ public class Map extends AbstractMap {
         }
     }
 
-    public function internalRemoveObj(_arg1:int):void {
-        var _local2:Dictionary = goDict_;
-        var _local3:BasicObject = _local2[_arg1];
-        if (_local3 == null) {
-            _local2 = boDict_;
-            _local3 = _local2[_arg1];
-            if (_local3 == null) {
+    public function internalRemoveObj(objId:int):void {
+        var dict:Dictionary = goDict_;
+        var bo:BasicObject = dict[objId];
+        if (bo == null) {
+            dict = boDict_;
+            bo = dict[objId];
+            if (bo == null) {
                 return;
             }
         }
-        _local3.removeFromMap();
-        delete _local2[_arg1];
+        bo.removeFromMap();
+        delete dict[objId];
     }
 
     public function getSquare(_arg1:Number, _arg2:Number):Square {
