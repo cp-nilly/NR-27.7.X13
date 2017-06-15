@@ -1,6 +1,5 @@
 ﻿package com.company.assembleegameclient.screens {
 import com.company.assembleegameclient.ui.Scrollbar;
-import com.company.googleanalytics.GA;
 
 import flash.display.Graphics;
 import flash.display.Shape;
@@ -47,7 +46,6 @@ public class ServersScreen extends Sprite {
         this.makeServerBoxes();
         (((this.serverBoxes_.height > 400)) && (this.makeScrollbar()));
         this.makeMenuBar();
-        GA.global().trackPageview("/serversScreen");
     }
 
     private function makeMenuBar():void {

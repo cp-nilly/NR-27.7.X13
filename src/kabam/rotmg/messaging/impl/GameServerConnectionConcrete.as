@@ -911,7 +911,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     override public function buy(sellableObjectId:int, quantity:int):void {
         var sObj:SellableObject;
         var converted:Boolean;
-        if (outstandingBuy_ != null) {
+        if (outstandingBuy_) {
             return;
         }
         sObj = gs_.map.goDict_[sellableObjectId];
@@ -933,7 +933,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     }
 
     private function buyConfirmation(_arg1:SellableObject, _arg2:Boolean, _arg3:int, _arg4:int) {
-        outstandingBuy_ = new OutstandingBuy(_arg1.soldObjectInternalName(), _arg1.price_, _arg1.currency_, _arg2);
+        outstandingBuy_ = true;
         var _local5:Buy = (this.messages.require(BUY) as Buy);
         _local5.objectId_ = _arg3;
         _local5.quantity_ = _arg4;
@@ -1864,12 +1864,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     }
 
     private function onBuyResult(_arg1:BuyResult):void {
-        if (_arg1.result_ == BuyResult.SUCCESS_BRID) {
-            if (outstandingBuy_ != null) {
-                outstandingBuy_.record();
-            }
-        }
-        outstandingBuy_ = null;
+        outstandingBuy_ = false;
         this.handleBuyResultType(_arg1);
     }
 

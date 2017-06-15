@@ -89,7 +89,7 @@ public class CharacterRectList extends Sprite {
     }
 
     private function onBuyCharSlot(_arg1:Event):void {
-        this.buyCharacterSlot.dispatch(this.model.getNextCharSlotPrice());
+        this.buyCharacterSlot.dispatch(this.model.getCharSlotPrice());
     }
 
 

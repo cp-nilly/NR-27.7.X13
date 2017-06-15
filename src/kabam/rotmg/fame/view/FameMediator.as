@@ -10,7 +10,6 @@ import flash.display.BitmapData;
 import kabam.rotmg.assets.services.CharacterFactory;
 import kabam.rotmg.core.signals.GotoPreviousScreenSignal;
 import kabam.rotmg.core.signals.SetScreenSignal;
-import kabam.rotmg.core.signals.TrackPageViewSignal;
 import kabam.rotmg.death.model.DeathModel;
 import kabam.rotmg.fame.model.FameModel;
 import kabam.rotmg.fame.service.RequestCharacterFameTask;
@@ -32,8 +31,6 @@ public class FameMediator extends Mediator {
     [Inject]
     public var gotoPrevious:GotoPreviousScreenSignal;
     [Inject]
-    public var track:TrackPageViewSignal;
-    [Inject]
     public var task:RequestCharacterFameTask;
     [Inject]
     public var factory:CharacterFactory;
@@ -43,7 +40,6 @@ public class FameMediator extends Mediator {
 
     override public function initialize():void {
         this.view.closed.add(this.onClosed);
-        this.track.dispatch("/fame");
         this.setViewDataFromDeath();
         this.requestFameData();
     }

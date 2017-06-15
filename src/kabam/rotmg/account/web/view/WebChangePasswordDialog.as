@@ -19,7 +19,7 @@ public class WebChangePasswordDialog extends Frame {
     public var retypeNewPassword_:TextInputField;
 
     public function WebChangePasswordDialog() {
-        super(TextKey.WEB_CHANGE_PASSWORD_TITLE, TextKey.WEB_CHANGE_PASSWORD_LEFT, TextKey.WEB_CHANGE_PASSWORD_RIGHT, "/changePassword");
+        super(TextKey.WEB_CHANGE_PASSWORD_TITLE, TextKey.WEB_CHANGE_PASSWORD_LEFT, TextKey.WEB_CHANGE_PASSWORD_RIGHT);
         this.password_ = new TextInputField(TextKey.WEB_CHANGE_PASSWORD_PASSWORD, true);
         addTextInputField(this.password_);
         this.newPassword_ = new TextInputField(TextKey.WEB_CHANGE_PASSWORD_NEW_PASSWORD, true);

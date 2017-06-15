@@ -132,7 +132,7 @@ public class GameServerConnection {
     public var lastTickId_:int = -1;
     public var jitterWatcher_:JitterWatcher;
     public var serverConnection:SocketServer;
-    public var outstandingBuy_:OutstandingBuy = null;
+    public var outstandingBuy_:Boolean;
 
 
     public function chooseName(_arg1:String):void {

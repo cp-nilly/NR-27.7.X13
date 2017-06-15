@@ -8,7 +8,6 @@ public class FixedIPSetup implements ApplicationSetup {
     private const SERVER:String = "rotmgtesting.appspot.com";
     private const UNENCRYPTED:String = ("http://" + SERVER);
     private const ENCRYPTED:String = ("https://" + SERVER);
-    private const ANALYTICS:String = "UA-99999999-1";
     private const BUILD_LABEL:String = "<font color='#9900FF'>{IP}</font> #{VERSION}";
 
     private var ipAddress:String;
@@ -21,10 +20,6 @@ public class FixedIPSetup implements ApplicationSetup {
 
     public function getAppEngineUrl(_arg1:Boolean = false):String {
         return (((_arg1) ? this.UNENCRYPTED : this.ENCRYPTED));
-    }
-
-    public function getAnalyticsCode():String {
-        return (this.ANALYTICS);
     }
 
     public function getBuildLabel():String {

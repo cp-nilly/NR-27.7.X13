@@ -5,8 +5,6 @@ import kabam.rotmg.account.core.services.RegisterAccountTask;
 import kabam.rotmg.account.kongregate.view.KongregateApi;
 import kabam.rotmg.account.web.model.AccountData;
 import kabam.rotmg.appengine.api.AppEngineClient;
-import kabam.rotmg.core.service.TrackingData;
-import kabam.rotmg.core.signals.TrackEventSignal;
 
 public class KongregateRegisterAccountTask extends BaseTask implements RegisterAccountTask {
 
@@ -16,8 +14,6 @@ public class KongregateRegisterAccountTask extends BaseTask implements RegisterA
     public var api:KongregateApi;
     [Inject]
     public var account:Account;
-    [Inject]
-    public var track:TrackEventSignal;
     [Inject]
     public var client:AppEngineClient;
 
@@ -43,14 +39,6 @@ public class KongregateRegisterAccountTask extends BaseTask implements RegisterA
 
     private function onInternalRegisterDone(_arg1:String):void {
         this.updateAccount(_arg1);
-        this.trackAccountRegistration();
-    }
-
-    private function trackAccountRegistration():void {
-        var _local1:TrackingData = new TrackingData();
-        _local1.category = "kongregateAccount";
-        _local1.action = "accountRegistered";
-        this.track.dispatch(_local1);
     }
 
     private function updateAccount(_arg1:String):void {

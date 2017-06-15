@@ -25,23 +25,25 @@ public class BuyCharacterRect extends CharacterRect {
         className = new LineBuilder().setParams(BUY_CHARACTER_RECT_CLASS_NAME_TEXT, {"nth": (_arg1.getMaxCharacters() + 1)});
         super.init();
         this.makeIcon();
-        this.makeTagline();
+        //this.makeTagline();
         this.makePriceText();
-        this.makeCoin();
+        this.makeCurrency();
     }
 
-    private function makeCoin():void {
-        var _local1:BitmapData = IconFactory.makeCoin();
-        var _local2:Bitmap = new Bitmap(_local1);
-        _local2.x = (WIDTH - 43);
-        _local2.y = (((HEIGHT - _local2.height) * 0.5) - 1);
-        selectContainer.addChild(_local2);
+    private function makeCurrency():void {
+        var dat:BitmapData = this.model.getCharSlotCurrency() == 0 ?
+                IconFactory.makeCoin() :
+                IconFactory.makeFame();
+        var cur:Bitmap = new Bitmap(dat);
+        cur.x = WIDTH - 43;
+        cur.y = (HEIGHT - cur.height) * 0.5 - 1;
+        selectContainer.addChild(cur);
     }
 
     private function makePriceText():void {
         var _local1:TextFieldDisplayConcrete;
         _local1 = new TextFieldDisplayConcrete().setSize(18).setColor(0xFFFFFF).setAutoSize(TextFieldAutoSize.RIGHT);
-        _local1.setStringBuilder(new StaticStringBuilder(this.model.getNextCharSlotPrice().toString()));
+        _local1.setStringBuilder(new StaticStringBuilder(this.model.getCharSlotPrice().toString()));
         _local1.filters = [new DropShadowFilter(0, 0, 0, 1, 8, 8)];
         _local1.x = (WIDTH - 43);
         _local1.y = 19;
@@ -49,7 +51,7 @@ public class BuyCharacterRect extends CharacterRect {
     }
 
     private function makeTagline():void {
-        var _local1:int = (100 - (this.model.getNextCharSlotPrice() / 10));
+        var _local1:int = (100 - (this.model.getCharSlotPrice() / 10));
         var _local2:String = String(_local1);
         if (_local1 != 0) {
             makeTaglineText(new LineBuilder().setParams(TextKey.BUY_CHARACTER_RECT_TAGLINE_TEXT, {"percentage": _local2}));

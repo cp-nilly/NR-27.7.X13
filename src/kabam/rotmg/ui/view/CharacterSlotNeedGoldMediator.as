@@ -20,7 +20,7 @@ public class CharacterSlotNeedGoldMediator extends Mediator {
     override public function initialize():void {
         this.view.buyGold.add(this.onBuyGold);
         this.view.cancel.add(this.onCancel);
-        this.view.setPrice(this.model.getNextCharSlotPrice());
+        this.view.setPrice(this.model.getCharSlotPrice());
     }
 
     override public function destroy():void {
