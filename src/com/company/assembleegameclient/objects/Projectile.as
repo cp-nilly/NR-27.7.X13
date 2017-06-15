@@ -203,87 +203,88 @@ public class Projectile extends BasicObject {
         }
     }
 
-    override public function update(_arg1:int, _arg2:int):Boolean {
-        var _local5:Vector.<uint>;
-        var _local7:Player;
-        var _local8:Boolean;
-        var _local9:Boolean;
-        var _local10:Boolean;
-        var _local11:int;
-        var _local12:Boolean;
-        var _local3:int = (_arg1 - this.startTime_);
-        if (_local3 > this.projProps_.lifetime_) {
-            return (false);
+    override public function update(currentTime:int, msDelta:int):Boolean {
+        var blood:Vector.<uint>;
+
+        var lifetime:int = currentTime - this.startTime_;
+        if (lifetime > this.projProps_.lifetime_) {
+            return false;
         }
-        var _local4:Point = this.staticPoint_;
-        this.positionAt(_local3, _local4);
-        if (((!(this.moveTo(_local4.x, _local4.y))) || ((square_.tileType_ == 0xFFFF)))) {
+
+        var pnt:Point = this.staticPoint_;
+        this.positionAt(lifetime, pnt);
+
+        if (!this.moveTo(pnt.x, pnt.y) || square_.tileType_ == 0xFFFF) {
             if (this.damagesPlayers_) {
-                map_.gs_.gsc_.squareHit(_arg1, this.bulletId_, this.ownerId_);
+                map_.gs_.gsc_.squareHit(currentTime, this.bulletId_, this.ownerId_);
             }
             else {
                 if (square_.obj_ != null) {
-                    _local5 = BloodComposition.getColors(this.texture_);
-                    map_.addObj(new HitEffect(_local5, 100, 3, this.angle_, this.projProps_.speed_), _local4.x, _local4.y);
+                    blood = BloodComposition.getColors(this.texture_);
+                    map_.addObj(new HitEffect(blood, 100, 3, this.angle_, this.projProps_.speed_), pnt.x, pnt.y);
                 }
             }
-            return (false);
-        }
-        if (((((!((square_.obj_ == null))) && (((!(square_.obj_.props_.isEnemy_)) || (!(this.damagesEnemies_)))))) && (((square_.obj_.props_.enemyOccupySquare_) || (((!(this.projProps_.passesCover_)) && (square_.obj_.props_.occupySquare_))))))) {
-            if (this.damagesPlayers_) {
-                map_.gs_.gsc_.otherHit(_arg1, this.bulletId_, this.ownerId_, square_.obj_.objectId_);
-            }
-            else {
-                _local5 = BloodComposition.getColors(this.texture_);
-                map_.addObj(new HitEffect(_local5, 100, 3, this.angle_, this.projProps_.speed_), _local4.x, _local4.y);
-            }
-            return (false);
+            return false;
         }
 
-        var ownPlayer:Player = map_.player_;
-        if (ownPlayer != null && ownPlayer.isHidden() && this.ownerId_ == ownPlayer.objectId_) {
-            return true;
+        if (square_.obj_ != null &&
+                (!square_.obj_.props_.isEnemy_ || !this.damagesEnemies_) &&
+                (square_.obj_.props_.enemyOccupySquare_ || !this.projProps_.passesCover_ && square_.obj_.props_.occupySquare_)) {
+            if (this.damagesPlayers_) {
+                map_.gs_.gsc_.otherHit(currentTime, this.bulletId_, this.ownerId_, square_.obj_.objectId_);
+            }
+            else {
+                blood = BloodComposition.getColors(this.texture_);
+                map_.addObj(new HitEffect(blood, 100, 3, this.angle_, this.projProps_.speed_), pnt.x, pnt.y);
+            }
+            return false;
         }
         
-        var _local6:GameObject = this.getHit(_local4.x, _local4.y);
-        if (_local6 != null) {
-            _local7 = map_.player_;
-            _local8 = !((_local7 == null));
-            _local9 = _local6.props_.isEnemy_;
-            _local10 = ((((_local8) && (!(_local7.isPaused())))) && (((this.damagesPlayers_) || (((_local9) && ((this.ownerId_ == _local7.objectId_)))))));
-            if (_local10) {
-                _local11 = GameObject.damageWithDefense(this.damage_, _local6.defense_, this.projProps_.armorPiercing_, _local6.condition_);
-                _local12 = false;
-                if (_local6.hp_ <= _local11) {
-                    _local12 = true;
-                    if (_local6.props_.isEnemy_) {
+        var go:GameObject = this.getHit(pnt.x, pnt.y);
+        if (go != null) {
+            var player:Player = map_.player_;
+            var goIsEnemy:Boolean = go.props_.isEnemy_;
+            var goHit:Boolean = player != null &&
+                    !player.isPaused() &&
+                    !player.isHidden() &&
+                    (this.damagesPlayers_ || goIsEnemy && this.ownerId_ == player.objectId_);
+
+            if (goHit) {
+                var dmg:int = GameObject.damageWithDefense(this.damage_, go.defense_, this.projProps_.armorPiercing_, go.condition_);
+
+                var killed:Boolean = false;
+                if (go.hp_ <= dmg) {
+                    killed = true;
+                    if (goIsEnemy) {
                         doneAction(map_.gs_, Tutorial.KILL_ACTION);
                     }
                 }
-                if (_local6 == _local7) {
+
+                if (go == player) {
                     map_.gs_.gsc_.playerHit(this.bulletId_, this.ownerId_);
-                    _local6.damage(this.containerType_, _local11, this.projProps_.effects_, false, this);
+                    go.damage(this.containerType_, dmg, this.projProps_.effects_, false, this);
                 }
                 else {
-                    if (_local6.props_.isEnemy_) {
-                        map_.gs_.gsc_.enemyHit(_arg1, this.bulletId_, _local6.objectId_, _local12);
-                        _local6.damage(this.containerType_, _local11, this.projProps_.effects_, _local12, this);
+                    if (goIsEnemy) {
+                        map_.gs_.gsc_.enemyHit(currentTime, this.bulletId_, go.objectId_, killed);
+                        go.damage(this.containerType_, dmg, this.projProps_.effects_, killed, this);
                     }
                     else {
                         if (!this.projProps_.multiHit_) {
-                            map_.gs_.gsc_.otherHit(_arg1, this.bulletId_, this.ownerId_, _local6.objectId_);
+                            map_.gs_.gsc_.otherHit(currentTime, this.bulletId_, this.ownerId_, go.objectId_);
                         }
                     }
                 }
             }
+
             if (this.projProps_.multiHit_) {
-                this.multiHitDict_[_local6] = true;
+                this.multiHitDict_[go] = true;
             }
             else {
-                return (false);
+                return false;
             }
         }
-        return (true);
+        return true;
     }
 
     public function getHit(_arg1:Number, _arg2:Number):GameObject {
