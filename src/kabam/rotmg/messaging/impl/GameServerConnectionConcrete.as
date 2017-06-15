@@ -1004,6 +1004,13 @@ public class GameServerConnectionConcrete extends GameServerConnection {
             return;
         }
 
+        // -2 is Nexus. Allows disconnecting to character select screen when nexus key is pressed in nexus.
+        // gameId is used over name so that marketplace only servers allow disconnect to char select screen via nexus key.
+        if (gs_.map && gs_.gsc_ && gs_.gsc_.gameId_ == -2) {
+            gs_.closed.dispatch();
+            return;
+        }
+
         if (gs_.map && gs_.map.name_ == "Arena") {
             serverConnection.sendMessage(this.messages.require(ACCEPT_ARENA_DEATH));
             return;
