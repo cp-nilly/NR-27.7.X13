@@ -15,6 +15,7 @@ import flash.display.DisplayObject;
 import flash.display.GraphicsBitmapFill;
 import flash.display.GraphicsSolidFill;
 import flash.display.IGraphicsData;
+import flash.display3D.Context3D;
 import flash.filters.BlurFilter;
 import flash.filters.ColorMatrixFilter;
 import flash.geom.ColorTransform;
@@ -305,25 +306,13 @@ public class Map extends AbstractMap {
         return (squares_[(_arg1 + (_arg2 * width_))]);
     }
 
-    override public function draw(_arg1:Camera, _arg2:int):void {
-        var _local6:Square;
-        var _local13:GameObject;
-        var _local14:BasicObject;
-        var _local15:int;
-        var _local16:Number;
-        var _local17:Number;
-        var _local18:Number;
-        var _local19:Number;
-        var _local20:Number;
-        var _local21:uint;
-        var _local22:Render3D;
-        var _local23:int;
-        var _local24:Array;
-        var _local25:Number;
+    override public function draw(camera:Camera, currentTime:int):void {
         if (wasLastFrameGpu != Parameters.isGpuRender()) {
-            if ((((((wasLastFrameGpu == true)) && (!((WebMain.STAGE.stage3Ds[0].context3D == null))))) && (!(((!((WebMain.STAGE.stage3Ds[0].context3D == null))) && (!((WebMain.STAGE.stage3Ds[0].context3D.driverInfo.toLowerCase().indexOf("disposed") == -1)))))))) {
-                WebMain.STAGE.stage3Ds[0].context3D.clear();
-                WebMain.STAGE.stage3Ds[0].context3D.present();
+            var context:Context3D = WebMain.STAGE.stage3Ds[0].context3D;
+            if (wasLastFrameGpu == true && context != null &&
+                    context.driverInfo.toLowerCase().indexOf("disposed") == -1) {
+                context.clear();
+                context.present();
             }
             else {
                 map_.graphics.clear();
@@ -331,142 +320,165 @@ public class Map extends AbstractMap {
             signalRenderSwitch.dispatch(wasLastFrameGpu);
             wasLastFrameGpu = Parameters.isGpuRender();
         }
-        var _local3:Rectangle = _arg1.clipRect_;
-        x = -(_local3.x);
-        y = -(_local3.y);
-        var _local4:Number = ((-(_local3.y) - (_local3.height / 2)) / 50);
-        var _local5:Point = new Point((_arg1.x_ + (_local4 * Math.cos((_arg1.angleRad_ - (Math.PI / 2))))), (_arg1.y_ + (_local4 * Math.sin((_arg1.angleRad_ - (Math.PI / 2))))));
+
+        var rect:Rectangle = camera.clipRect_;
+        x = -rect.x;
+        y = -rect.y;
+        var sy:Number = (-rect.y - rect.height / 2) / 50;
+        var plrPos:Point = new Point(
+                camera.x_ + sy * Math.cos(camera.angleRad_ - Math.PI / 2),
+                camera.y_ + sy * Math.sin(camera.angleRad_ - Math.PI / 2));
+
         if (background_ != null) {
-            background_.draw(_arg1, _arg2);
+            background_.draw(camera, currentTime);
         }
+
         this.visible_.length = 0;
         this.visibleUnder_.length = 0;
         this.visibleSquares_.length = 0;
         this.topSquares_.length = 0;
-        var _local7:int = _arg1.maxDist_;
-        var _local8:int = Math.max(0, (_local5.x - _local7));
-        var _local9:int = Math.min((width_ - 1), (_local5.x + _local7));
-        var _local10:int = Math.max(0, (_local5.y - _local7));
-        var _local11:int = Math.min((height_ - 1), (_local5.y + _local7));
+
+        var distMax:int = camera.maxDist_;
+        var xMin:int = Math.max(0, plrPos.x - distMax);
+        var xMax:int = Math.min(width_ - 1, plrPos.x + distMax);
+        var yMin:int = Math.max(0, plrPos.y - distMax);
+        var yMax:int = Math.min(height_ - 1, plrPos.y + distMax);
+
         this.graphicsData_.length = 0;
         this.graphicsDataStageSoftware_.length = 0;
         this.graphicsData3d_.length = 0;
-        var _local12:int = _local8;
-        while (_local12 <= _local9) {
-            _local15 = _local10;
-            while (_local15 <= _local11) {
-                _local6 = squares_[(_local12 + (_local15 * width_))];
-                if (_local6 != null) {
-                    _local16 = (_local5.x - _local6.center_.x);
-                    _local17 = (_local5.y - _local6.center_.y);
-                    _local18 = ((_local16 * _local16) + (_local17 * _local17));
-                    if (_local18 <= _arg1.maxDistSq_) {
-                        _local6.lastVisible_ = _arg2;
-                        _local6.draw(this.graphicsData_, _arg1, _arg2);
-                        this.visibleSquares_.push(_local6);
-                        if (_local6.topFace_ != null) {
-                            this.topSquares_.push(_local6);
+
+        // visible tiles
+        var sqr:Square;
+        for (var i:int = xMin; i <= xMax; i++) {
+            for (var j:int = yMin; j <= yMax; j++) {
+                sqr = squares_[i + j * width_];
+                if (sqr != null) {
+                    var dx:Number = plrPos.x - sqr.center_.x;
+                    var dy:Number = plrPos.y - sqr.center_.y;
+                    var sqrDist:Number = dx * dx + dy * dy;
+                    if (sqrDist <= camera.maxDistSq_) {
+                        sqr.lastVisible_ = currentTime;
+                        sqr.draw(this.graphicsData_, camera, currentTime);
+                        this.visibleSquares_.push(sqr);
+                        if (sqr.topFace_ != null) {
+                            this.topSquares_.push(sqr);
                         }
                     }
                 }
-                _local15++;
             }
-            _local12++;
         }
-        for each (_local13 in goDict_) {
-            _local13.drawn_ = false;
-            if (!_local13.dead_) {
-                _local6 = _local13.square_;
-                if (!(((_local6 == null)) || (!((_local6.lastVisible_ == _arg2))))) {
-                    _local13.drawn_ = true;
-                    _local13.computeSortVal(_arg1);
-                    if (_local13.props_.drawUnder_) {
-                        if (_local13.props_.drawOnGround_) {
-                            _local13.draw(this.graphicsData_, _arg1, _arg2);
-                        }
-                        else {
-                            this.visibleUnder_.push(_local13);
-                        }
+
+        // visible game objects
+        for each (var go:GameObject in goDict_) {
+            go.drawn_ = false;
+            if (go.dead_) {
+                continue;
+            }
+            sqr = go.square_;
+            if (sqr != null && sqr.lastVisible_ == currentTime) {
+                go.drawn_ = true;
+                go.computeSortVal(camera);
+                if (go.props_.drawUnder_) {
+                    if (go.props_.drawOnGround_) {
+                        go.draw(this.graphicsData_, camera, currentTime);
                     }
                     else {
-                        this.visible_.push(_local13);
+                        this.visibleUnder_.push(go);
                     }
                 }
-            }
-        }
-        for each (_local14 in boDict_) {
-            _local14.drawn_ = false;
-            _local6 = _local14.square_;
-            if (!(((_local6 == null)) || (!((_local6.lastVisible_ == _arg2))))) {
-                _local14.drawn_ = true;
-                _local14.computeSortVal(_arg1);
-                this.visible_.push(_local14);
-            }
-        }
-        if (this.visibleUnder_.length > 0) {
-            this.visibleUnder_.sortOn(VISIBLE_SORT_FIELDS, VISIBLE_SORT_PARAMS);
-            for each (_local14 in this.visibleUnder_) {
-                _local14.draw(this.graphicsData_, _arg1, _arg2);
-            }
-        }
-        this.visible_.sortOn(VISIBLE_SORT_FIELDS, VISIBLE_SORT_PARAMS);
-        if (Parameters.data_.drawShadows) {
-            for each (_local14 in this.visible_) {
-                if (_local14.hasShadow_) {
-                    _local14.drawShadow(this.graphicsData_, _arg1, _arg2);
+                else {
+                    this.visible_.push(go);
                 }
             }
         }
-        for each (_local14 in this.visible_) {
-            _local14.draw(this.graphicsData_, _arg1, _arg2);
+
+        // visible basic objects (projectiles, particles and such)
+        for each (var bo:BasicObject in boDict_) {
+            bo.drawn_ = false;
+            sqr = bo.square_;
+            if (sqr != null && sqr.lastVisible_ == currentTime) {
+                bo.drawn_ = true;
+                bo.computeSortVal(camera);
+                this.visible_.push(bo);
+            }
+        }
+
+        // draw visible under
+        if (this.visibleUnder_.length > 0) {
+            this.visibleUnder_.sortOn(VISIBLE_SORT_FIELDS, VISIBLE_SORT_PARAMS);
+            for each (bo in this.visibleUnder_) {
+                bo.draw(this.graphicsData_, camera, currentTime);
+            }
+        }
+
+        // draw shadows
+        this.visible_.sortOn(VISIBLE_SORT_FIELDS, VISIBLE_SORT_PARAMS);
+        if (Parameters.data_.drawShadows) {
+            for each (bo in this.visible_) {
+                if (bo.hasShadow_) {
+                    bo.drawShadow(this.graphicsData_, camera, currentTime);
+                }
+            }
+        }
+
+        // draw visible
+        for each (bo in this.visible_) {
+            bo.draw(this.graphicsData_, camera, currentTime);
             if (Parameters.isGpuRender()) {
-                _local14.draw3d(this.graphicsData3d_);
+                bo.draw3d(this.graphicsData3d_);
             }
         }
+
+        // draw top squares
         if (this.topSquares_.length > 0) {
-            for each (_local6 in this.topSquares_) {
-                _local6.drawTop(this.graphicsData_, _arg1, _arg2);
+            for each (sqr in this.topSquares_) {
+                sqr.drawTop(this.graphicsData_, camera, currentTime);
             }
         }
-        if (((((!((player_ == null))) && ((player_.breath_ >= 0)))) && ((player_.breath_ < Parameters.BREATH_THRESH)))) {
-            _local19 = ((Parameters.BREATH_THRESH - player_.breath_) / Parameters.BREATH_THRESH);
-            _local20 = (Math.abs(Math.sin((_arg2 / 300))) * 0.75);
-            BREATH_CT.alphaMultiplier = (_local19 * _local20);
+
+        // draw breath overlay
+        if (player_ != null && player_.breath_ >= 0 && player_.breath_ < Parameters.BREATH_THRESH) {
+            var bMult:Number = Parameters.BREATH_THRESH - player_.breath_ / Parameters.BREATH_THRESH;
+            var btMult:Number = Math.abs(Math.sin(currentTime / 300)) * 0.75;
+            BREATH_CT.alphaMultiplier = bMult * btMult;
             hurtOverlay_.transform.colorTransform = BREATH_CT;
             hurtOverlay_.visible = true;
-            hurtOverlay_.x = _local3.left;
-            hurtOverlay_.y = _local3.top;
+            hurtOverlay_.x = rect.left;
+            hurtOverlay_.y = rect.top;
         }
         else {
             hurtOverlay_.visible = false;
         }
-        if (((!((player_ == null))) && (!(Parameters.screenShotMode_)))) {
+
+        // draw side bar gradient
+        if (player_ != null && !Parameters.screenShotMode_) {
             gradientOverlay_.visible = true;
-            gradientOverlay_.x = (_local3.right - 10);
-            gradientOverlay_.y = _local3.top;
+            gradientOverlay_.x = (rect.right - 10);
+            gradientOverlay_.y = rect.top;
         }
         else {
             gradientOverlay_.visible = false;
         }
-        if (((Parameters.isGpuRender()) && (Renderer.inGame))) {
-            _local21 = this.getFilterIndex();
-            _local22 = StaticInjectorContext.getInjector().getInstance(Render3D);
-            _local22.dispatch(this.graphicsData_, this.graphicsData3d_, width_, height_, _arg1, _local21);
-            _local23 = 0;
-            while (_local23 < this.graphicsData_.length) {
-                if ((((this.graphicsData_[_local23] is GraphicsBitmapFill)) && (GraphicsFillExtra.isSoftwareDraw(GraphicsBitmapFill(this.graphicsData_[_local23]))))) {
-                    this.graphicsDataStageSoftware_.push(this.graphicsData_[_local23]);
-                    this.graphicsDataStageSoftware_.push(this.graphicsData_[(_local23 + 1)]);
-                    this.graphicsDataStageSoftware_.push(this.graphicsData_[(_local23 + 2)]);
+
+        // draw hw capable screen filters
+        if (Parameters.isGpuRender() && Renderer.inGame) {
+            var fIndex:uint = this.getFilterIndex();
+            var r3d:Render3D = StaticInjectorContext.getInjector().getInstance(Render3D);
+            r3d.dispatch(this.graphicsData_, this.graphicsData3d_, width_, height_, camera, fIndex);
+            for (var i:int = 0; i < this.graphicsData_.length; i++) {
+                if (this.graphicsData_[i] is GraphicsBitmapFill && GraphicsFillExtra.isSoftwareDraw(GraphicsBitmapFill(this.graphicsData_[i]))) {
+                    this.graphicsDataStageSoftware_.push(this.graphicsData_[i]);
+                    this.graphicsDataStageSoftware_.push(this.graphicsData_[i + 1]);
+                    this.graphicsDataStageSoftware_.push(this.graphicsData_[i + 2]);
                 }
                 else {
-                    if ((((this.graphicsData_[_local23] is GraphicsSolidFill)) && (GraphicsFillExtra.isSoftwareDrawSolid(GraphicsSolidFill(this.graphicsData_[_local23]))))) {
-                        this.graphicsDataStageSoftware_.push(this.graphicsData_[_local23]);
-                        this.graphicsDataStageSoftware_.push(this.graphicsData_[(_local23 + 1)]);
-                        this.graphicsDataStageSoftware_.push(this.graphicsData_[(_local23 + 2)]);
+                    if (this.graphicsData_[i] is GraphicsSolidFill && GraphicsFillExtra.isSoftwareDrawSolid(GraphicsSolidFill(this.graphicsData_[i]))) {
+                        this.graphicsDataStageSoftware_.push(this.graphicsData_[i]);
+                        this.graphicsDataStageSoftware_.push(this.graphicsData_[i + 1]);
+                        this.graphicsDataStageSoftware_.push(this.graphicsData_[i + 2]);
                     }
                 }
-                _local23++;
             }
             if (this.graphicsDataStageSoftware_.length > 0) {
                 map_.graphics.clear();
@@ -481,7 +493,7 @@ public class Map extends AbstractMap {
                     this.lastSoftwareClear = true;
                 }
             }
-            if ((_arg2 % 149) == 0) {
+            if ((currentTime % 149) == 0) {
                 GraphicsFillExtra.manageSize();
             }
         }
@@ -489,28 +501,33 @@ public class Map extends AbstractMap {
             map_.graphics.clear();
             map_.graphics.drawGraphicsData(this.graphicsData_);
         }
+
+        // draw filters
         map_.filters.length = 0;
-        if (((!((player_ == null))) && (!(((player_.condition_[ConditionEffect.CE_FIRST_BATCH] & ConditionEffect.MAP_FILTER_BITMASK) == 0))))) {
-            _local24 = [];
+        if (player_ != null && (player_.condition_[ConditionEffect.CE_FIRST_BATCH] & ConditionEffect.MAP_FILTER_BITMASK) != 0) {
+            var filters:Array = [];
             if (player_.isDrunk()) {
-                _local25 = (20 + (10 * Math.sin((_arg2 / 1000))));
-                _local24.push(new BlurFilter(_local25, _local25));
+                var blur:Number = 20 + 10 * Math.sin(currentTime / 1000);
+                filters.push(new BlurFilter(blur, blur));
             }
             if (player_.isBlind()) {
-                _local24.push(BLIND_FILTER);
+                filters.push(BLIND_FILTER);
             }
-            map_.filters = _local24;
+            map_.filters = filters;
         }
         else {
             if (map_.filters.length > 0) {
                 map_.filters = [];
             }
         }
-        mapOverlay_.draw(_arg1, _arg2);
-        partyOverlay_.draw(_arg1, _arg2);
-        if (((player_) && (player_.isDarkness()))) {
+
+        mapOverlay_.draw(camera, currentTime);
+        partyOverlay_.draw(camera, currentTime);
+
+        // draw darkness
+        if (player_ && player_.isDarkness()) {
             this.darkness.x = -300;
-            this.darkness.y = ((Parameters.data_.centerOnPlayer) ? -525 : -515);
+            this.darkness.y = Parameters.data_.centerOnPlayer ? -525 : -515;
             this.darkness.alpha = 0.95;
             addChild(this.darkness);
         }
