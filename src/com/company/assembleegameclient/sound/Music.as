@@ -12,30 +12,20 @@ import kabam.rotmg.core.StaticInjectorContext;
 
 public class Music {
 
-    private static var music_:Sound = null;
     private static var fadeTime:Number = 2;
     private static var musicName:String;
-    private static var url:String;
 
-    private static var musicVolumeTransform:SoundTransform;
-    private static var musicChannel_:SoundChannel;
-    private static var musicTween:GTween;
+    private static var currentSong:Song;
+    private static var currentSongTween:GTween;
 
-    private static var fadeOutVolumeTransform:SoundTransform;
-    private static var fadeOutChannel_:SoundChannel;
+    private static var fadeOutSong:Song;
     private static var fadeOutTween:GTween;
 
 
     public static function init():void {
-        musicVolumeTransform = new SoundTransform(0);
-        musicTween = new GTween(musicVolumeTransform, fadeTime);
-        musicTween.onChange = setMusicVolTransform;
-        fadeOutVolumeTransform = new SoundTransform(0);
-        fadeOutTween = new GTween(fadeOutVolumeTransform, fadeTime);
-        fadeOutTween.onChange = setFadeOutVolTransform;
+        currentSongTween = new GTween(currentSong, fadeTime);
+        fadeOutTween = new GTween(fadeOutSong, fadeTime);
         fadeOutTween.onComplete = stopMusic;
-        var app:ApplicationSetup = StaticInjectorContext.getInjector().getInstance(ApplicationSetup);
-        url = app.getAppEngineUrl(true) + "/music/{SONG}.mp3";
     }
 
     public static function load(name:String):void {
@@ -44,11 +34,9 @@ public class Music {
         }
         musicName = name;
 
-        if (musicChannel_ != null) {
+        if (currentSong != null) {
             stopMusic();
-            fadeOutVolumeTransform.volume = musicChannel_.soundTransform.volume;
-            fadeOutChannel_ = musicChannel_;
-            fadeOutChannel_.soundTransform = fadeOutVolumeTransform;
+            fadeOutSong = currentSong;
             fadeOutTween.setValue("volume", 0);
         }
 
@@ -56,35 +44,18 @@ public class Music {
     }
 
     private static function stopMusic(tween:GTween = null):void {
-        if (fadeOutChannel_ != null) {
-            fadeOutChannel_.stop();
-            fadeOutChannel_ = null;
-        }
+        if(fadeOutSong)
+            fadeOutSong.stop()
     }
 
     private static function startNewMusic(tween:GTween = null):void {
-        musicChannel_ = null;
-
         if (musicName == null || musicName == "") {
             return;
         }
 
-        music_ = new Sound();
-        music_.load(new URLRequest(url.replace("{SONG}", musicName)));
-        musicChannel_ = music_.play(0, int.MAX_VALUE, musicVolumeTransform);
-        musicTween.setValue("volume", Parameters.data_.playMusic ? Parameters.data_.musicVolume : 0);
-    }
-
-    private static function setMusicVolTransform(tween:GTween):void {
-        if (musicChannel_ != null) {
-            musicChannel_.soundTransform = musicVolumeTransform;
-        }
-    }
-
-    private static function setFadeOutVolTransform(tween:GTween):void {
-        if (fadeOutChannel_ != null) {
-            fadeOutChannel_.soundTransform = fadeOutVolumeTransform;
-        }
+        currentSong = new Song(musicName, 0);
+        currentSong.play();
+        currentSongTween.setValue("volume", Parameters.data_.playMusic ? Parameters.data_.musicVolume : 0);
     }
 
     public static function setPlayMusic(playMusic:Boolean):void {
@@ -92,8 +63,8 @@ public class Music {
         Parameters.save();
 
         var vol:Number = playMusic ? Parameters.data_.musicVolume : 0;
-        musicTween.setValue("volume", vol);
-        musicVolumeTransform.volume = vol;
+        currentSongTween.setValue("volume", vol);
+        currentSong.volume = 0;
     }
 
     public static function setMusicVolume(newVol:Number):void {
@@ -102,8 +73,8 @@ public class Music {
         if (!Parameters.data_.playMusic) {
             return;
         }
-        musicTween.setValue("volume", newVol);
-        musicVolumeTransform.volume = newVol;
+        currentSongTween.setValue("volume", newVol);
+        currentSong.volume = newVol;
     }
 
 
