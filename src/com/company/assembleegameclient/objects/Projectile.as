@@ -9,6 +9,7 @@ import com.company.assembleegameclient.parameters.Parameters;
 import com.company.assembleegameclient.tutorial.Tutorial;
 import com.company.assembleegameclient.tutorial.doneAction;
 import com.company.assembleegameclient.util.BloodComposition;
+import com.company.assembleegameclient.util.ConditionEffect;
 import com.company.assembleegameclient.util.FreeList;
 import com.company.assembleegameclient.util.RandomUtil;
 import com.company.assembleegameclient.util.TextureRedrawer;
@@ -287,40 +288,35 @@ public class Projectile extends BasicObject {
         return true;
     }
 
-    public function getHit(_arg1:Number, _arg2:Number):GameObject {
-        var _local5:GameObject;
-        var _local6:Number;
-        var _local7:Number;
-        var _local8:Number;
-        var _local9:Number;
-        var _local3:Number = Number.MAX_VALUE;
-        var _local4:GameObject;
-        for each (_local5 in map_.goDict_) {
-            if (!_local5.isInvincible()) {
-                if (!_local5.isStasis()) {
-                    if (((((this.damagesEnemies_) && (_local5.props_.isEnemy_))) || (((this.damagesPlayers_) && (_local5.props_.isPlayer_))))) {
-                        if (!((_local5.dead_) || (_local5.isPaused()))) {
-                            _local6 = (((_local5.x_ > _arg1)) ? (_local5.x_ - _arg1) : (_arg1 - _local5.x_));
-                            _local7 = (((_local5.y_ > _arg2)) ? (_local5.y_ - _arg2) : (_arg2 - _local5.y_));
-                            if (!(((_local6 > _local5.radius_)) || ((_local7 > _local5.radius_)))) {
-                                if (!((this.projProps_.multiHit_) && (!((this.multiHitDict_[_local5] == null))))) {
-                                    if (_local5 == map_.player_) {
-                                        return (_local5);
-                                    }
-                                    _local8 = Math.sqrt(((_local6 * _local6) + (_local7 * _local7)));
-                                    _local9 = ((_local6 * _local6) + (_local7 * _local7));
-                                    if (_local9 < _local3) {
-                                        _local3 = _local9;
-                                        _local4 = _local5;
-                                    }
-                                }
-                            }
-                        }
+    public function getHit(x:Number, y:Number):GameObject {
+        var currentDSqr:Number = Number.MAX_VALUE;
+        var hit:GameObject;
+
+        for each (var go:GameObject in map_.goDict_) {
+            var dx:Number;
+            var dy:Number;
+            if ((dx = Math.abs(go.x_ - x)) > go.radius_ ||
+                (dy = Math.abs(go.y_ - y)) > go.radius_ ||
+                go.dead_ ||
+                go.condition_[ConditionEffect.CE_FIRST_BATCH] & ConditionEffect.PROJ_NOHIT_BITMASK) {
+                continue;
+            }
+
+            if (damagesEnemies_ && go.props_.isEnemy_ || damagesPlayers_ && go.props_.isPlayer_) {
+                if (!projProps_.multiHit_ || multiHitDict_[go] == null) {
+                    if (go == map_.player_) {
+                        return go;
+                    }
+
+                    var dSqr:Number = dx * dx + dy * dy;
+                    if (dSqr < currentDSqr) {
+                        currentDSqr = dSqr;
+                        hit = go;
                     }
                 }
             }
         }
-        return (_local4);
+        return hit;
     }
 
     override public function draw(_arg1:Vector.<IGraphicsData>, _arg2:Camera, _arg3:int):void {
