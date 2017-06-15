@@ -88,7 +88,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._contents = _arg1;
     }
 
-    public function get priceAmount():String {
+    public function get priceAmount():* {
         return (this._priceAmount);
     }
 
@@ -96,7 +96,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._priceAmount = _arg1;
     }
 
-    public function get priceCurrency():String {
+    public function get priceCurrency():* {
         return (this._priceCurrency);
     }
 
@@ -104,7 +104,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._priceCurrency = _arg1;
     }
 
-    public function get saleAmount():String {
+    public function get saleAmount():* {
         return (this._saleAmount);
     }
 
@@ -112,7 +112,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._saleAmount = _arg1;
     }
 
-    public function get saleCurrency():String {
+    public function get saleCurrency():* {
         return (this._saleCurrency);
     }
 
