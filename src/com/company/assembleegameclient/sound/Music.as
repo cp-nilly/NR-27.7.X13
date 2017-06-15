@@ -1,20 +1,10 @@
 ﻿package com.company.assembleegameclient.sound {
 import com.company.assembleegameclient.parameters.Parameters;
-import com.gskinner.motion.GTween;
-
-import flash.media.Sound;
-import flash.media.SoundChannel;
-import flash.media.SoundTransform;
-import flash.net.URLRequest;
-
-import kabam.rotmg.application.api.ApplicationSetup;
-import kabam.rotmg.core.StaticInjectorContext;
 
 public class Music {
 
     private static var musicName:String;
-    private static var currentSong:Song;
-    private static var fadeOutSong:Song;
+    private static var song:Song;
 
 
     public static function load(name:String):void {
@@ -23,41 +13,40 @@ public class Music {
         }
         musicName = name;
 
-        if (currentSong != null) {
-            if(fadeOutSong)
-                fadeOutSong.stop();
-            fadeOutSong = currentSong;
-            fadeOutSong.volume = 0;
+        if (Parameters.data_.playMusic) {
+            transitionNewMusic();
         }
-
-        startNewMusic();
     }
 
-    private static function startNewMusic():void {
+    private static function transitionNewMusic():void {
+        if (song) {
+            song.stop();
+        }
         if (musicName == null || musicName == "") {
             return;
         }
-
-        currentSong = new Song(musicName, 0);
-        currentSong.play();
-        currentSong.volume = Parameters.data_.playMusic ? Parameters.data_.musicVolume : 0;
+        song = new Song(musicName);
+        song.play(Parameters.data_.musicVolume);
     }
 
-    public static function setPlayMusic(playMusic:Boolean):void {
-        Parameters.data_.playMusic = playMusic;
+    public static function setPlayMusic(play:Boolean):void {
+        Parameters.data_.playMusic = play;
         Parameters.save();
-
-        var vol:Number = playMusic ? Parameters.data_.musicVolume : 0;
-        currentSong.volume = vol;
+        if (play) {
+            transitionNewMusic();
+        }
+        else if (song) {
+            song.stop(true);
+            song = null;
+        }
     }
 
     public static function setMusicVolume(newVol:Number):void {
         Parameters.data_.musicVolume = newVol;
         Parameters.save();
-        if (!Parameters.data_.playMusic) {
-            return;
+        if (Parameters.data_.playMusic && song) {
+            song.volume = newVol;
         }
-        currentSong.volume = newVol;
     }
 
 

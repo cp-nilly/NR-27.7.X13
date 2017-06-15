@@ -16,27 +16,33 @@ public class Song {
     private var channel:SoundChannel;
     private var tween:GTween;
 
-    public var isSmoothFade:Boolean;
-    public var fadeTime:Number;
 
-
-    public function Song(name:String, volume:Number = 1.0, isSmoothFade:Boolean = true, fadeTime:Number = 4) {
-        this.isSmoothFade = isSmoothFade;
-        this.fadeTime = fadeTime;
+    public function Song(name:String) {
         var setup:ApplicationSetup = StaticInjectorContext.getInjector().getInstance(ApplicationSetup);
         sound = new Sound();
         sound.load(new URLRequest(setup.getAppEngineUrl() + "/music/" + name + ".mp3"));
-        transform = new SoundTransform(volume);
-        tween = new GTween(transform, fadeTime);
-        tween.onChange = updateVolume;
+        transform = new SoundTransform(0);
+        tween = new GTween(transform);
+        tween.onChange = updateTransform;
     }
 
-    public function play(loops:int = int.MAX_VALUE):void {
+    public function play(volume:Number = 1.0, fadeTime:Number = 2, loops:int = int.MAX_VALUE):void {
+        if (channel) {
+            channel.stop();
+        }
+        tween.duration = fadeTime;
+        tween.setValue("volume", volume);
         channel = sound.play(0, loops, transform);
     }
 
-    public function stop():void {
-        channel.stop()
+    public function stop(noFade:Boolean = false):void {
+        if (channel) {
+            tween.onComplete = stopChannel;
+            tween.setValue("volume", 0);
+            if (noFade) {
+                transform.volume = 0;
+            }
+        }
     }
 
     public function get volume():Number {
@@ -44,19 +50,19 @@ public class Song {
     }
 
     public function set volume(volume:Number):void {
-        if(channel) {
-            if(isSmoothFade) {
-                tween.setValue("volume", volume);
-            }
-            else {
-                transform.volume = volume;
-                channel.soundTransform = transform;
-            }
+        if (channel) {
+            transform.volume = volume;
+            tween.setValue("volume", volume);
         }
     }
 
-    private function updateVolume(tween:GTween = null):void {
+    private function updateTransform(tween:GTween = null):void {
         channel.soundTransform = transform;
+    }
+
+    private function stopChannel(tween:GTween):void {
+        channel.stop();
+        channel = null;
     }
 
 
