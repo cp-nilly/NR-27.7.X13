@@ -48,7 +48,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         super();
     }
 
-    public function get id() {
+    public function get id():String {
         return (this._id);
     }
 
@@ -56,7 +56,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._id = _arg1;
     }
 
-    public function get title() {
+    public function get title():String {
         return (this._title);
     }
 
@@ -64,7 +64,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._title = _arg1;
     }
 
-    public function get description() {
+    public function get description():String {
         return (this._description);
     }
 
@@ -72,7 +72,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._description = _arg1;
     }
 
-    public function get weight() {
+    public function get weight():String {
         return (this._weight);
     }
 
@@ -80,7 +80,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._weight = _arg1;
     }
 
-    public function get contents() {
+    public function get contents():String {
         return (this._contents);
     }
 
@@ -88,7 +88,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._contents = _arg1;
     }
 
-    public function get priceAmount() {
+    public function get priceAmount():String {
         return (this._priceAmount);
     }
 
@@ -96,7 +96,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._priceAmount = _arg1;
     }
 
-    public function get priceCurrency() {
+    public function get priceCurrency():String {
         return (this._priceCurrency);
     }
 
@@ -104,7 +104,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._priceCurrency = _arg1;
     }
 
-    public function get saleAmount() {
+    public function get saleAmount():String {
         return (this._saleAmount);
     }
 
@@ -112,7 +112,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._saleAmount = _arg1;
     }
 
-    public function get saleCurrency() {
+    public function get saleCurrency():String {
         return (this._saleCurrency);
     }
 
@@ -120,7 +120,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._saleCurrency = _arg1;
     }
 
-    public function get quantity() {
+    public function get quantity():String {
         return (this._quantity);
     }
 
@@ -128,7 +128,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._quantity = _arg1;
     }
 
-    public function get saleEnd() {
+    public function get saleEnd():Date {
         return (this._saleEnd);
     }
 
@@ -136,7 +136,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._saleEnd = _arg1;
     }
 
-    public function get iconImageUrl() {
+    public function get iconImageUrl():String {
         return (this._iconImageUrl);
     }
 
@@ -170,7 +170,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         return (this._iconImage);
     }
 
-    public function get infoImageUrl() {
+    public function get infoImageUrl():String {
         return (this._infoImageUrl);
     }
 
@@ -203,7 +203,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._infoImage = DisplayObject(this._infoImageLoader);
     }
 
-    public function get startTime() {
+    public function get startTime():Date {
         return (this._startTime);
     }
 
@@ -211,7 +211,7 @@ public class MysteryBoxInfo extends EventDispatcher {
         this._startTime = _arg1;
     }
 
-    public function get endTime() {
+    public function get endTime():Date {
         return (this._endTime);
     }
 

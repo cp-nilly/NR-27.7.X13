@@ -23,7 +23,7 @@ public class Program3DFactory {
 
     public static function getInstance():Program3DFactory {
         if (instance == null) {
-            instance = new (Program3DFactory)("yoThisIsInternal");
+            instance = new Program3DFactory("yoThisIsInternal");
         }
         return (instance);
     }
