@@ -67,7 +67,7 @@ public class JitterWatcher extends Sprite {
         for each (var dx:int in this.ticks_) {
             sqrSum = sqrSum + (dx - avg) * (dx - avg);
         }
-        return Math.sqrt(sqrSum / numSamples);
+        return int(Math.sqrt(sqrSum / numSamples) * 10) / 10;
     }
 
 
