@@ -383,9 +383,7 @@ public class Map extends AbstractMap {
                     if (go.props_.drawOnGround_) {
                         go.draw(this.graphicsData_, camera, currentTime);
                     }
-                    else {
-                        this.visibleUnder_.push(go);
-                    }
+                    this.visibleUnder_.push(go);
                 }
                 else {
                     this.visible_.push(go);
@@ -408,6 +406,9 @@ public class Map extends AbstractMap {
         if (this.visibleUnder_.length > 0) {
             this.visibleUnder_.sortOn(VISIBLE_SORT_FIELDS, VISIBLE_SORT_PARAMS);
             for each (bo in this.visibleUnder_) {
+                if (bo is GameObject && (bo as GameObject).props_.drawOnGround_) {
+                    continue;
+                }
                 bo.draw(this.graphicsData_, camera, currentTime);
             }
         }

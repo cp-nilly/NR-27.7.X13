@@ -292,26 +292,33 @@ public class Projectile extends BasicObject {
         var currentDSqr:Number = Number.MAX_VALUE;
         var hit:GameObject;
 
-        for each (var go:GameObject in map_.goDict_) {
-            var dx:Number;
-            var dy:Number;
-            if ((dx = Math.abs(go.x_ - x)) > go.radius_ ||
-                (dy = Math.abs(go.y_ - y)) > go.radius_ ||
-                go.dead_ ||
-                go.condition_[ConditionEffect.CE_FIRST_BATCH] & ConditionEffect.PROJ_NOHIT_BITMASK) {
-                continue;
-            }
+        for each (var dict:Array in [map_.visible_, map_.visibleUnder_]) {
+            for each (var obj:Object in dict) {
+                var go:GameObject = obj as GameObject;
+                if (go == null) {
+                    continue;
+                }
+                var dx:Number;
+                var dy:Number;
+                if ((dx = Math.abs(go.x_ - x)) > go.radius_ ||
+                    (dy = Math.abs(go.y_ - y)) > go.radius_ ||
+                    go.dead_ ||
+                    go.condition_[ConditionEffect.CE_FIRST_BATCH] & ConditionEffect.PROJ_NOHIT_BITMASK ||
+                    map_.goDict_[go.objectId_] == null) {
+                    continue;
+                }
 
-            if (damagesEnemies_ && go.props_.isEnemy_ || damagesPlayers_ && go.props_.isPlayer_) {
-                if (!projProps_.multiHit_ || multiHitDict_[go] == null) {
-                    if (go == map_.player_) {
-                        return go;
-                    }
+                if (damagesEnemies_ && go.props_.isEnemy_ || damagesPlayers_ && go.props_.isPlayer_) {
+                    if (!projProps_.multiHit_ || multiHitDict_[go] == null) {
+                        if (go == map_.player_) {
+                            return go;
+                        }
 
-                    var dSqr:Number = dx * dx + dy * dy;
-                    if (dSqr < currentDSqr) {
-                        currentDSqr = dSqr;
-                        hit = go;
+                        var dSqr:Number = dx * dx + dy * dy;
+                        if (dSqr < currentDSqr) {
+                            currentDSqr = dSqr;
+                            hit = go;
+                        }
                     }
                 }
             }
