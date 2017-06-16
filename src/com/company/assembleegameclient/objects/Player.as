@@ -142,6 +142,7 @@ public class Player extends Character {
     private var breathBackPath_:GraphicsPath = null;
     private var breathFill_:GraphicsSolidFill = null;
     private var breathPath_:GraphicsPath = null;
+    private var hallucinatingMaskedImage_:MaskedImage = null;
 
     public function Player(_arg1:XML) {
         this.ip_ = new IntPoint();
@@ -767,7 +768,7 @@ public class Player extends Character {
 
         var maskImg:MaskedImage;
         if (camera.isHallucinating_) {
-            maskImg = new MaskedImage(getHallucinatingTexture(), null);
+            maskImg = getHallucinatingMaskedImage();
         }
         else {
             maskImg = animatedChar_.imageFromFacing(facing_, camera, action, pos);
@@ -821,6 +822,13 @@ public class Player extends Character {
             }
         }
         return plrTex;
+    }
+
+    private function getHallucinatingMaskedImage():MaskedImage {
+        if (hallucinatingMaskedImage_ == null) {
+            hallucinatingMaskedImage_ = new MaskedImage(getHallucinatingTexture(), null);
+        }
+        return hallucinatingMaskedImage_;
     }
 
     override public function getPortrait():BitmapData {
