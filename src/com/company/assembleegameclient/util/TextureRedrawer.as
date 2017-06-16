@@ -32,7 +32,7 @@ public class TextureRedrawer {
 
 
     public static function redraw(tex:BitmapData, size:int, padBottom:Boolean, glowColor:uint, useCache:Boolean = true, sMult:Number = 5):BitmapData {
-        var hash:String = getHash(size, padBottom, glowColor, sMult);
+        var hash:* = getHash(size, padBottom, glowColor, sMult);
         if (useCache && isCached(tex, hash)) {
             return redrawCaches[tex][hash];
         }
@@ -44,18 +44,22 @@ public class TextureRedrawer {
         return modTex;
     }
 
-    private static function getHash(size:int, padBottom:Boolean, glowColor:uint, sMult:Number):String {
-        return size.toString() + "," + glowColor.toString() + "," + padBottom + "," + sMult;
+    private static function getHash(size:int, padBottom:Boolean, glowColor:uint, sMult:Number):* {
+        var h:int = (padBottom ? (1 << 31) : 0) | (size * sMult);
+        if (glowColor == 0) {
+            return h;
+        }
+        return h.toString() + glowColor.toString();
     }
 
-    private static function cache(tex:BitmapData, hash:String, modifiedTex:BitmapData):void {
+    private static function cache(tex:BitmapData, hash:*, modifiedTex:BitmapData):void {
         if (!(tex in redrawCaches)) {
             redrawCaches[tex] = {};
         }
         redrawCaches[tex][hash] = modifiedTex;
     }
 
-    private static function isCached(tex:BitmapData, hash:String):Boolean {
+    private static function isCached(tex:BitmapData, hash:*):Boolean {
         if (tex in redrawCaches) {
             if (hash in redrawCaches[tex]) {
                 return true;
