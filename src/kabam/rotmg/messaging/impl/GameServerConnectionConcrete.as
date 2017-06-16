@@ -1003,13 +1003,23 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         if (this.playerId_ == -1) {
             return;
         }
-        if (((gs_.map) && ((gs_.map.name_ == "Arena")))) {
+
+        // -2 is Nexus. Allows disconnecting to character select screen when nexus key is pressed in nexus.
+        // gameId is used over name so that marketplace only servers allow disconnect to char select screen via nexus key.
+        if (gs_.map && gs_.gsc_ && gs_.gsc_.gameId_ == -2) {
+            gs_.closed.dispatch();
+            return;
+        }
+
+        if (gs_.map && gs_.map.name_ == "Arena") {
             serverConnection.sendMessage(this.messages.require(ACCEPT_ARENA_DEATH));
+            return;
         }
-        else {
-            serverConnection.sendMessage(this.messages.require(ESCAPE));
-            this.checkDavyKeyRemoval();
-        }
+
+        this.checkDavyKeyRemoval();
+
+        //serverConnection.sendMessage(this.messages.require(ESCAPE));
+        reconnect2Nexus();
     }
 
     override public function gotoQuestRoom():void {
@@ -1804,6 +1814,15 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         isFromArena_ = _arg1.isFromArena_;
         var _local8:ReconnectEvent = new ReconnectEvent(_local2, _local3, _local4, _local5, _local6, _local7, isFromArena_);
         gs_.dispatchEvent(_local8);
+    }
+
+    private function reconnect2Nexus():void {
+        var svr:Server = new Server()
+                .setName("Nexus")
+                .setAddress(server_.address)
+                .setPort(server_.port);
+        var reconEvt:ReconnectEvent = new ReconnectEvent(svr, -2, false, charId_, 0, null, isFromArena_);
+        gs_.dispatchEvent(reconEvt);
     }
 
     private function onPing(_arg1:Ping):void {
