@@ -120,20 +120,11 @@ public class SocketServer {
         var temp:Message = this.head.next;
         var msg:Message = temp;
 
-        if (!this.socket.connected)
-        {
-            while (msg)
-            {
-                temp = msg;
-                msg = msg.next;
-                temp.consume();
-            }
-            this.unsentPlaceholder.next = null;
-            this.unsentPlaceholder.prev = null;
-            this.head = (this.tail = this.unsentPlaceholder);
+        if (!this.socket.connected) {
             return;
         }
 
+        var i:int = 0;
         while (msg) {
             this.data.clear();
             msg.writeToOutput(this.data);
@@ -148,15 +139,17 @@ public class SocketServer {
             temp = msg;
             msg = msg.next;
             temp.consume();
+            i++;
         }
-        this.socket.flush();
+        if (i > 0) {
+            this.socket.flush();
+        }
         this.unsentPlaceholder.next = null;
         this.unsentPlaceholder.prev = null;
         this.head = (this.tail = this.unsentPlaceholder);
     }
 
     private function onConnect(evt:Event):void {
-        this.sendPendingMessages();
         this.connected.dispatch();
     }
 
@@ -222,6 +215,7 @@ public class SocketServer {
                 return;
             }
             message.consume();
+            sendPendingMessages();
         }
     }
 
