@@ -40,6 +40,7 @@ import com.company.assembleegameclient.objects.particles.TeleportEffect;
 import com.company.assembleegameclient.objects.particles.ThrowEffect;
 import com.company.assembleegameclient.objects.thrown.ThrowProjectileEffect;
 import com.company.assembleegameclient.parameters.Parameters;
+import com.company.assembleegameclient.sound.Music;
 import com.company.assembleegameclient.sound.SoundEffectLibrary;
 import com.company.assembleegameclient.ui.PicView;
 import com.company.assembleegameclient.ui.dialogs.Dialog;
@@ -146,6 +147,7 @@ import kabam.rotmg.messaging.impl.incoming.ReskinUnlock;
 import kabam.rotmg.messaging.impl.incoming.ServerFull;
 import kabam.rotmg.messaging.impl.incoming.ServerPlayerShoot;
 import kabam.rotmg.messaging.impl.incoming.ShowEffect;
+import kabam.rotmg.messaging.impl.incoming.SwitchMusic;
 import kabam.rotmg.messaging.impl.incoming.TradeAccepted;
 import kabam.rotmg.messaging.impl.incoming.TradeChanged;
 import kabam.rotmg.messaging.impl.incoming.TradeDone;
@@ -458,13 +460,16 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.map(QUEST_REDEEM_RESPONSE).toMessage(QuestRedeemResponse).toMethod(this.onQuestRedeemResponse);
         _local1.map(KEY_INFO_RESPONSE).toMessage(KeyInfoResponse).toMethod(this.onKeyInfoResponse);
         _local1.map(LOGIN_REWARD_MSG).toMessage(ClaimDailyRewardResponse).toMethod(this.onLoginRewardResponse);
-        
-        // server queue messages
         _local1.map(QUEUE_PONG).toMessage(QueuePong);
         _local1.map(SERVER_FULL).toMessage(ServerFull).toMethod(this.HandleServerFull);
         _local1.map(QUEUE_PING).toMessage(QueuePing).toMethod(this.HandleQueuePing);
+        _local1.map(SWITCH_MUSIC).toMessage(SwitchMusic).toMethod(this.onSwitchMusic);
     }
-    
+
+    private function onSwitchMusic(sm:SwitchMusic):void {
+        Music.load(sm.music);
+    }
+
     private function HandleServerFull(_arg1:ServerFull):void
     {
         this.injector.getInstance(ShowQueueSignal).dispatch();
@@ -587,6 +592,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.unmap(SERVER_FULL);
         _local1.unmap(QUEUE_PING);
         _local1.unmap(QUEUE_PONG);
+        _local1.unmap(SWITCH_MUSIC);
     }
 
     private function encryptConnection():void {
@@ -1003,13 +1009,23 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         if (this.playerId_ == -1) {
             return;
         }
-        if (((gs_.map) && ((gs_.map.name_ == "Arena")))) {
-            serverConnection.queueMessage(this.messages.require(ACCEPT_ARENA_DEATH));
+
+        // -2 is Nexus. Allows disconnecting to character select screen when nexus key is pressed in nexus.
+        // gameId is used over name so that marketplace only servers allow disconnect to char select screen via nexus key.
+        if (gs_.map && gs_.gsc_ && gs_.gsc_.gameId_ == -2) {
+            gs_.closed.dispatch();
+            return;
         }
-        else {
-            serverConnection.queueMessage(this.messages.require(ESCAPE));
-            this.checkDavyKeyRemoval();
+
+        if (gs_.map && gs_.map.name_ == "Arena") {
+            serverConnection.sendMessage(this.messages.require(ACCEPT_ARENA_DEATH));
+            return;
         }
+
+        this.checkDavyKeyRemoval();
+
+        //serverConnection.sendMessage(this.messages.require(ESCAPE));
+        reconnect2Nexus();
     }
 
     override public function gotoQuestRoom():void {
@@ -1806,6 +1822,15 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         gs_.dispatchEvent(_local8);
     }
 
+    private function reconnect2Nexus():void {
+        var svr:Server = new Server()
+                .setName("Nexus")
+                .setAddress(server_.address)
+                .setPort(server_.port);
+        var reconEvt:ReconnectEvent = new ReconnectEvent(svr, -2, false, charId_, 0, null, isFromArena_);
+        gs_.dispatchEvent(reconEvt);
+    }
+
     private function onPing(_arg1:Ping):void {
         var _local2:Pong = (this.messages.require(PONG) as Pong);
         _local2.serial_ = _arg1.serial_;
@@ -1833,6 +1858,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         this.closeDialogs.dispatch();
         gs_.applyMapInfo(_arg1);
         this.rand_ = new Random(_arg1.fp_);
+        Music.load(_arg1.music);
         if (createCharacter_) {
             this.create();
         }
