@@ -58,6 +58,7 @@ public class GameObject extends BasicObject {
 
     protected static const PAUSED_FILTER:ColorMatrixFilter = new ColorMatrixFilter(MoreColorUtil.greyscaleFilterMatrix);
     protected static const CURSED_FILTER:ColorMatrixFilter = new ColorMatrixFilter(MoreColorUtil.redFilterMatrix);
+    protected static const SHOCKED_FILTER:ColorMatrixFilter = new ColorMatrixFilter(MoreColorUtil.greyscaleFilterMatrix);
     protected static const IDENTITY_MATRIX:Matrix = new Matrix();
     private static const ZERO_LIMIT:Number = 1E-5;
     private static const NEGATIVE_ZERO_LIMIT:Number = -(ZERO_LIMIT);
@@ -1138,7 +1139,7 @@ public class GameObject extends BasicObject {
             else {
                 _local8 = _local4.clone();
                 _local8.colorTransform(_local8.rect, new ColorTransform(-1, -1, -1, 1, 0xFF, 0xFF, 0xFF, 0));
-                _local8 = CachingColorTransformer.filterBitmapData(_local8, new ColorMatrixFilter(MoreColorUtil.greyscaleFilterMatrix));
+                _local8 = CachingColorTransformer.filterBitmapData(_local8, SHOCKED_FILTER);
                 _local4 = _local8;
             }
             this.isShockedTransformSet = true;

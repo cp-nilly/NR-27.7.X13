@@ -66,7 +66,9 @@ public class Player extends Character {
     private static const MAX_ATTACK_FREQ:Number = 0.008;
     private static const MIN_ATTACK_MULT:Number = 0.5;
     private static const MAX_ATTACK_MULT:Number = 2;
+    private static const LOW_HEALTH_CT_OFFSET:int = 128;
 
+    private static var lowHealthCT:Dictionary = new Dictionary();
     public static var rank:int = 0;
     public static var isAdmin:Boolean = false;
     public static var isMod:Boolean = false;
@@ -803,9 +805,15 @@ public class Player extends Character {
 
         if (hp_ < maxHP_ * 0.2) {
             var intensity:Number = int(Math.abs(Math.sin(currentTime / 200)) * 10) / 10;
-            var base:int = 128;
-            var cTrans:ColorTransform = new ColorTransform(1, 1, 1, 1, intensity * base, -intensity * base, -intensity * base);
-            tex = CachingColorTransformer.transformBitmapData(tex, cTrans);
+            var ct = lowHealthCT[intensity];
+            if (ct == null) {
+                ct = new ColorTransform(1, 1, 1, 1,
+                        intensity * LOW_HEALTH_CT_OFFSET,
+                        -intensity * LOW_HEALTH_CT_OFFSET,
+                        -intensity * LOW_HEALTH_CT_OFFSET);
+                lowHealthCT[intensity] = ct;
+            }
+            tex = CachingColorTransformer.transformBitmapData(tex, ct);
         }
 
         var plrTex:BitmapData = texturingCache_[tex];

@@ -8,59 +8,64 @@ import flash.utils.Dictionary;
 public class CachingColorTransformer {
 
     private static var bds_:Dictionary = new Dictionary();
+    private static var alphas_:Dictionary = new Dictionary();
 
 
     public static function transformBitmapData(tex:BitmapData, transform:ColorTransform):BitmapData {
         var ret:BitmapData;
-        var keyStore:Object = bds_[tex];
-        if (keyStore != null) {
-            ret = keyStore[transform];
+        var dict:Dictionary = bds_[tex];
+        if (dict != null) {
+            ret = dict[transform];
         }
         else {
-            keyStore = new Object();
-            bds_[tex] = keyStore;
+            dict = new Dictionary();
+            bds_[tex] = dict;
         }
 
         if (ret == null) {
             ret = tex.clone();
             ret.colorTransform(ret.rect, transform);
-            keyStore[transform] = ret;
+            dict[transform] = ret;
         }
         return ret;
     }
 
     public static function filterBitmapData(tex:BitmapData, filter:BitmapFilter):BitmapData {
         var ret:BitmapData;
-        var keyStore:Object = bds_[tex];
-        if (keyStore != null) {
-            ret = keyStore[filter];
+        var dict:Dictionary = bds_[tex];
+        if (dict != null) {
+            ret = dict[filter];
         }
         else {
-            keyStore = new Object();
-            bds_[tex] = keyStore;
+            dict = new Dictionary();
+            bds_[tex] = dict;
         }
 
         if (ret == null) {
             ret = tex.clone();
             ret.applyFilter(ret, ret.rect, new Point(), filter);
-            keyStore[filter] = ret;
+            dict[filter] = ret;
         }
         return ret;
     }
 
     public static function alphaBitmapData(tex:BitmapData, alpha:Number):BitmapData {
-        var alphaPercent:int = int(alpha * 100);
-        var transform:ColorTransform = new ColorTransform(1, 1, 1, alphaPercent / 100);
-        return transformBitmapData(tex, transform);
+        var ct:ColorTransform = alphas_[alpha];
+        if (ct == null) {
+            ct = new ColorTransform(1, 1, 1, alpha);
+            alphas_[alpha] = ct;
+        }
+        return transformBitmapData(tex, ct);
     }
 
     public static function clear():void {
-        for each (var keyStore:Object in bds_) {
-            for each (var tex:BitmapData in keyStore) {
+        for each (var dict:Dictionary in bds_) {
+            for each (var tex:BitmapData in dict) {
                 tex.dispose();
             }
         }
         bds_ = new Dictionary();
+        alphas_ = new Dictionary();
     }
 
 
