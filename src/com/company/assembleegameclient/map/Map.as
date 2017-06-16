@@ -70,6 +70,7 @@ public class Map extends AbstractMap {
     public var visible_:Array;
     public var visibleUnder_:Array;
     public var visibleSquares_:Vector.<Square>;
+    public var visibleHit_:Array;
     public var topSquares_:Vector.<Square>;
 
     public function Map(_arg1:AGameSprite) {
@@ -83,6 +84,7 @@ public class Map extends AbstractMap {
         this.visible_ = new Array();
         this.visibleUnder_ = new Array();
         this.visibleSquares_ = new Vector.<Square>();
+        this.visibleHit_ = new Array();
         this.topSquares_ = new Vector.<Square>();
         super();
         gs_ = _arg1;
@@ -336,6 +338,7 @@ public class Map extends AbstractMap {
         this.visible_.length = 0;
         this.visibleUnder_.length = 0;
         this.visibleSquares_.length = 0;
+        this.visibleHit_.length = 0;
         this.topSquares_.length = 0;
 
         var distMax:int = camera.maxDist_;
@@ -379,6 +382,9 @@ public class Map extends AbstractMap {
             if (sqr != null && sqr.lastVisible_ == currentTime) {
                 go.drawn_ = true;
                 go.computeSortVal(camera);
+                if (!(go is ParticleEffect)) {
+                    this.visibleHit_.push(go);
+                }
                 if (go.props_.drawUnder_) {
                     if (go.props_.drawOnGround_) {
                         go.draw(this.graphicsData_, camera, currentTime);
