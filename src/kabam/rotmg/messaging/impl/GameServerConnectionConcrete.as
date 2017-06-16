@@ -1052,7 +1052,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local2.key_.length = 0;
         ((!((key_ == null))) && (_local2.key_.writeBytes(key_)));
         _local2.mapJSON_ = (((mapJSON_ == null)) ? "" : mapJSON_);
-        serverConnection.queueMessage(_local2);
+        serverConnection.sendMessage(_local2);
     }
 
     private function onCreateSuccess(_arg1:CreateSuccess):void {
