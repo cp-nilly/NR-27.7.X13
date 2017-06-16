@@ -40,6 +40,7 @@ import com.company.assembleegameclient.objects.particles.TeleportEffect;
 import com.company.assembleegameclient.objects.particles.ThrowEffect;
 import com.company.assembleegameclient.objects.thrown.ThrowProjectileEffect;
 import com.company.assembleegameclient.parameters.Parameters;
+import com.company.assembleegameclient.sound.Music;
 import com.company.assembleegameclient.sound.SoundEffectLibrary;
 import com.company.assembleegameclient.ui.PicView;
 import com.company.assembleegameclient.ui.dialogs.Dialog;
@@ -146,6 +147,7 @@ import kabam.rotmg.messaging.impl.incoming.ReskinUnlock;
 import kabam.rotmg.messaging.impl.incoming.ServerFull;
 import kabam.rotmg.messaging.impl.incoming.ServerPlayerShoot;
 import kabam.rotmg.messaging.impl.incoming.ShowEffect;
+import kabam.rotmg.messaging.impl.incoming.SwitchMusic;
 import kabam.rotmg.messaging.impl.incoming.TradeAccepted;
 import kabam.rotmg.messaging.impl.incoming.TradeChanged;
 import kabam.rotmg.messaging.impl.incoming.TradeDone;
@@ -458,13 +460,16 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.map(QUEST_REDEEM_RESPONSE).toMessage(QuestRedeemResponse).toMethod(this.onQuestRedeemResponse);
         _local1.map(KEY_INFO_RESPONSE).toMessage(KeyInfoResponse).toMethod(this.onKeyInfoResponse);
         _local1.map(LOGIN_REWARD_MSG).toMessage(ClaimDailyRewardResponse).toMethod(this.onLoginRewardResponse);
-        
-        // server queue messages
         _local1.map(QUEUE_PONG).toMessage(QueuePong);
         _local1.map(SERVER_FULL).toMessage(ServerFull).toMethod(this.HandleServerFull);
         _local1.map(QUEUE_PING).toMessage(QueuePing).toMethod(this.HandleQueuePing);
+        _local1.map(SWITCH_MUSIC).toMessage(SwitchMusic).toMethod(this.onSwitchMusic);
     }
-    
+
+    private function onSwitchMusic(sm:SwitchMusic):void {
+        Music.load(sm.music);
+    }
+
     private function HandleServerFull(_arg1:ServerFull):void
     {
         this.injector.getInstance(ShowQueueSignal).dispatch();
@@ -587,6 +592,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.unmap(SERVER_FULL);
         _local1.unmap(QUEUE_PING);
         _local1.unmap(QUEUE_PONG);
+        _local1.unmap(SWITCH_MUSIC);
     }
 
     private function encryptConnection():void {
@@ -1852,6 +1858,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         this.closeDialogs.dispatch();
         gs_.applyMapInfo(_arg1);
         this.rand_ = new Random(_arg1.fp_);
+        Music.load(_arg1.music);
         if (createCharacter_) {
             this.create();
         }
