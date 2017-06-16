@@ -111,9 +111,28 @@ public class SocketServer {
         this.socket.connected && this.sendPendingMessages();
     }
 
+    public function queueMessage(msg:Message):void {
+        this.tail.next = msg;
+        this.tail = msg;
+    }
+
     private function sendPendingMessages():void {
-        var nxtMsg:Message = this.head.next;
-        var msg:Message = nxtMsg;
+        var temp:Message = this.head.next;
+        var msg:Message = temp;
+
+        if (!this.socket.connected)
+        {
+            while (msg)
+            {
+                temp = msg;
+                msg = msg.next;
+                temp.consume();
+            }
+            this.unsentPlaceholder.next = null;
+            this.unsentPlaceholder.prev = null;
+            this.head = (this.tail = this.unsentPlaceholder);
+            return;
+        }
 
         while (msg) {
             this.data.clear();
@@ -126,8 +145,9 @@ public class SocketServer {
             this.socket.writeInt(this.data.bytesAvailable + 5);
             this.socket.writeByte(msg.id);
             this.socket.writeBytes(this.data);
-            msg.consume();
+            temp = msg;
             msg = msg.next;
+            temp.consume();
         }
         this.socket.flush();
         this.unsentPlaceholder.next = null;
