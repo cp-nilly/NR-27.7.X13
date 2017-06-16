@@ -126,7 +126,8 @@ public class SocketServer {
 
         var i:int = 0;
         while (msg) {
-            this.data.clear();
+            this.data.position = 0;
+            this.data.length = 0;
             msg.writeToOutput(this.data);
             this.data.position = 0;
             if (this.outgoingCipher != null) {
@@ -174,7 +175,6 @@ public class SocketServer {
     private function onSocketData(_:ProgressEvent = null):void {
         var messageId:uint;
         var message:Message;
-        var data:ByteArray;
         var errorMessage:String;
         while (true) {
             if (this.socket == null || !this.socket.connected) break;
@@ -193,7 +193,8 @@ public class SocketServer {
             if (this.socket.bytesAvailable < this.messageLen - MESSAGE_LENGTH_SIZE_IN_BYTES) break;
             messageId = this.socket.readUnsignedByte();
             message = this.messages.require(messageId);
-            data = new ByteArray();
+            data.position = 0;
+            data.length = 0;
             if (this.messageLen - 5 > 0) {
                 this.socket.readBytes(data, 0, this.messageLen - 5);
             }
