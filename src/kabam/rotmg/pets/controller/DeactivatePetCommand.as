@@ -24,7 +24,7 @@ public class DeactivatePetCommand extends Command {
         var _local1:ActivePetUpdateRequest = (this.messages.require(GameServerConnection.ACTIVE_PET_UPDATE_REQUEST) as ActivePetUpdateRequest);
         _local1.instanceid = this.instanceID;
         _local1.commandtype = PetsConstants.FOLLOWING;
-        this.server.sendMessage(_local1);
+        this.server.queueMessage(_local1);
     }
 
 
