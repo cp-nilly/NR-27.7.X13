@@ -30,20 +30,19 @@ public class JitterWatcher extends Sprite {
     }
 
     public function record():void {
-        var _local3:int;
-        var _local1:int = getTimer();
+        var currentTime:int = getTimer();
         if (this.lastRecord_ == -1) {
-            this.lastRecord_ = _local1;
+            this.lastRecord_ = currentTime;
             return;
         }
-        var _local2:int = (_local1 - this.lastRecord_);
-        this.ticks_.push(_local2);
-        this.sum_ = (this.sum_ + _local2);
+        var dx:int = currentTime - this.lastRecord_;
+        this.ticks_.push(dx);
+        this.sum_ = this.sum_ + dx;
         if (this.ticks_.length > 50) {
-            _local3 = this.ticks_.shift();
-            this.sum_ = (this.sum_ - _local3);
+            var fdx:int = this.ticks_.shift();
+            this.sum_ = this.sum_ - fdx;
         }
-        this.lastRecord_ = _local1;
+        this.lastRecord_ = currentTime;
     }
 
     private function onAddedToStage(_arg1:Event):void {
@@ -59,17 +58,16 @@ public class JitterWatcher extends Sprite {
     }
 
     private function jitter():Number {
-        var _local4:int;
-        var _local1:int = this.ticks_.length;
-        if (_local1 == 0) {
-            return (0);
+        var numSamples:int = this.ticks_.length;
+        if (numSamples == 0) {
+            return 0;
         }
-        var _local2:Number = (this.sum_ / _local1);
-        var _local3:Number = 0;
-        for each (_local4 in this.ticks_) {
-            _local3 = (_local3 + ((_local4 - _local2) * (_local4 - _local2)));
+        var avg:Number = this.sum_ / numSamples;
+        var sqrSum:Number = 0;
+        for each (var dx:int in this.ticks_) {
+            sqrSum = sqrSum + (dx - avg) * (dx - avg);
         }
-        return (Math.sqrt((_local3 / _local1)));
+        return Math.sqrt(sqrSum / numSamples);
     }
 
 
