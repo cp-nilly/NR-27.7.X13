@@ -4,6 +4,9 @@ import com.company.assembleegameclient.appengine.SavedCharactersList;
 import com.company.assembleegameclient.appengine.SavedNewsItem;
 import com.company.assembleegameclient.parameters.Parameters;
 
+import flash.globalization.DateTimeFormatter;
+import flash.globalization.LocaleID;
+
 import kabam.rotmg.account.core.Account;
 import kabam.rotmg.account.kongregate.KongregateAccount;
 import kabam.rotmg.servers.api.LatLong;
@@ -271,6 +274,23 @@ public class PlayerModel {
 
     public function getDeadMusic():String {
         return this.charList.deadMusic_;
+    }
+
+    public function isBanned():Boolean {
+        return this.charList.isBanned;
+    }
+
+    public function getBanReasons():String {
+        return this.charList.banReasons;
+    }
+
+    public function getBanLiftTime():String {
+        if (this.charList.banLiftTime < 0) {
+            return "<font color=\'#ff0000\'>Never</font>";
+        }
+        var date:DateTimeFormatter = new DateTimeFormatter(LocaleID.DEFAULT);
+        date.setDateTimePattern("yyyy-MM-dd HH:mm:ss");
+        return "<font color=\'#00ff00\'>" + date.formatUTC(new Date(this.charList.banLiftTime * 1000)) + " UTC</font>";
     }
 }
 }
