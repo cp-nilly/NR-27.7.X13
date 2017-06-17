@@ -46,12 +46,14 @@ public class Graphic3D {
     private var gradientVB:VertexBuffer3D;
     private var gradientIB:IndexBuffer3D;
     private var repeat:Boolean;
+    private var rawMatrix3D:Vector.<Number>;
 
     public function Graphic3D() {
         this.matrix3D = new Matrix3D();
         this.sinkOffset = new Vector.<Number>(4, true);
         this.ctMult = new Vector.<Number>(4, true);
         this.ctOffset = new Vector.<Number>(4, true);
+        this.rawMatrix3D = new Vector.<Number>(16, true);
         super();
     }
 
@@ -108,14 +110,14 @@ public class Graphic3D {
 
     private function transform():void {
         this.matrix3D.identity();
-        var m:Vector.<Number> = this.matrix3D.rawData;
-        m[4] = -this.matrix2D.c;
-        m[1] = -this.matrix2D.b;
-        m[0] = this.matrix2D.a;
-        m[5] = this.matrix2D.d;
-        m[12] = this.matrix2D.tx;
-        m[13] = -this.matrix2D.ty;
-        this.matrix3D.rawData = m;
+        this.matrix3D.copyRawDataTo(rawMatrix3D);
+        rawMatrix3D[4] = -this.matrix2D.c;
+        rawMatrix3D[1] = -this.matrix2D.b;
+        rawMatrix3D[0] = this.matrix2D.a;
+        rawMatrix3D[5] = this.matrix2D.d;
+        rawMatrix3D[12] = this.matrix2D.tx;
+        rawMatrix3D[13] = -this.matrix2D.ty;
+        this.matrix3D.copyRawDataFrom(rawMatrix3D);
         this.matrix3D.prependScale(Math.ceil(this.texture.getWidth()), Math.ceil(this.texture.getHeight()), 1);
         this.matrix3D.prependTranslation(0.5, -0.5, 0);
     }
