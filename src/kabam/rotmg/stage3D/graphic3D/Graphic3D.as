@@ -39,6 +39,9 @@ public class Graphic3D {
     private var shadowMatrix2D:Matrix;
     private var sinkLevel:Number = 0;
     private var offsetMatrix:Vector.<Number>;
+    private var sinkOffset:Vector.<Number>;
+    private var ctMult:Vector.<Number>;
+    private var ctOffset:Vector.<Number>;
     private var vertexBufferCustom:VertexBuffer3D;
     private var gradientVB:VertexBuffer3D;
     private var gradientIB:IndexBuffer3D;
@@ -46,6 +49,9 @@ public class Graphic3D {
 
     public function Graphic3D() {
         this.matrix3D = new Matrix3D();
+        this.sinkOffset = new Vector.<Number>(4, true);
+        this.ctMult = new Vector.<Number>(4, true);
+        this.ctOffset = new Vector.<Number>(4, true);
         super();
     }
 
@@ -58,18 +64,23 @@ public class Graphic3D {
         this.vertexBufferCustom = GraphicsFillExtra.getVertexBuffer(gfx);
         this.sinkLevel = GraphicsFillExtra.getSinkLevel(gfx);
         if (this.sinkLevel != 0) {
-            this.offsetMatrix = Vector.<Number>([0, -this.sinkLevel, 0, 0]);
+            this.sinkOffset[1] = -this.sinkLevel;
+            this.offsetMatrix = sinkOffset;
         }
         this.transform();
 
         var ct:ColorTransform = GraphicsFillExtra.getColorTransform(this.bitmapData);
+        ctMult[0] = ct.redMultiplier;
+        ctMult[1] = ct.greenMultiplier;
+        ctMult[2] = ct.blueMultiplier;
+        ctMult[3] = ct.alphaMultiplier;
+        ctOffset[0] = ct.redOffset / 0xFF;
+        ctOffset[1] = ct.greenOffset / 0xFF;
+        ctOffset[2] = ct.blueOffset / 0xFF;
+        ctOffset[3] = ct.alphaOffset / 0xFF;
         var c3d = ctx.GetContext3D();
-        c3d.setProgramConstantsFromVector(
-                Context3DProgramType.FRAGMENT, 2,
-                Vector.<Number>([ct.redMultiplier, ct.greenMultiplier, ct.blueMultiplier, ct.alphaMultiplier]));
-        c3d.setProgramConstantsFromVector(
-                Context3DProgramType.FRAGMENT, 3,
-                Vector.<Number>([ct.redOffset / 0xFF, ct.greenOffset / 0xFF, ct.blueOffset / 0xFF, ct.alphaOffset / 0xFF]));
+        c3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 2, ctMult);
+        c3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 3, ctOffset);
     }
 
     public function setGradientFill(gfx:GraphicsGradientFill, ctx:Context3DProxy, sx:Number, sy:Number):void {
