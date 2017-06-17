@@ -96,7 +96,7 @@ public class WebMain extends Sprite {
         if (ENV == null)
             ENV = "localhost";
         
-        ENV = "nr";
+        //ENV = "nrtest";
     }
 
     private function hackParameters():void {
