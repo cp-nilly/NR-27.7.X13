@@ -16,27 +16,27 @@ public class TagsInputField extends Sprite {
     public var inputText_:BaseSimpleText;
     public var instructionsText_:BaseSimpleText;
 
-    public function TagsInputField(_arg1:String, _arg2:int = 260, _arg3:int = 100, _arg4:Boolean = false) {
+    public function TagsInputField(_arg_1:String, _arg_2:int=260, _arg_3:int=100, _arg_4:Boolean=false){
         this.nameText_ = new BaseSimpleText(18, 0xB3B3B3, false, 0, 0);
         this.nameText_.setBold(true);
         this.nameText_.text = "Tags: ";
         this.nameText_.updateMetrics();
         this.nameText_.filters = [new DropShadowFilter(0, 0, 0)];
         addChild(this.nameText_);
-        this.inputText_ = new BaseSimpleText(16, 0xB3B3B3, true, _arg2, _arg3);
-        this.inputText_.x = ((_arg4) ? 0 : 80);
-        this.inputText_.y = ((_arg4) ? 30 : 0);
+        this.inputText_ = new BaseSimpleText(16, 0xB3B3B3, true, _arg_2, _arg_3);
+        this.inputText_.x = ((_arg_4) ? 0 : 80);
+        this.inputText_.y = ((_arg_4) ? 30 : 0);
         this.inputText_.border = false;
         this.inputText_.maxChars = 0x0100;
         this.inputText_.multiline = true;
         this.inputText_.wordWrap = true;
         this.inputText_.restrict = "a-z0-9 ,";
         this.inputText_.updateMetrics();
-        this.inputText_.text = _arg1;
+        this.inputText_.text = _arg_1;
         addChild(this.inputText_);
         graphics.lineStyle(2, 0x454545, 1, false, LineScaleMode.NORMAL, CapsStyle.ROUND, JointStyle.ROUND);
         graphics.beginFill(0x333333, 1);
-        graphics.drawRect(this.inputText_.x, this.inputText_.y, _arg2, _arg3);
+        graphics.drawRect(this.inputText_.x, this.inputText_.y, _arg_2, _arg_3);
         graphics.endFill();
         graphics.lineStyle();
         this.inputText_.addEventListener(FocusEvent.FOCUS_IN, this.onFocusIn);
@@ -47,7 +47,7 @@ public class TagsInputField extends Sprite {
         this.instructionsText_.filters = [new DropShadowFilter(0, 0, 0, 1, 8, 8, 1)];
         this.instructionsText_.x = this.inputText_.x;
         this.instructionsText_.y = this.inputText_.y;
-        if (this.inputText_.text == "") {
+        if (this.inputText_.text == ""){
             addChild(this.instructionsText_);
         }
     }
@@ -56,13 +56,13 @@ public class TagsInputField extends Sprite {
         return (this.inputText_.text);
     }
 
-    private function onFocusIn(_arg1:FocusEvent):void {
+    private function onFocusIn(_arg_1:FocusEvent):void {
         if (contains(this.instructionsText_)) {
             removeChild(this.instructionsText_);
         }
     }
 
-    private function onFocusOut(_arg1:FocusEvent):void {
+    private function onFocusOut(_arg_1:FocusEvent):void {
         if (((!(contains(this.instructionsText_))) && ((this.inputText_.text == "")))) {
             addChild(this.instructionsText_);
         }
@@ -70,4 +70,4 @@ public class TagsInputField extends Sprite {
 
 
 }
-}
+}//package kabam.rotmg.editor.view.components.savedialog

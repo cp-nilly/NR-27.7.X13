@@ -27,10 +27,15 @@ public class ButtonFactory {
     private static var mainButton:TitleMenuOption;
     private static var classesButton:TitleMenuOption;
     private static var transferAccountButton:TitleMenuOption;
+    private static var textureEditorButton:TitleMenuOption;
 
 
     public static function getPlayButton():TitleMenuOption {
         return ((playButton = ((playButton) || (makeButton(ScreenTypes.PLAY, BUTTON_SIZE_LARGE, CENTER, true)))));
+    }
+
+    public static function getTextureEditorButton():TitleMenuOption {
+        return ((textureEditorButton = ((textureEditorButton) || (makeButton(ScreenTypes.TEXTURE_EDITOR, BUTTON_SIZE_SMALL, LEFT)))));
     }
 
     public static function getClassesButton():TitleMenuOption {

@@ -26,6 +26,7 @@ import kabam.rotmg.core.StaticInjectorContext;
 import kabam.rotmg.dailyLogin.config.DailyLoginConfig;
 import kabam.rotmg.death.DeathConfig;
 import kabam.rotmg.dialogs.DialogsConfig;
+import kabam.rotmg.editor.EditorConfig;
 import kabam.rotmg.errors.ErrorConfig;
 import kabam.rotmg.external.ExternalConfig;
 import kabam.rotmg.fame.FameConfig;
@@ -129,6 +130,7 @@ public class WebMain extends Sprite {
                 .configure(CharactersConfig)
                 .configure(ServersConfig)
                 .configure(GameConfig)
+                .configure(EditorConfig)
                 .configure(UIConfig)
                 .configure(MiniMapConfig)
                 .configure(LegendsConfig)
