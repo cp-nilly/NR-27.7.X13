@@ -19,7 +19,6 @@ public class AbstractMap extends Sprite {
     public var gs_:AGameSprite;
     public var name_:String;
     public var player_:Player = null;
-    public var spectatePlayer:Player = null;
     public var showDisplays_:Boolean;
     public var width_:int;
     public var height_:int;

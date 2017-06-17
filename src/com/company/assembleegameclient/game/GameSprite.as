@@ -145,12 +145,9 @@ public class GameSprite extends AGameSprite {
         mui_.onMouseUp(_arg1);
     }
 
-    override public function setFocus(obj:GameObject, bool:Boolean = false):void {
-        obj = ((obj) || (map.player_));
-        this.focus = obj;
-        if (bool) {
-            map.spectatePlayer = obj as Player;
-        }
+    override public function setFocus(_arg1:GameObject):void {
+        _arg1 = ((_arg1) || (map.player_));
+        this.focus = _arg1;
     }
 
     public function addChatPlayerMenu(_arg1:Player, _arg2:Number, _arg3:Number, _arg4:String = null, _arg5:Boolean = false, _arg6:Boolean = false):void {
