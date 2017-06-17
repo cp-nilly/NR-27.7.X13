@@ -50,14 +50,14 @@ public class Song {
     }
 
     public function set volume(volume:Number):void {
-        if (channel) {
-            transform.volume = volume;
-            tween.setValue("volume", volume);
-        }
+        transform.volume = volume;
+        tween.setValue("volume", volume);
     }
 
     private function updateTransform(tween:GTween = null):void {
-        channel.soundTransform = transform;
+        if (channel) {
+            channel.soundTransform = transform;
+        }
     }
 
     private function stopChannel(tween:GTween):void {
