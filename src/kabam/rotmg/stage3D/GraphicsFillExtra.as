@@ -45,7 +45,6 @@ public class GraphicsFillExtra {
         var ct:ColorTransform;
         if (bmp in colorTransforms) {
             ct = colorTransforms[bmp];
-            colorTransforms[bmp] = new ColorTransform();
         }
         else {
             ct = new ColorTransform();
