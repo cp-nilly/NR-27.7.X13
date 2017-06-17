@@ -16,15 +16,17 @@ public class ReconnectEvent extends Event {
     public var key_:ByteArray;
     public var isFromArena_:Boolean;
 
-    public function ReconnectEvent(_arg1:Server, _arg2:int, _arg3:Boolean, _arg4:int, _arg5:int, _arg6:ByteArray, _arg7:Boolean) {
+    public function ReconnectEvent(
+            svr:Server, gameId:int, createCharacter:Boolean,
+            charId:int, keyTime:int, key:ByteArray, fromArena:Boolean) {
         super(RECONNECT);
-        this.server_ = _arg1;
-        this.gameId_ = _arg2;
-        this.createCharacter_ = _arg3;
-        this.charId_ = _arg4;
-        this.keyTime_ = _arg5;
-        this.key_ = _arg6;
-        this.isFromArena_ = _arg7;
+        this.server_ = svr;
+        this.gameId_ = gameId;
+        this.createCharacter_ = createCharacter;
+        this.charId_ = charId;
+        this.keyTime_ = keyTime;
+        this.key_ = key;
+        this.isFromArena_ = fromArena;
     }
 
     override public function clone():Event {

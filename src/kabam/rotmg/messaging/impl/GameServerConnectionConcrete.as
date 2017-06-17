@@ -147,6 +147,7 @@ import kabam.rotmg.messaging.impl.incoming.ReskinUnlock;
 import kabam.rotmg.messaging.impl.incoming.ServerFull;
 import kabam.rotmg.messaging.impl.incoming.ServerPlayerShoot;
 import kabam.rotmg.messaging.impl.incoming.ShowEffect;
+import kabam.rotmg.messaging.impl.incoming.SetFocus;
 import kabam.rotmg.messaging.impl.incoming.SwitchMusic;
 import kabam.rotmg.messaging.impl.incoming.TradeAccepted;
 import kabam.rotmg.messaging.impl.incoming.TradeChanged;
@@ -460,6 +461,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.map(QUEST_REDEEM_RESPONSE).toMessage(QuestRedeemResponse).toMethod(this.onQuestRedeemResponse);
         _local1.map(KEY_INFO_RESPONSE).toMessage(KeyInfoResponse).toMethod(this.onKeyInfoResponse);
         _local1.map(LOGIN_REWARD_MSG).toMessage(ClaimDailyRewardResponse).toMethod(this.onLoginRewardResponse);
+        _local1.map(SET_FOCUS).toMessage(SetFocus).toMethod(this.setFocus);
         _local1.map(QUEUE_PONG).toMessage(QueuePong);
         _local1.map(SERVER_FULL).toMessage(ServerFull).toMethod(this.HandleServerFull);
         _local1.map(QUEUE_PING).toMessage(QueuePing).toMethod(this.HandleQueuePing);
@@ -592,6 +594,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.unmap(SERVER_FULL);
         _local1.unmap(QUEUE_PING);
         _local1.unmap(QUEUE_PONG);
+        _local1.unmap(SET_FOCUS);
         _local1.unmap(SWITCH_MUSIC);
     }
 
@@ -1012,7 +1015,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
 
         // -2 is Nexus. Allows disconnecting to character select screen when nexus key is pressed in nexus.
         // gameId is used over name so that marketplace only servers allow disconnect to char select screen via nexus key.
-        if (gs_.map && gs_.gsc_ && gs_.gsc_.gameId_ == -2) {
+        if (gameId_ == -2) {
             gs_.closed.dispatch();
             return;
         }
@@ -1908,7 +1911,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     private function handleDefaultResult(_arg1:BuyResult):void {
         var _local2:LineBuilder = LineBuilder.fromJSON(_arg1.resultString_);
         var _local3:Boolean = (((_arg1.result_ == BuyResult.SUCCESS_BRID)) || ((_arg1.result_ == BuyResult.PET_FEED_SUCCESS_BRID)));
-        var _local4:ChatMessage = ChatMessage.make(((_local3) ? Parameters.SERVER_CHAT_NAME : Parameters.ERROR_CHAT_NAME), _local2.key);
+        var _local4:ChatMessage = ChatMessage.make(_local3 ? Parameters.SERVER_CHAT_NAME : Parameters.ERROR_CHAT_NAME, _local2.key);
         _local4.tokens = _local2.tokens;
         this.addTextLine.dispatch(_local4);
     }
@@ -2213,6 +2216,15 @@ public class GameServerConnectionConcrete extends GameServerConnection {
 
     override public function isConnected():Boolean {
         return (serverConnection.isConnected());
+    }
+
+    private function setFocus(pkt:SetFocus):void {
+        var goDict:Dictionary = this.gs_.map.goDict_;
+        if (goDict) {
+            var go:GameObject = goDict[pkt.objectId_];
+            gs_.setFocus(go);
+            gs_.hudView.setMiniMapFocus(go);
+        }
     }
 
 

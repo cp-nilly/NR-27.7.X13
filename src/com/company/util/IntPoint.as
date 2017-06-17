@@ -17,7 +17,7 @@ public class IntPoint {
     }
 
     public static function fromPoint(_arg1:Point):IntPoint {
-        return (new (IntPoint)(Math.round(_arg1.x), Math.round(_arg1.y)));
+        return (new IntPoint(Math.round(_arg1.x), Math.round(_arg1.y)));
     }
 
 
