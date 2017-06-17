@@ -535,16 +535,17 @@ public class Player extends Character {
             }
         }
 
+        var angle:Number = Parameters.data_.cameraAngle;
+        if (this.rotate_ != 0) {
+            angle = angle + deltaMS * Parameters.PLAYER_ROTATE_SPEED * this.rotate_;
+            Parameters.data_.cameraAngle = angle;
+        }
+
         if (map_.player_ == this && isPaused()) {
             return true;
         }
 
         if (this.relMoveVec_ != null) {
-            var angle:Number = Parameters.data_.cameraAngle;
-            if (this.rotate_ != 0) {
-                angle = angle + deltaMS * Parameters.PLAYER_ROTATE_SPEED * this.rotate_;
-                Parameters.data_.cameraAngle = angle;
-            }
             if (this.relMoveVec_.x != 0 || this.relMoveVec_.y != 0) {
                 var mvSpd:Number = this.getMoveSpeed();
                 var mvAngle:Number = Math.atan2(this.relMoveVec_.y, this.relMoveVec_.x);
