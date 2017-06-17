@@ -41,18 +41,18 @@ public class GraphicsFillExtra {
         colorTransforms[_arg1] = _arg2;
     }
 
-    public static function getColorTransform(_arg1:BitmapData):ColorTransform {
-        var _local2:ColorTransform;
-        if ((_arg1 in colorTransforms)) {
-            _local2 = colorTransforms[_arg1];
-            colorTransforms[_arg1] = new ColorTransform();
+    public static function getColorTransform(bmp:BitmapData):ColorTransform {
+        var ct:ColorTransform;
+        if (bmp in colorTransforms) {
+            ct = colorTransforms[bmp];
+            colorTransforms[bmp] = new ColorTransform();
         }
         else {
-            _local2 = new ColorTransform();
-            colorTransforms[_arg1] = _local2;
+            ct = new ColorTransform();
+            colorTransforms[bmp] = ct;
             colorTransformsSize++;
         }
-        return (_local2);
+        return ct;
     }
 
     public static function setOffsetUV(_arg1:GraphicsBitmapFill, _arg2:Number, _arg3:Number):void {
