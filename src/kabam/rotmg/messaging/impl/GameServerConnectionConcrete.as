@@ -2197,10 +2197,10 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         return (serverConnection.isConnected());
     }
 
-    private function setFocus(packet:SetFocus) :void {
+    private function setFocus(pkt:SetFocus):void {
         var goDict:Dictionary = this.gs_.map.goDict_;
         if (goDict) {
-            var go:GameObject = goDict[packet.objectId_];
+            var go:GameObject = goDict[pkt.objectId_];
             gs_.setFocus(go);
             gs_.hudView.setMiniMapFocus(go);
         }
