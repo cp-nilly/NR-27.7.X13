@@ -63,8 +63,8 @@ public class PlayerMenu extends Menu {
             _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 10), 0xFFFFFF, "Ban Menu");
             _local3.addEventListener(MouseEvent.CLICK, this.openBanMenu);
             addOption(_local3);
-            _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 4), 0xFFFFFF, TextKey.PLAYERMENU_MUTE);
-            _local3.addEventListener(MouseEvent.CLICK, this.onMute);
+            _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 4), 0xFFFFFF, "Mute Menu");
+            _local3.addEventListener(MouseEvent.CLICK, this.openMuteMenu);
             addOption(_local3);
             _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 3), 0xFFFFFF, TextKey.PLAYERMENU_UNMUTE);
             _local3.addEventListener(MouseEvent.CLICK, this.onUnMute);
@@ -116,13 +116,13 @@ public class PlayerMenu extends Menu {
         addOption(_local3);
     }
 
-    private function openBanMenu(_arg_1:MouseEvent):void {
+    private function openBanMenu(_arg1:MouseEvent):void {
         StaticInjectorContext.getInjector().getInstance(OpenDialogSignal).dispatch(new BanMenu(this.player_));
         remove();
     }
 
-    private function onMute(_arg1:Event):void {
-        this.gs_.gsc_.playerText(("/mute " + this.player_.name_));
+    private function openMuteMenu(_arg1:MouseEvent):void {
+        StaticInjectorContext.getInjector().getInstance(OpenDialogSignal).dispatch(new MuteMenu(this.player_));
         remove();
     }
 
