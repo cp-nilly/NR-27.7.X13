@@ -519,9 +519,12 @@ public class GameObject extends BasicObject {
         return (!(((this.condition_[ConditionEffect.CE_SECOND_BATCH] & ConditionEffect.CURSE_IMMUNE_BIT) == 0)));
     }
 
-    public function isHidden() : Boolean
-    {
+    public function isHidden():Boolean {
         return (this.condition_[ConditionEffect.CE_SECOND_BATCH] & ConditionEffect.HIDDEN_BIT) != 0;
+    }
+
+    public function isMuted():Boolean {
+        return (this.condition_[ConditionEffect.CE_SECOND_BATCH] & ConditionEffect.MUTED_BIT) != 0;
     }
 
     public function isSafe(_arg1:int = 20):Boolean {

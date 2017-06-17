@@ -63,12 +63,16 @@ public class PlayerMenu extends Menu {
             _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 10), 0xFFFFFF, "Ban Menu");
             _local3.addEventListener(MouseEvent.CLICK, this.openBanMenu);
             addOption(_local3);
-            _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 4), 0xFFFFFF, "Mute Menu");
-            _local3.addEventListener(MouseEvent.CLICK, this.openMuteMenu);
-            addOption(_local3);
-            _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 3), 0xFFFFFF, TextKey.PLAYERMENU_UNMUTE);
-            _local3.addEventListener(MouseEvent.CLICK, this.onUnMute);
-            addOption(_local3);
+            if (!this.player_.isMuted()) {
+                _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 4), 0xFFFFFF, "Mute Menu");
+                _local3.addEventListener(MouseEvent.CLICK, this.openMuteMenu);
+                addOption(_local3);
+            }
+            else {
+                _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 3), 0xFFFFFF, TextKey.PLAYERMENU_UNMUTE);
+                _local3.addEventListener(MouseEvent.CLICK, this.onUnMute);
+                addOption(_local3);
+            }
         }
         if (((this.gs_.map.allowPlayerTeleport()) && (this.player_.isTeleportEligible(this.player_)))) {
             _local3 = new TeleportMenuOption(this.gs_.map.player_);
