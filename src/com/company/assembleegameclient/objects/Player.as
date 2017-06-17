@@ -142,6 +142,7 @@ public class Player extends Character {
     private var breathBackPath_:GraphicsPath = null;
     private var breathFill_:GraphicsSolidFill = null;
     private var breathPath_:GraphicsPath = null;
+    private var slideVec_:Vector3D;
 
     public function Player(_arg1:XML) {
         this.ip_ = new IntPoint();
@@ -158,6 +159,7 @@ public class Player extends Character {
         this.maxHPMax_ = int(_arg1.MaxHitPoints.@max);
         this.maxMPMax_ = int(_arg1.MaxMagicPoints.@max);
         texturingCache_ = new Dictionary();
+        this.slideVec_ = new Vector3D();
     }
 
     public static function fromPlayerXML(_arg1:String, _arg2:XML):Player {
@@ -547,15 +549,13 @@ public class Player extends Character {
                 var mvSpd:Number = this.getMoveSpeed();
                 var mvAngle:Number = Math.atan2(this.relMoveVec_.y, this.relMoveVec_.x);
                 if (square_.props_.slideAmount_ > 0) {
-                    var slideVec:Vector3D = new Vector3D();
-                    slideVec.x = mvSpd * Math.cos(angle + mvAngle);
-                    slideVec.y = mvSpd * Math.sin(angle + mvAngle);
-                    slideVec.z = 0;
-                    var slideDist:Number = slideVec.length;
-                    slideVec.scaleBy(1 - square_.props_.slideAmount_);
+                    slideVec_.x = mvSpd * Math.cos(angle + mvAngle);
+                    slideVec_.y = mvSpd * Math.sin(angle + mvAngle);
+                    slideVec_.z = 0;
                     moveVec_.scaleBy(square_.props_.slideAmount_);
-                    if (moveVec_.length < slideDist) {
-                        moveVec_ = moveVec_.add(slideVec);
+                    if (moveVec_.length < slideVec_.length) {
+                        slideVec_.scaleBy(1 - square_.props_.slideAmount_);
+                        moveVec_ = moveVec_.add(slideVec_);
                     }
                 }
                 else {
