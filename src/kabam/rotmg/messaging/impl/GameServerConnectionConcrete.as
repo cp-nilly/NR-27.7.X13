@@ -40,6 +40,7 @@ import com.company.assembleegameclient.objects.particles.TeleportEffect;
 import com.company.assembleegameclient.objects.particles.ThrowEffect;
 import com.company.assembleegameclient.objects.thrown.ThrowProjectileEffect;
 import com.company.assembleegameclient.parameters.Parameters;
+import com.company.assembleegameclient.sound.Music;
 import com.company.assembleegameclient.sound.SoundEffectLibrary;
 import com.company.assembleegameclient.ui.PicView;
 import com.company.assembleegameclient.ui.dialogs.Dialog;
@@ -147,6 +148,7 @@ import kabam.rotmg.messaging.impl.incoming.ServerFull;
 import kabam.rotmg.messaging.impl.incoming.ServerPlayerShoot;
 import kabam.rotmg.messaging.impl.incoming.ShowEffect;
 import kabam.rotmg.messaging.impl.incoming.SetFocus;
+import kabam.rotmg.messaging.impl.incoming.SwitchMusic;
 import kabam.rotmg.messaging.impl.incoming.TradeAccepted;
 import kabam.rotmg.messaging.impl.incoming.TradeChanged;
 import kabam.rotmg.messaging.impl.incoming.TradeDone;
@@ -460,13 +462,16 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.map(KEY_INFO_RESPONSE).toMessage(KeyInfoResponse).toMethod(this.onKeyInfoResponse);
         _local1.map(LOGIN_REWARD_MSG).toMessage(ClaimDailyRewardResponse).toMethod(this.onLoginRewardResponse);
         _local1.map(SET_FOCUS).toMessage(SetFocus).toMethod(this.setFocus);
-        
-        // server queue messages
         _local1.map(QUEUE_PONG).toMessage(QueuePong);
         _local1.map(SERVER_FULL).toMessage(ServerFull).toMethod(this.HandleServerFull);
         _local1.map(QUEUE_PING).toMessage(QueuePing).toMethod(this.HandleQueuePing);
+        _local1.map(SWITCH_MUSIC).toMessage(SwitchMusic).toMethod(this.onSwitchMusic);
     }
-    
+
+    private function onSwitchMusic(sm:SwitchMusic):void {
+        Music.load(sm.music);
+    }
+
     private function HandleServerFull(_arg1:ServerFull):void
     {
         this.injector.getInstance(ShowQueueSignal).dispatch();
@@ -590,6 +595,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.unmap(QUEUE_PING);
         _local1.unmap(QUEUE_PONG);
         _local1.unmap(SET_FOCUS);
+        _local1.unmap(SWITCH_MUSIC);
     }
 
     private function encryptConnection():void {
@@ -908,7 +914,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     override public function buy(sellableObjectId:int, quantity:int):void {
         var sObj:SellableObject;
         var converted:Boolean;
-        if (outstandingBuy_ != null) {
+        if (outstandingBuy_) {
             return;
         }
         sObj = gs_.map.goDict_[sellableObjectId];
@@ -930,7 +936,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     }
 
     private function buyConfirmation(_arg1:SellableObject, _arg2:Boolean, _arg3:int, _arg4:int) {
-        outstandingBuy_ = new OutstandingBuy(_arg1.soldObjectInternalName(), _arg1.price_, _arg1.currency_, _arg2);
+        outstandingBuy_ = true;
         var _local5:Buy = (this.messages.require(BUY) as Buy);
         _local5.objectId_ = _arg3;
         _local5.quantity_ = _arg4;
@@ -1006,13 +1012,23 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         if (this.playerId_ == -1) {
             return;
         }
-        if (((gs_.map) && ((gs_.map.name_ == "Arena")))) {
+
+        // -2 is Nexus. Allows disconnecting to character select screen when nexus key is pressed in nexus.
+        // gameId is used over name so that marketplace only servers allow disconnect to char select screen via nexus key.
+        if (gameId_ == -2) {
+            gs_.closed.dispatch();
+            return;
+        }
+
+        if (gs_.map && gs_.map.name_ == "Arena") {
             serverConnection.sendMessage(this.messages.require(ACCEPT_ARENA_DEATH));
+            return;
         }
-        else {
-            serverConnection.sendMessage(this.messages.require(ESCAPE));
-            this.checkDavyKeyRemoval();
-        }
+
+        this.checkDavyKeyRemoval();
+
+        //serverConnection.sendMessage(this.messages.require(ESCAPE));
+        reconnect2Nexus();
     }
 
     override public function gotoQuestRoom():void {
@@ -1809,6 +1825,15 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         gs_.dispatchEvent(_local8);
     }
 
+    private function reconnect2Nexus():void {
+        var svr:Server = new Server()
+                .setName("Nexus")
+                .setAddress(server_.address)
+                .setPort(server_.port);
+        var reconEvt:ReconnectEvent = new ReconnectEvent(svr, -2, false, charId_, 0, null, isFromArena_);
+        gs_.dispatchEvent(reconEvt);
+    }
+
     private function onPing(_arg1:Ping):void {
         var _local2:Pong = (this.messages.require(PONG) as Pong);
         _local2.serial_ = _arg1.serial_;
@@ -1836,6 +1861,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         this.closeDialogs.dispatch();
         gs_.applyMapInfo(_arg1);
         this.rand_ = new Random(_arg1.fp_);
+        Music.load(_arg1.music);
         if (createCharacter_) {
             this.create();
         }
@@ -1860,12 +1886,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     }
 
     private function onBuyResult(_arg1:BuyResult):void {
-        if (_arg1.result_ == BuyResult.SUCCESS_BRID) {
-            if (outstandingBuy_ != null) {
-                outstandingBuy_.record();
-            }
-        }
-        outstandingBuy_ = null;
+        outstandingBuy_ = false;
         this.handleBuyResultType(_arg1);
     }
 
@@ -1890,7 +1911,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     private function handleDefaultResult(_arg1:BuyResult):void {
         var _local2:LineBuilder = LineBuilder.fromJSON(_arg1.resultString_);
         var _local3:Boolean = (((_arg1.result_ == BuyResult.SUCCESS_BRID)) || ((_arg1.result_ == BuyResult.PET_FEED_SUCCESS_BRID)));
-        var _local4:ChatMessage = ChatMessage.make(((_local3) ? Parameters.SERVER_CHAT_NAME : Parameters.ERROR_CHAT_NAME), _local2.key);
+        var _local4:ChatMessage = ChatMessage.make(_local3 ? Parameters.SERVER_CHAT_NAME : Parameters.ERROR_CHAT_NAME, _local2.key);
         _local4.tokens = _local2.tokens;
         this.addTextLine.dispatch(_local4);
     }

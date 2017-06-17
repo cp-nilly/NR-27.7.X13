@@ -28,7 +28,7 @@ public class WebLoginDialog extends Frame {
     private var rememberMeCheckbox:CheckBoxField;
 
     public function WebLoginDialog() {
-        super(TextKey.WEB_LOGIN_DIALOG_TITLE, TextKey.WEB_LOGIN_DIALOG_LEFT, TextKey.WEB_LOGIN_DIALOG_RIGHT, "/signIn");
+        super(TextKey.WEB_LOGIN_DIALOG_TITLE, TextKey.WEB_LOGIN_DIALOG_LEFT, TextKey.WEB_LOGIN_DIALOG_RIGHT);
         this.makeUI();
         this.forgot = new NativeMappedSignal(this.forgotText, MouseEvent.CLICK);
         this.register = new NativeMappedSignal(this.registerText, MouseEvent.CLICK);

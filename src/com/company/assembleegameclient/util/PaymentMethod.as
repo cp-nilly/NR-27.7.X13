@@ -10,9 +10,9 @@ import kabam.rotmg.text.model.TextKey;
 
 public class PaymentMethod {
 
-    public static const GO_METHOD:PaymentMethod = new (PaymentMethod)(TextKey.PAYMENTS_GOOGLE_CHECKOUT, "co", "");
-    public static const PAYPAL_METHOD:PaymentMethod = new (PaymentMethod)(TextKey.PAYMENTS_PAYPAL, "ps", "P3");
-    public static const CREDITS_METHOD:PaymentMethod = new (PaymentMethod)(TextKey.PAYMENTS_CREDIT_CARDS, "ps", "CH");
+    public static const GO_METHOD:PaymentMethod = new PaymentMethod(TextKey.PAYMENTS_GOOGLE_CHECKOUT, "co", "");
+    public static const PAYPAL_METHOD:PaymentMethod = new PaymentMethod(TextKey.PAYMENTS_PAYPAL, "ps", "P3");
+    public static const CREDITS_METHOD:PaymentMethod = new PaymentMethod(TextKey.PAYMENTS_CREDIT_CARDS, "ps", "CH");
     public static const PAYMENT_METHODS:Vector.<PaymentMethod> = new <PaymentMethod>[GO_METHOD, PAYPAL_METHOD, CREDITS_METHOD];
 
     public var label_:String;

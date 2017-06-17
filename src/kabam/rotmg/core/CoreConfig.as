@@ -12,16 +12,12 @@ import kabam.rotmg.core.commands.ConfigureSpamFilterCommand;
 import kabam.rotmg.core.commands.InvalidateDataCommand;
 import kabam.rotmg.core.commands.PurchaseCharacterCommand;
 import kabam.rotmg.core.commands.SetScreenWithValidDataCommand;
-import kabam.rotmg.core.commands.SetupAnalyticsCommand;
 import kabam.rotmg.core.commands.SetupDomainSecurityCommand;
-import kabam.rotmg.core.commands.TrackEventCommand;
-import kabam.rotmg.core.commands.TrackPageViewCommand;
 import kabam.rotmg.core.commands.UpdatePetsModelCommand;
 import kabam.rotmg.core.commands.UpdatePlayerModelCommand;
 import kabam.rotmg.core.model.MapModel;
 import kabam.rotmg.core.model.PlayerModel;
 import kabam.rotmg.core.model.ScreenModel;
-import kabam.rotmg.core.service.GoogleAnalytics;
 import kabam.rotmg.core.service.PurchaseCharacterClassTask;
 import kabam.rotmg.core.service.PurchaseCharacterErrorTask;
 import kabam.rotmg.core.service.RequestAppInitTask;
@@ -35,11 +31,8 @@ import kabam.rotmg.core.signals.PurchaseCharacterSignal;
 import kabam.rotmg.core.signals.SetLoadingMessageSignal;
 import kabam.rotmg.core.signals.SetScreenSignal;
 import kabam.rotmg.core.signals.SetScreenWithValidDataSignal;
-import kabam.rotmg.core.signals.SetupAnalyticsSignal;
 import kabam.rotmg.core.signals.SetupDomainSecuritySignal;
 import kabam.rotmg.core.signals.ShowTooltipSignal;
-import kabam.rotmg.core.signals.TrackEventSignal;
-import kabam.rotmg.core.signals.TrackPageViewSignal;
 import kabam.rotmg.core.signals.UpdateNewCharacterScreenSignal;
 import kabam.rotmg.core.view.Layers;
 import kabam.rotmg.core.view.ScreensMediator;
@@ -81,7 +74,6 @@ public class CoreConfig implements IConfig {
         this.configureSignals();
         this.configureViews();
         this.startup.addSignal(SetupDomainSecuritySignal, -1000);
-        this.startup.addSignal(SetupAnalyticsSignal, -999);
         this.startup.addTask(RequestAppInitTask);
         this.context.lifecycle.afterInitializing(this.init);
     }
@@ -95,9 +87,6 @@ public class CoreConfig implements IConfig {
 
     private function configureCommands():void {
         this.commandMap.map(SetupDomainSecuritySignal).toCommand(SetupDomainSecurityCommand);
-        this.commandMap.map(SetupAnalyticsSignal).toCommand(SetupAnalyticsCommand);
-        this.commandMap.map(TrackEventSignal).toCommand(TrackEventCommand);
-        this.commandMap.map(TrackPageViewSignal).toCommand(TrackPageViewCommand);
         this.commandMap.map(InvalidateDataSignal).toCommand(InvalidateDataCommand);
         this.commandMap.map(SetScreenWithValidDataSignal).toCommand(SetScreenWithValidDataCommand);
         this.commandMap.map(PurchaseCharacterSignal).toCommand(PurchaseCharacterCommand);
@@ -112,7 +101,6 @@ public class CoreConfig implements IConfig {
         this.injector.map(TaskMonitor).asSingleton();
         this.injector.map(PurchaseCharacterClassTask);
         this.injector.map(PurchaseCharacterErrorTask);
-        this.injector.map(GoogleAnalytics).asSingleton();
         this.injector.map(RequestAppInitTask);
     }
 

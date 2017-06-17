@@ -31,7 +31,7 @@ public class KongregateAccountDetailDialog extends Sprite {
 
     public function setInfo(_arg1:String, _arg2:String, _arg3:Boolean):void {
         var _local4:Frame;
-        _local4 = new Frame(TextKey.KONGREGATEACCOUNTDETAILDIALOG_TITLE, "", TextKey.KONGREGATEACCOUNTDETAILDIALOG_RIGHTBUTTON, "/kongregateCurrentLogin");
+        _local4 = new Frame(TextKey.KONGREGATEACCOUNTDETAILDIALOG_TITLE, "", TextKey.KONGREGATEACCOUNTDETAILDIALOG_RIGHTBUTTON);
         addChild(_local4);
         this.loginText_ = new TextFieldDisplayConcrete().setSize(18).setColor(0xB3B3B3);
         this.loginText_.setBold(true);
