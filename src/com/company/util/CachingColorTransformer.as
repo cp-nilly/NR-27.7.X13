@@ -49,11 +49,11 @@ public class CachingColorTransformer {
         return ret;
     }
 
-    public static function alphaBitmapData(tex:BitmapData, alpha:Number):BitmapData {
-        var ct:ColorTransform = alphas_[alpha];
+    public static function alphaBitmapData(tex:BitmapData, alphaPercent:int):BitmapData {
+        var ct:ColorTransform = alphas_[alphaPercent];
         if (ct == null) {
-            ct = new ColorTransform(1, 1, 1, alpha);
-            alphas_[alpha] = ct;
+            ct = new ColorTransform(1, 1, 1, alphaPercent / 100);
+            alphas_[alphaPercent] = ct;
         }
         return transformBitmapData(tex, ct);
     }

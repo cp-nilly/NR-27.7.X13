@@ -826,7 +826,7 @@ public class Player extends Character {
         }
         else {
             if (isInvisible()) {
-                plrTex = CachingColorTransformer.alphaBitmapData(plrTex, 0.4);
+                plrTex = CachingColorTransformer.alphaBitmapData(plrTex, 40);
             }
         }
         return plrTex;
