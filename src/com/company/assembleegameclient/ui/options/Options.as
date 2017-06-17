@@ -507,12 +507,6 @@ public class Options extends Sprite {
 
     private function onPlayMusicChange():void {
         Music.setPlayMusic(Parameters.data_.playMusic);
-        if (Parameters.data_.playMusic) {
-            Music.setMusicVolume(1);
-        }
-        else {
-            Music.setMusicVolume(0);
-        }
         this.refresh();
     }
 

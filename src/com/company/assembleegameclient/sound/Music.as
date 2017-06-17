@@ -1,52 +1,52 @@
 ﻿package com.company.assembleegameclient.sound {
 import com.company.assembleegameclient.parameters.Parameters;
 
-import flash.media.Sound;
-import flash.media.SoundChannel;
-import flash.media.SoundTransform;
-import flash.net.URLRequest;
-
-import kabam.rotmg.application.api.ApplicationSetup;
-import kabam.rotmg.core.StaticInjectorContext;
-
 public class Music {
 
-    private static var music_:Sound = null;
-    private static var musicVolumeTransform:SoundTransform;
-    private static var musicChannel_:SoundChannel = null;
-    private static var volume:Number = 0.3;
+    private static var musicName:String;
+    private static var song:Song;
 
 
-    public static function load():void {
-        var _local1:ApplicationSetup = StaticInjectorContext.getInjector().getInstance(ApplicationSetup);
-        var _local2 = (_local1.getAppEngineUrl(true) + "/music/sorc.mp3");
-        volume = Parameters.data_.musicVolume;
-        musicVolumeTransform = new SoundTransform(((Parameters.data_.playMusic) ? volume : 0));
-        music_ = new Sound();
-        music_.load(new URLRequest(_local2));
-        musicChannel_ = music_.play(0, int.MAX_VALUE, musicVolumeTransform);
-    }
-
-    public static function setPlayMusic(_arg1:Boolean):void {
-        Parameters.data_.playMusic = _arg1;
-        Parameters.save();
-        musicVolumeTransform.volume = ((Parameters.data_.playMusic) ? volume : 0);
-        musicChannel_.soundTransform = musicVolumeTransform;
-    }
-
-    public static function setMusicVolume(_arg1:Number):void {
-        Parameters.data_.musicVolume = _arg1;
-        Parameters.save();
-        if (!Parameters.data_.playMusic) {
+    public static function load(name:String):void {
+        if (musicName == name) {
             return;
         }
-        if (musicVolumeTransform != null) {
-            musicVolumeTransform.volume = _arg1;
+        musicName = name;
+
+        if (Parameters.data_.playMusic) {
+            transitionNewMusic();
         }
-        else {
-            musicVolumeTransform = new SoundTransform(_arg1);
+    }
+
+    private static function transitionNewMusic():void {
+        if (song) {
+            song.stop();
         }
-        musicChannel_.soundTransform = musicVolumeTransform;
+        if (musicName == null || musicName == "") {
+            return;
+        }
+        song = new Song(musicName);
+        song.play(Parameters.data_.musicVolume);
+    }
+
+    public static function setPlayMusic(play:Boolean):void {
+        Parameters.data_.playMusic = play;
+        Parameters.save();
+        if (play) {
+            transitionNewMusic();
+        }
+        else if (song) {
+            song.stop(true);
+            song = null;
+        }
+    }
+
+    public static function setMusicVolume(newVol:Number):void {
+        Parameters.data_.musicVolume = newVol;
+        Parameters.save();
+        if (Parameters.data_.playMusic && song) {
+            song.volume = newVol;
+        }
     }
 
 

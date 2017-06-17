@@ -1,4 +1,6 @@
 ﻿package kabam.rotmg.death.control {
+import com.company.assembleegameclient.sound.Music;
+
 import kabam.rotmg.core.model.PlayerModel;
 import kabam.rotmg.death.model.DeathModel;
 import kabam.rotmg.dialogs.control.CloseDialogsSignal;
@@ -23,6 +25,7 @@ public class HandleDeathCommand {
 
 
     public function execute():void {
+        Music.load(player.getDeadMusic());
         this.closeDialogs.dispatch();
         if (this.isZombieDeathPending()) {
             this.passPreviousDeathToFameView();
