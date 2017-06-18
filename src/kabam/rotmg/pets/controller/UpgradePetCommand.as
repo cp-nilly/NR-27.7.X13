@@ -55,7 +55,7 @@ public class UpgradePetCommand extends Command {
             _local1.paymentTransType = FusePetRequestVO(this.vo).paymentTransType;
         }
         if (_local1) {
-            this.server.sendMessage(_local1);
+            this.server.queueMessage(_local1);
         }
     }
 

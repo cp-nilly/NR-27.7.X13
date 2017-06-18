@@ -46,7 +46,7 @@ public class CalendarDayBoxMediator extends Mediator {
             _local2 = (this.messages.require(GameServerConnection.CLAIM_LOGIN_REWARD_MSG) as ClaimDailyRewardMessage);
             _local2.claimKey = this.view.day.claimKey;
             _local2.type = this.view.getDay().calendarType;
-            this.socketServer.sendMessage(_local2);
+            this.socketServer.queueMessage(_local2);
             this.view.markAsClaimed();
             this.model.markAsClaimed(this.view.getDay().dayNumber, this.view.getDay().calendarType);
         }

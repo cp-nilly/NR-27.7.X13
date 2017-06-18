@@ -26,7 +26,7 @@ public class ReskinPetRequestCommand extends Command {
         _local1.petInstanceId = this.reskinModel.getSelectedPet().getID();
         _local1.pickedNewPetType = this.reskinModel.getpetTypeFromSkinID(this.reskinModel.getSelectedSkin());
         _local1.item = this.reskinModel.slotObjectData;
-        this.socketServer.sendMessage(_local1);
+        this.socketServer.queueMessage(_local1);
     }
 
 

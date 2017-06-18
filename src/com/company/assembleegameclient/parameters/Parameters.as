@@ -107,7 +107,7 @@ public class Parameters {
     }
 
     public static function isGpuRender():Boolean {
-        return (((((!(GPURenderError)) && (data_.GPURender))) && (!(Map.forceSoftwareRender))));
+        return !GPURenderError && data_.GPURender && !Map.forceSoftwareRender;
     }
 
     public static function clearGpuRenderEvent(_arg1:Event):void {
