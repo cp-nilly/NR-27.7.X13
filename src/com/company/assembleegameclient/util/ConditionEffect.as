@@ -57,9 +57,9 @@ public class ConditionEffect {
     public static const ATT_BOOST:uint = 42;
     public static const DEF_BOOST:uint = 43;
     public static const SPD_BOOST:uint = 44;
-    public static const VIT_BOOST:uint = 45;
-    public static const WIS_BOOST:uint = 46;
-    public static const DEX_BOOST:uint = 47;
+    public static const DEX_BOOST:uint = 45;
+    public static const VIT_BOOST:uint = 46;
+    public static const WIS_BOOST:uint = 47;
     public static const HIDDEN:uint = 48;
     public static const MUTED:int = 49;
     public static const GROUND_DAMAGE:uint = 99;
