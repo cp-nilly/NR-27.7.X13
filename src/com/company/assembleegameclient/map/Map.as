@@ -96,20 +96,20 @@ public class Map extends AbstractMap {
         quest_ = new Quest(this);
         this.loopMonitor = StaticInjectorContext.getInjector().getInstance(RollingMeanLoopMonitor);
         StaticInjectorContext.getInjector().getInstance(GameModel).gameObjects = goDict_;
-        this.forceSoftwareMap[PET_YARD_1] = true;
-        this.forceSoftwareMap[PET_YARD_2] = true;
-        this.forceSoftwareMap[PET_YARD_3] = true;
-        this.forceSoftwareMap[PET_YARD_4] = true;
-        this.forceSoftwareMap[PET_YARD_5] = true;
-        this.forceSoftwareMap["Nexus"] = true;
-        this.forceSoftwareMap["Tomb of the Ancients"] = true;
-        this.forceSoftwareMap["Tomb of the Ancients (Heroic)"] = true;
-        this.forceSoftwareMap["Mad Lab"] = true;
-        this.forceSoftwareMap["Guild Hall"] = true;
-        this.forceSoftwareMap["Guild Hall 2"] = true;
-        this.forceSoftwareMap["Guild Hall 3"] = true;
-        this.forceSoftwareMap["Guild Hall 4"] = true;
-        this.forceSoftwareMap["Cloth Bazaar"] = true;
+        //this.forceSoftwareMap[PET_YARD_1] = true;
+        //this.forceSoftwareMap[PET_YARD_2] = true;
+        //this.forceSoftwareMap[PET_YARD_3] = true;
+        //this.forceSoftwareMap[PET_YARD_4] = true;
+        //this.forceSoftwareMap[PET_YARD_5] = true;
+        //this.forceSoftwareMap["Nexus"] = true;
+        //this.forceSoftwareMap["Tomb of the Ancients"] = true;
+        //this.forceSoftwareMap["Tomb of the Ancients (Heroic)"] = true;
+        //this.forceSoftwareMap["Mad Lab"] = true;
+        //this.forceSoftwareMap["Guild Hall"] = true;
+        //this.forceSoftwareMap["Guild Hall 2"] = true;
+        //this.forceSoftwareMap["Guild Hall 3"] = true;
+        //this.forceSoftwareMap["Guild Hall 4"] = true;
+        //this.forceSoftwareMap["Cloth Bazaar"] = true;
         wasLastFrameGpu = Parameters.isGpuRender();
     }
 
@@ -124,7 +124,7 @@ public class Map extends AbstractMap {
     }
 
     private function forceSoftwareRenderCheck(_arg1:String):void {
-        forceSoftwareRender = ((!((this.forceSoftwareMap[_arg1] == null))) || (((!((WebMain.STAGE == null))) && ((WebMain.STAGE.stage3Ds[0].context3D == null)))));
+        forceSoftwareRender = this.forceSoftwareMap[_arg1] != null || WebMain.STAGE != null && WebMain.STAGE.stage3Ds[0].context3D == null;
     }
 
     override public function initialize():void {
