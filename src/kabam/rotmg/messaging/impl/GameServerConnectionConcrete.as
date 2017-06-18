@@ -147,6 +147,7 @@ import kabam.rotmg.messaging.impl.incoming.ReskinUnlock;
 import kabam.rotmg.messaging.impl.incoming.ServerFull;
 import kabam.rotmg.messaging.impl.incoming.ServerPlayerShoot;
 import kabam.rotmg.messaging.impl.incoming.ShowEffect;
+import kabam.rotmg.messaging.impl.incoming.SetFocus;
 import kabam.rotmg.messaging.impl.incoming.SwitchMusic;
 import kabam.rotmg.messaging.impl.incoming.TradeAccepted;
 import kabam.rotmg.messaging.impl.incoming.TradeChanged;
@@ -460,6 +461,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.map(QUEST_REDEEM_RESPONSE).toMessage(QuestRedeemResponse).toMethod(this.onQuestRedeemResponse);
         _local1.map(KEY_INFO_RESPONSE).toMessage(KeyInfoResponse).toMethod(this.onKeyInfoResponse);
         _local1.map(LOGIN_REWARD_MSG).toMessage(ClaimDailyRewardResponse).toMethod(this.onLoginRewardResponse);
+        _local1.map(SET_FOCUS).toMessage(SetFocus).toMethod(this.setFocus);
         _local1.map(QUEUE_PONG).toMessage(QueuePong);
         _local1.map(SERVER_FULL).toMessage(ServerFull).toMethod(this.HandleServerFull);
         _local1.map(QUEUE_PING).toMessage(QueuePing).toMethod(this.HandleQueuePing);
@@ -592,6 +594,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local1.unmap(SERVER_FULL);
         _local1.unmap(QUEUE_PING);
         _local1.unmap(QUEUE_PONG);
+        _local1.unmap(SET_FOCUS);
         _local1.unmap(SWITCH_MUSIC);
     }
 
@@ -2213,6 +2216,15 @@ public class GameServerConnectionConcrete extends GameServerConnection {
 
     override public function isConnected():Boolean {
         return (serverConnection.isConnected());
+    }
+
+    private function setFocus(pkt:SetFocus):void {
+        var goDict:Dictionary = this.gs_.map.goDict_;
+        if (goDict) {
+            var go:GameObject = goDict[pkt.objectId_];
+            gs_.setFocus(go);
+            gs_.hudView.setMiniMapFocus(go);
+        }
     }
 
 
