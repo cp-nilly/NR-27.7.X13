@@ -123,6 +123,7 @@ public class TextureRedrawer {
         if (shade == 1) {
             return tex;
         }
+        shade = int(shade * 100);
         var dict:Dictionary = faceCache_[shade];
         if (dict == null) {
             dict = new Dictionary();
@@ -133,6 +134,7 @@ public class TextureRedrawer {
             return modTex;
         }
         modTex = tex.clone();
+        shade /= 100;
         modTex.colorTransform(modTex.rect, new ColorTransform(shade, shade, shade));
         dict[tex] = modTex;
         return modTex;
