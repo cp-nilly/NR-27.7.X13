@@ -467,7 +467,7 @@ public class GameSprite extends AGameSprite {
         camera_.update(_local3);
         var _local5:Player = map.player_;
         if (this.focus) {
-            camera_.configureCamera(this.focus, ((_local5) ? _local5.isHallucinating() : false));
+            camera_.configureCamera(this.focus, _local5 ? _local5.isHallucinating() : false, _local5 ? _local5.isPartying() : false);
             map.draw(camera_, _local2);
         }
         if (_local5 != null) {

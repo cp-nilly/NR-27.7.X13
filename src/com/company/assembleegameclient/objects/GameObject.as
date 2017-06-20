@@ -439,6 +439,10 @@ public class GameObject extends BasicObject {
         return (!(((this.condition_[ConditionEffect.CE_FIRST_BATCH] & ConditionEffect.HALLUCINATING_BIT) == 0)));
     }
 
+    public function isPartying():Boolean {
+        return (!(((this.condition_[ConditionEffect.CE_FIRST_BATCH] & ConditionEffect.PARTYING_BIT) == 0)));
+    }
+
     public function isHealing():Boolean {
         return (!(((this.condition_[ConditionEffect.CE_FIRST_BATCH] & ConditionEffect.HEALING_BIT) == 0)));
     }

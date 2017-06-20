@@ -61,7 +61,8 @@ public class ConditionEffect {
     public static const WIS_BOOST:uint = 46;
     public static const DEX_BOOST:uint = 47;
     public static const HIDDEN:uint = 48;
-    public static const MUTED:int = 49;
+    public static const MUTED:uint = 49;
+    public static const PARTYING:uint = 50;
     public static const GROUND_DAMAGE:uint = 99;
     public static const DEAD_BIT:uint = (1 << (DEAD - 1));
     public static const QUIET_BIT:uint = (1 << (QUIET - 1));
@@ -112,6 +113,7 @@ public class ConditionEffect {
     public static const DEX_BOOST_BIT:uint = (1 << (DEX_BOOST - NEW_CON_THREASHOLD));
     public static const HIDDEN_BIT:uint = (1 << (HIDDEN - NEW_CON_THREASHOLD));
     public static const MUTED_BIT:uint = (1 << (MUTED - NEW_CON_THREASHOLD));
+    public static const PARTYING_BIT:uint = (1 << (PARTYING - NEW_CON_THREASHOLD));
     public static const MAP_FILTER_BITMASK:uint = ((DRUNK_BIT | BLIND_BIT) | PAUSED_BIT);
     public static const CE_FIRST_BATCH:uint = 0;
     public static const CE_SECOND_BATCH:uint = 1;
@@ -170,7 +172,8 @@ public class ConditionEffect {
                 new ConditionEffect("Wis Boost", WIS_BOOST_BIT, [39], "Wis Boost", true),
                 new ConditionEffect("Dex Boost", DEX_BOOST_BIT, [37], "Dex Boost", true),
                 new ConditionEffect("Hidden", HIDDEN_BIT, [27], "Hidden", true),
-                new ConditionEffect("Muted", MUTED_BIT, [21], "Muted", true)
+                new ConditionEffect("Muted", MUTED_BIT, [21], "Muted", true),
+                new ConditionEffect("Partying", PARTYING_BIT, null, "Partying", true)
             ];
     
     private static var conditionEffectFromName_:Object = null;

@@ -9,12 +9,14 @@ import com.company.assembleegameclient.sound.SoundEffectLibrary;
 import com.company.assembleegameclient.tutorial.Tutorial;
 import com.company.assembleegameclient.tutorial.doneAction;
 import com.company.assembleegameclient.util.AnimatedChar;
+import com.company.assembleegameclient.util.AnimatedChars;
 import com.company.assembleegameclient.util.ConditionEffect;
 import com.company.assembleegameclient.util.FameUtil;
 import com.company.assembleegameclient.util.FreeList;
 import com.company.assembleegameclient.util.MaskedImage;
 import com.company.assembleegameclient.util.TextureRedrawer;
 import com.company.assembleegameclient.util.redrawers.GlowRedrawer;
+import com.company.util.AssetLibrary;
 import com.company.util.CachingColorTransformer;
 import com.company.util.ConversionUtil;
 import com.company.util.GraphicsUtil;
@@ -71,6 +73,8 @@ public class Player extends Character {
     public static var isAdmin:Boolean = false;
     public static var isMod:Boolean = false;
     private static var newP:Point = new Point();
+
+    public static var partySkin:AnimatedChar;
 
     public var xpTimer:int;
     public var skinId:int;
@@ -773,7 +777,13 @@ public class Player extends Character {
             _local5 = new MaskedImage(getHallucinatingTexture(), null);
         }
         else {
-            _local5 = animatedChar_.imageFromFacing(facing_, _arg1, _local4, _local3);
+            if (_arg1.isPartying_) {
+                if (partySkin == null)
+                    partySkin = AnimatedChars.getAnimatedChar("partySkin", 0);
+                _local5 = partySkin.imageFromFacing(facing_, _arg1, _local4, _local3);
+            }
+            else
+                _local5 = animatedChar_.imageFromFacing(facing_, _arg1, _local4, _local3);
         }
         var _local6:int = tex1Id_;
         var _local7:int = tex2Id_;
