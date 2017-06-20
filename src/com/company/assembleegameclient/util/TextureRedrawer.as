@@ -45,7 +45,7 @@ public class TextureRedrawer {
     }
 
     private static function getHash(size:int, padBottom:Boolean, glowColor:uint, sMult:Number):* {
-        var h:int = (padBottom ? (1 << 31) : 0) | (size * sMult);
+        var h:int = (padBottom ? (1 << 27) : 0) | (size * sMult);
         if (glowColor == 0) {
             return h;
         }
