@@ -129,6 +129,8 @@ public class AssetLoader {
         AnimatedChars.add("mountainTempleChars16x16", new EmbeddedAssets.mountainTempleChars16x16Embed_().bitmapData, null, 16, 16, 112, 16, AnimatedChar.RIGHT);
         AnimatedChars.add("Hanami8x8chars", new EmbeddedAssets.Hanami8x8charsEmbed_().bitmapData, null, 8, 8, 64, 8, AnimatedChar.RIGHT);
         AnimatedChars.add("partySkin", new EmbeddedAssets.partySkin().bitmapData, null, 8, 8, 56, 24, AnimatedChar.RIGHT);
+        AnimatedChars.add("reindeerSkin", new EmbeddedAssets.reindeerSkin().bitmapData, null, 8, 8, 56, 24, AnimatedChar.RIGHT);
+        AnimatedChars.add("santaSkin", new EmbeddedAssets.santaSkin().bitmapData, null, 16, 16, 112, 16, AnimatedChar.RIGHT);
     }
 
     private function addSoundEffects():void {

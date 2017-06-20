@@ -75,6 +75,8 @@ public class Player extends Character {
     private static var newP:Point = new Point();
 
     public static var partySkin:AnimatedChar;
+    public static var reindeerSkin:AnimatedChar;
+    public static var santaSkin:AnimatedChar;
 
     public var xpTimer:int;
     public var skinId:int;
@@ -777,10 +779,20 @@ public class Player extends Character {
             _local5 = new MaskedImage(getHallucinatingTexture(), null);
         }
         else {
-            if (_arg1.isPartying_) {
+            if (_arg1.isPartyVision_) {
                 if (partySkin == null)
                     partySkin = AnimatedChars.getAnimatedChar("partySkin", 0);
                 _local5 = partySkin.imageFromFacing(facing_, _arg1, _local4, _local3);
+            }
+                    else if (_arg1.isXMasVision_) {
+                if (reindeerSkin == null)
+                    reindeerSkin = AnimatedChars.getAnimatedChar("reindeerSkin", 0);
+                if (santaSkin == null)
+                    santaSkin =     AnimatedChars.getAnimatedChar("santaSkin", 0);
+                if (this.admin_)
+                    _local5 = santaSkin.imageFromFacing(facing_, _arg1, _local4, _local3);
+                else
+                    _local5 = reindeerSkin.imageFromFacing(facing_, _arg1, _local4, _local3);
             }
             else
                 _local5 = animatedChar_.imageFromFacing(facing_, _arg1, _local4, _local3);

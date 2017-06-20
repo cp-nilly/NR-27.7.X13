@@ -439,10 +439,6 @@ public class GameObject extends BasicObject {
         return (!(((this.condition_[ConditionEffect.CE_FIRST_BATCH] & ConditionEffect.HALLUCINATING_BIT) == 0)));
     }
 
-    public function isPartying():Boolean {
-        return (!(((this.condition_[ConditionEffect.CE_FIRST_BATCH] & ConditionEffect.PARTYING_BIT) == 0)));
-    }
-
     public function isHealing():Boolean {
         return (!(((this.condition_[ConditionEffect.CE_FIRST_BATCH] & ConditionEffect.HEALING_BIT) == 0)));
     }
@@ -523,9 +519,16 @@ public class GameObject extends BasicObject {
         return (!(((this.condition_[ConditionEffect.CE_SECOND_BATCH] & ConditionEffect.CURSE_IMMUNE_BIT) == 0)));
     }
 
-    public function isHidden() : Boolean
-    {
+    public function isHidden() : Boolean {
         return (this.condition_[ConditionEffect.CE_SECOND_BATCH] & ConditionEffect.HIDDEN_BIT) != 0;
+    }
+
+    public function isPartyVision():Boolean {
+        return (this.condition_[ConditionEffect.CE_SECOND_BATCH] & ConditionEffect.PARTY_VISION_BIT) != 0;
+    }
+
+    public function isXMasVision():Boolean {
+        return (this.condition_[ConditionEffect.CE_SECOND_BATCH] & ConditionEffect.XMAS_VISION_BIT) != 0;
     }
 
     public function isSafe(_arg1:int = 20):Boolean {
