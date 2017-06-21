@@ -24,6 +24,8 @@ import kabam.rotmg.text.view.stringBuilder.LineBuilder;
 
 public class ClassToolTip extends ToolTip {
 
+    private static const unlockReqCT = new ColorTransform(0, 0, 0, 0.5, 0, 0, 0, 0);
+
     private var portrait_:Bitmap;
     private var nameText_:TextFieldDisplayConcrete;
     private var descriptionText_:TextFieldDisplayConcrete;
@@ -51,7 +53,7 @@ public class ClassToolTip extends ToolTip {
         var _local7:BitmapData = TextureRedrawer.redraw(_local5.image_, _local6, true, 0);
         this.showUnlockRequirements = this.shouldShowUnlockRequirements(_arg2, _arg1);
         if (this.showUnlockRequirements) {
-            _local7 = CachingColorTransformer.transformBitmapData(_local7, new ColorTransform(0, 0, 0, 0.5, 0, 0, 0, 0));
+            _local7 = CachingColorTransformer.transformBitmapData(_local7, unlockReqCT);
         }
         this.portrait_ = new Bitmap();
         this.portrait_.bitmapData = _local7;

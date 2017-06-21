@@ -57,7 +57,6 @@ public class StaticDialog extends Sprite {
 
     public function StaticDialog(_arg1:String, _arg2:String, leftBtn:String, rightBtn:String) {
         this.dialogWidth = this.setDialogWidth();
-        this.replaceTokens = this.replaceTokens;
         this.leftButtonKey = leftBtn;
         this.rightButtonKey = rightBtn;
         super();

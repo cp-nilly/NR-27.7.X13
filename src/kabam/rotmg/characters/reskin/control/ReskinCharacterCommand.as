@@ -33,7 +33,7 @@ public class ReskinCharacterCommand {
                 _local2.size_ = 100;
             }
         }
-        this.server.sendMessage(_local1);
+        this.server.queueMessage(_local1);
     }
 
 

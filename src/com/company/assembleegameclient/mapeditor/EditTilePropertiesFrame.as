@@ -10,7 +10,7 @@ public class EditTilePropertiesFrame extends Frame {
     public var objectName_:TextInputField;
 
     public function EditTilePropertiesFrame(_arg1:String) {
-        super("Tile properties", "Cancel", "Save", null);
+        super("Tile properties", "Cancel", "Save");
         this.objectName_ = new TextInputField("Object Name", false);
         if (_arg1 != null) {
             this.objectName_.inputText_.text = _arg1;
