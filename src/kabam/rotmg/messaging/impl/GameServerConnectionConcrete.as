@@ -1257,13 +1257,13 @@ public class GameServerConnectionConcrete extends GameServerConnection {
             _local3++;
         }
         _local3 = 0;
-        while (_local3 < _arg1.newObjs_.length) {
-            this.addObject(_arg1.newObjs_[_local3]);
+        while (_local3 < _arg1.drops_.length) {
+            gs_.map.removeObj(_arg1.drops_[_local3]);
             _local3++;
         }
         _local3 = 0;
-        while (_local3 < _arg1.drops_.length) {
-            gs_.map.removeObj(_arg1.drops_[_local3]);
+        while (_local3 < _arg1.newObjs_.length) {
+            this.addObject(_arg1.newObjs_[_local3]);
             _local3++;
         }
     }
