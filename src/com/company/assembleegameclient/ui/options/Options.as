@@ -471,6 +471,7 @@ public class Options extends Sprite {
         this.addOptionAndPosition(new ChoiceOption("particleEffect", makeHighLowLabels(), [true, false], TextKey.OPTIONS_TOGGLE_PARTICLE_EFFECT, TextKey.OPTIONS_TOGGLE_PARTICLE_EFFECT_DESC, null));
         this.addOptionAndPosition(new ChoiceOption("uiQuality", makeHighLowLabels(), [true, false], TextKey.OPTIONS_TOGGLE_UI_QUALITY, TextKey.OPTIONS_TOGGLE_UI_QUALITY_DESC, onUIQualityToggle));
         this.addOptionAndPosition(new ChoiceOption("HPBar", makeOnOffLabels(), [true, false], TextKey.OPTIONS_HPBAR, TextKey.OPTIONS_HPBAR_DESC, null));
+        this.addOptionAndPosition(new ChoiceOption("enhancedQuestToolTip", makeOnOffLabels(), [true, false], TextKey.OPTIONS_TOGGLE_ENHANCED_QUEST_PORTRAIT, TextKey.OPTIONS_TOGGLE_ENHANCED_QUEST_PORTRAIT_DESC, null));
     }
 
     private function onShowQuestPortraitsChange():void {

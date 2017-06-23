@@ -1,4 +1,5 @@
 ﻿package com.company.assembleegameclient.ui.tooltip {
+import com.company.assembleegameclient.parameters.Parameters;
 import com.company.util.GraphicsUtil;
 
 import flash.display.CapsStyle;
@@ -100,12 +101,22 @@ public class ToolTip extends Sprite {
             this.position();
             addEventListener(Event.ENTER_FRAME, this.onEnterFrame);
         }
+        if (((!this.followMouse_)) && ((Parameters.data_.enhancedQuestToolTip == true))) {
+            addEventListener(Event.ENTER_FRAME, this.drawOnEnterFrame);
+        }
     }
 
     private function onRemovedFromStage(_arg1:Event):void {
         if (this.followMouse_) {
             removeEventListener(Event.ENTER_FRAME, this.onEnterFrame);
         }
+        else {
+            removeEventListener(Event.ENTER_FRAME, this.drawOnEnterFrame);
+        }
+    }
+
+    public function drawOnEnterFrame(_arg1:Event):void {
+        this.draw();
     }
 
     private function onEnterFrame(_arg1:Event):void {
