@@ -310,8 +310,6 @@ public class Map extends AbstractMap {
     }
 
     override public function draw(camera:Camera, currentTime:int):void {
-        this.scaleX = 600 / (WebMain.WIDTH * (3/4));
-        this.scaleY = 600 / WebMain.HEIGHT;
         if (wasLastFrameGpu != Parameters.isGpuRender()) {
             var context:Context3D = WebMain.STAGE.stage3Ds[0].context3D;
             if (wasLastFrameGpu == true && context != null &&
@@ -327,8 +325,18 @@ public class Map extends AbstractMap {
         }
 
         var rect:Rectangle = camera.clipRect_;
-        x = (-rect.x * 600) / (WebMain.WIDTH * (3/4));
-        y = (-rect.y * 600) / WebMain.HEIGHT;
+        if(Parameters.data_.fullscreenMod) {
+            this.scaleX = 600 / (WebMain.WIDTH * (3/4));
+            this.scaleY = 600 / WebMain.HEIGHT;
+            x = (-rect.x * 600) / (WebMain.WIDTH * (3 / 4));
+            y = (-rect.y * 600) / WebMain.HEIGHT;
+        }
+        else {
+            this.scaleX = 1;
+            this.scaleY = 1;
+            x = -rect.x;
+            y = -rect.y;
+        }
 
         var sy:Number = (-rect.y - rect.height / 2) / 50;
         var plrPos:Point = new Point(

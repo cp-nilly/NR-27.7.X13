@@ -231,6 +231,7 @@ public class Parameters {
         setDefault("chatFriend", false);
         setDefault("friendStarRequirement", 0);
         setDefault("HPBar", false);
+        setDefault("fullscreenMod", true);
         if (!data_.hasOwnProperty("needsSurvey")) {
             data_.needsSurvey = data_.needsTutorial;
             switch (int((Math.random() * 5))) {

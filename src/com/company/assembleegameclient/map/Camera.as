@@ -63,10 +63,12 @@ public class Camera {
     public function configureCamera(_arg1:GameObject, _arg2:Boolean):void {
         var playerRect:Rectangle = ((Parameters.data_.centerOnPlayer) ? CENTER_SCREEN_RECT : OFFSET_SCREEN_RECT);
         var clipRect:Rectangle = playerRect.clone();
-        clipRect.x = -(WebMain.WIDTH * (3/4) * (1/2));
-        clipRect.y = -(WebMain.HEIGHT * (clipRect.y / -600));
-        clipRect.width = WebMain.WIDTH * (3/4);
-        clipRect.height = WebMain.HEIGHT;
+        if(Parameters.data_.fullscreenMod) {
+            clipRect.x = -(WebMain.WIDTH * (3 / 4) * (1 / 2));
+            clipRect.y = -(WebMain.HEIGHT * (clipRect.y / -600));
+            clipRect.width = WebMain.WIDTH * (3 / 4);
+            clipRect.height = WebMain.HEIGHT;
+        }
         if (Parameters.screenShotMode_) {
             if (!Parameters.screenShotSlimMode_) {
                 clipRect = SCREENSHOT_SCREEN_RECT;
