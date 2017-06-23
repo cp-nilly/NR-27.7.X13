@@ -62,6 +62,8 @@ public class Camera {
 
     public function configureCamera(_arg1:GameObject, _arg2:Boolean):void {
         var _local3:Rectangle = ((Parameters.data_.centerOnPlayer) ? CENTER_SCREEN_RECT : OFFSET_SCREEN_RECT);
+        _local3.width = WebMain.SCALED_WIDTH * (3/4);
+        _local3.height = WebMain.SCALED_HEIGHT;
         if (Parameters.screenShotMode_) {
             if (!Parameters.screenShotSlimMode_) {
                 _local3 = SCREENSHOT_SCREEN_RECT;

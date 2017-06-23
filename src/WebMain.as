@@ -62,6 +62,8 @@ public class WebMain extends Sprite {
 
     public static var ENV:String;
     public static var STAGE:Stage;
+    public static var SCALED_WIDTH;
+    public static var SCALED_HEIGHT;
 
     protected var context:IContext;
 
@@ -80,6 +82,7 @@ public class WebMain extends Sprite {
     }
 
     private function setup():void {
+        addEventListener(Event.ENTER_FRAME, this.onEnterFrame);
         this.setEnvironment();
         this.hackParameters();
         this.createContext();
@@ -159,6 +162,13 @@ public class WebMain extends Sprite {
             Parameters.data_.fullscreenMode = false;
             Parameters.save();
         }
+    }
+
+    private function onEnterFrame(_arg1:Event):void {
+        WebMain.STAGE.scaleMode = StageScaleMode.NO_SCALE;
+        SCALED_WIDTH = WebMain.STAGE.stageWidth;
+        SCALED_HEIGHT = WebMain.STAGE.stageHeight;
+        WebMain.STAGE.scaleMode = StageScaleMode.EXACT_FIT;
     }
 
 

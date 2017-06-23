@@ -15,6 +15,7 @@ import flash.display.DisplayObject;
 import flash.display.GraphicsBitmapFill;
 import flash.display.GraphicsSolidFill;
 import flash.display.IGraphicsData;
+import flash.display.StageScaleMode;
 import flash.display3D.Context3D;
 import flash.filters.BlurFilter;
 import flash.filters.ColorMatrixFilter;
@@ -309,6 +310,8 @@ public class Map extends AbstractMap {
     }
 
     override public function draw(camera:Camera, currentTime:int):void {
+        this.scaleX = 600 / (WebMain.SCALED_WIDTH * (3/4));
+        this.scaleY = 600 / WebMain.SCALED_HEIGHT;
         if (wasLastFrameGpu != Parameters.isGpuRender()) {
             var context:Context3D = WebMain.STAGE.stage3Ds[0].context3D;
             if (wasLastFrameGpu == true && context != null &&
@@ -326,6 +329,7 @@ public class Map extends AbstractMap {
         var rect:Rectangle = camera.clipRect_;
         x = -rect.x;
         y = -rect.y;
+
         var sy:Number = (-rect.y - rect.height / 2) / 50;
         var plrPos:Point = new Point(
                 camera.x_ + sy * Math.cos(camera.angleRad_ - Math.PI / 2),
