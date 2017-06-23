@@ -310,8 +310,8 @@ public class Map extends AbstractMap {
     }
 
     override public function draw(camera:Camera, currentTime:int):void {
-        this.scaleX = 600 / (WebMain.SCALED_WIDTH * (3/4));
-        this.scaleY = 600 / WebMain.SCALED_HEIGHT;
+        this.scaleX = 600 / (WebMain.WIDTH * (3/4));
+        this.scaleY = 600 / WebMain.HEIGHT;
         if (wasLastFrameGpu != Parameters.isGpuRender()) {
             var context:Context3D = WebMain.STAGE.stage3Ds[0].context3D;
             if (wasLastFrameGpu == true && context != null &&

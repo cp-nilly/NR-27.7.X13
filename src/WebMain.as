@@ -62,8 +62,8 @@ public class WebMain extends Sprite {
 
     public static var ENV:String;
     public static var STAGE:Stage;
-    public static var SCALED_WIDTH;
-    public static var SCALED_HEIGHT;
+    public static var WIDTH;
+    public static var HEIGHT;
 
     protected var context:IContext;
 
@@ -166,8 +166,8 @@ public class WebMain extends Sprite {
 
     private function onEnterFrame(_arg1:Event):void {
         WebMain.STAGE.scaleMode = StageScaleMode.NO_SCALE;
-        SCALED_WIDTH = WebMain.STAGE.stageWidth;
-        SCALED_HEIGHT = WebMain.STAGE.stageHeight;
+        WIDTH = WebMain.STAGE.stageWidth;
+        HEIGHT = WebMain.STAGE.stageHeight;
         WebMain.STAGE.scaleMode = StageScaleMode.EXACT_FIT;
     }
 
