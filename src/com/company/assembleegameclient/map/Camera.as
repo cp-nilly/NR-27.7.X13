@@ -61,19 +61,22 @@ public class Camera {
     }
 
     public function configureCamera(_arg1:GameObject, _arg2:Boolean):void {
-        var _local3:Rectangle = ((Parameters.data_.centerOnPlayer) ? CENTER_SCREEN_RECT : OFFSET_SCREEN_RECT);
-        _local3.width = WebMain.WIDTH * (3/4);
-        _local3.height = WebMain.HEIGHT;
+        var playerRect:Rectangle = ((Parameters.data_.centerOnPlayer) ? CENTER_SCREEN_RECT : OFFSET_SCREEN_RECT);
+        var clipRect:Rectangle = playerRect.clone();
+        clipRect.x = -(WebMain.WIDTH * (3/4) * (1/2));
+        clipRect.y = -(WebMain.HEIGHT * (clipRect.y / -600));
+        clipRect.width = WebMain.WIDTH * (3/4);
+        clipRect.height = WebMain.HEIGHT;
         if (Parameters.screenShotMode_) {
             if (!Parameters.screenShotSlimMode_) {
-                _local3 = SCREENSHOT_SCREEN_RECT;
+                clipRect = SCREENSHOT_SCREEN_RECT;
             }
             else {
-                _local3 = SLIM_SCREENSHOT_SCREEN_RECT;
+                clipRect = SLIM_SCREENSHOT_SCREEN_RECT;
             }
         }
         var _local4:Number = Parameters.data_.cameraAngle;
-        this.configure(_arg1.x_, _arg1.y_, 12, _local4, _local3);
+        this.configure(_arg1.x_, _arg1.y_, 12, _local4, clipRect);
         this.isHallucinating_ = _arg2;
     }
 

@@ -327,8 +327,8 @@ public class Map extends AbstractMap {
         }
 
         var rect:Rectangle = camera.clipRect_;
-        x = -rect.x;
-        y = -rect.y;
+        x = (-rect.x * 600) / (WebMain.WIDTH * (3/4));
+        y = (-rect.y * 600) / WebMain.HEIGHT;
 
         var sy:Number = (-rect.y - rect.height / 2) / 50;
         var plrPos:Point = new Point(
