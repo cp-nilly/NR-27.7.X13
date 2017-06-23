@@ -61,7 +61,7 @@ public class MapBackground extends Sprite {
         xVal = BORDER;
         yVal = (BORDER + int(((mapSize.y_ - (2 * BORDER)) * Math.random())));
         camera = new Camera();
-        var _local3:Map = new Map(null);
+        var _local3:Map = new Map(null, true);
         _local3.setProps((mapSize.x_ + (2 * BORDER)), mapSize.y_, "Background Map", Background.NO_BACKGROUND, false, false);
         _local3.initialize();
         MapDecoder.writeMap(_local2, _local3, 0, 0);

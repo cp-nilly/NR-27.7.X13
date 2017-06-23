@@ -15,7 +15,6 @@ public class GradientOverlay extends Shape {
 
     public function GradientOverlay() {
         graphics.drawGraphicsData(this.gradientGraphicsData_);
-        visible = false;
     }
 
 }

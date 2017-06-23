@@ -232,6 +232,7 @@ public class Parameters {
         setDefault("friendStarRequirement", 0);
         setDefault("HPBar", false);
         setDefault("fullscreenMod", true);
+        setDefault("mscale", 1);
         if (!data_.hasOwnProperty("needsSurvey")) {
             data_.needsSurvey = data_.needsTutorial;
             switch (int((Math.random() * 5))) {

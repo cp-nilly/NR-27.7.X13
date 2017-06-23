@@ -64,10 +64,10 @@ public class Camera {
         var playerRect:Rectangle = ((Parameters.data_.centerOnPlayer) ? CENTER_SCREEN_RECT : OFFSET_SCREEN_RECT);
         var clipRect:Rectangle = playerRect.clone();
         if(Parameters.data_.fullscreenMod) {
-            clipRect.x = -(WebMain.WIDTH * (3 / 4) * (1 / 2));
-            clipRect.y = -(WebMain.HEIGHT * (clipRect.y / -600));
-            clipRect.width = WebMain.WIDTH * (3 / 4);
-            clipRect.height = WebMain.HEIGHT;
+            clipRect.x = -(WebMain.SCALED_WIDTH * (3 / 4) * (1 / 2));
+            clipRect.y = -(WebMain.SCALED_HEIGHT * (clipRect.y / -600));
+            clipRect.width = WebMain.SCALED_WIDTH * (3 / 4);
+            clipRect.height = WebMain.SCALED_HEIGHT;
         }
         if (Parameters.screenShotMode_) {
             if (!Parameters.screenShotSlimMode_) {

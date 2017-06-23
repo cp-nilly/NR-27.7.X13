@@ -15,7 +15,6 @@ import flash.display.DisplayObject;
 import flash.display.GraphicsBitmapFill;
 import flash.display.GraphicsSolidFill;
 import flash.display.IGraphicsData;
-import flash.display.StageScaleMode;
 import flash.display3D.Context3D;
 import flash.filters.BlurFilter;
 import flash.filters.ColorMatrixFilter;
@@ -58,6 +57,7 @@ public class Map extends AbstractMap {
     public static var texture:BitmapData;
 
     public var ifDrawEffectFlag:Boolean = true;
+    public var isBackground:Boolean;
     private var loopMonitor:RollingMeanLoopMonitor;
     private var inUpdate_:Boolean = false;
     private var objsToAdd_:Vector.<BasicObject>;
@@ -74,7 +74,8 @@ public class Map extends AbstractMap {
     public var visibleHit_:Array;
     public var topSquares_:Vector.<Square>;
 
-    public function Map(_arg1:AGameSprite) {
+    public function Map(_arg1:AGameSprite, isBackground:Boolean = false) {
+        this.isBackground = isBackground;
         this.objsToAdd_ = new Vector.<BasicObject>();
         this.idsToRemove_ = new Vector.<int>();
         this.forceSoftwareMap = new Dictionary();
@@ -90,7 +91,6 @@ public class Map extends AbstractMap {
         super();
         gs_ = _arg1;
         hurtOverlay_ = new HurtOverlay();
-        gradientOverlay_ = new GradientOverlay();
         mapOverlay_ = new MapOverlay();
         partyOverlay_ = new PartyOverlay(this);
         party_ = new Party(this);
@@ -136,7 +136,6 @@ public class Map extends AbstractMap {
         }
         addChild(map_);
         addChild(hurtOverlay_);
-        addChild(gradientOverlay_);
         addChild(mapOverlay_);
         addChild(partyOverlay_);
         isPetYard = (name_.substr(0, 8) == "Pet Yard");
@@ -150,7 +149,6 @@ public class Map extends AbstractMap {
         background_ = null;
         map_ = null;
         hurtOverlay_ = null;
-        gradientOverlay_ = null;
         mapOverlay_ = null;
         partyOverlay_ = null;
         for each (_local1 in squareList_) {
@@ -325,11 +323,11 @@ public class Map extends AbstractMap {
         }
 
         var rect:Rectangle = camera.clipRect_;
-        if(Parameters.data_.fullscreenMod) {
-            this.scaleX = 600 / (WebMain.WIDTH * (3/4));
-            this.scaleY = 600 / WebMain.HEIGHT;
-            x = (-rect.x * 600) / (WebMain.WIDTH * (3 / 4));
-            y = (-rect.y * 600) / WebMain.HEIGHT;
+        if(Parameters.data_.fullscreenMod && !isBackground) {
+            this.scaleX = 600 / (WebMain.SCALED_WIDTH * (3/4));
+            this.scaleY = 600 / WebMain.SCALED_HEIGHT;
+            x = (-rect.x * 600) / (WebMain.SCALED_WIDTH * (3 / 4));
+            y = (-rect.y * 600) / WebMain.SCALED_HEIGHT;
         }
         else {
             this.scaleX = 1;
@@ -468,16 +466,6 @@ public class Map extends AbstractMap {
         }
         else {
             hurtOverlay_.visible = false;
-        }
-
-        // draw side bar gradient
-        if (player_ != null && !Parameters.screenShotMode_) {
-            gradientOverlay_.visible = true;
-            gradientOverlay_.x = (rect.right - 10);
-            gradientOverlay_.y = rect.top;
-        }
-        else {
-            gradientOverlay_.visible = false;
         }
 
         // draw hw capable screen filters

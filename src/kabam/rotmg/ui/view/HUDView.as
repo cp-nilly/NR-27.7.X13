@@ -1,6 +1,7 @@
 ﻿package kabam.rotmg.ui.view {
 import com.company.assembleegameclient.game.AGameSprite;
 import com.company.assembleegameclient.game.GameSprite;
+import com.company.assembleegameclient.map.GradientOverlay;
 import com.company.assembleegameclient.objects.GameObject;
 import com.company.assembleegameclient.objects.Player;
 import com.company.assembleegameclient.ui.TradePanel;
@@ -31,6 +32,7 @@ public class HUDView extends Sprite implements UnFocusAble {
     private const EQUIPMENT_INVENTORY_POSITION:Point = new Point(14, 304);
     private const TAB_STRIP_POSITION:Point = new Point(7, 346);
     private const INTERACT_PANEL_POSITION:Point = new Point(0, 500);
+    private const GRADIENT_OVERLAY_POSITION:Point = new Point(-10, 0);
 
     private var background:CharacterWindowBackground;
     private var miniMap:MiniMapImp;
@@ -39,6 +41,7 @@ public class HUDView extends Sprite implements UnFocusAble {
     private var characterDetails:CharacterDetailsView;
     private var equippedGridBG:Sprite;
     private var player:Player;
+    private var gradientOverlay:GradientOverlay;
     public var tabStrip:TabStripView;
     public var interactPanel:InteractPanel;
     public var tradePanel:TradePanel;
@@ -55,6 +58,7 @@ public class HUDView extends Sprite implements UnFocusAble {
         this.tabStrip = new TabStripView();
         this.characterDetails = new CharacterDetailsView();
         this.statMeters = new StatMetersView();
+        this.gradientOverlay = new GradientOverlay();
     }
 
     private function addAssets():void {
@@ -63,6 +67,7 @@ public class HUDView extends Sprite implements UnFocusAble {
         addChild(this.tabStrip);
         addChild(this.characterDetails);
         addChild(this.statMeters);
+        addChild(this.gradientOverlay);
     }
 
     private function positionAssets():void {
@@ -76,6 +81,8 @@ public class HUDView extends Sprite implements UnFocusAble {
         this.characterDetails.y = this.CHARACTER_DETAIL_PANEL_POSITION.y;
         this.statMeters.x = this.STAT_METERS_POSITION.x;
         this.statMeters.y = this.STAT_METERS_POSITION.y;
+        this.gradientOverlay.x = this.GRADIENT_OVERLAY_POSITION.x;
+        this.gradientOverlay.y = this.GRADIENT_OVERLAY_POSITION.y;
     }
 
     public function setPlayerDependentAssets(_arg1:GameSprite):void {

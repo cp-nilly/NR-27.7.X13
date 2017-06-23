@@ -29,13 +29,24 @@ public class ParseChatMessageCommand {
 
 
     public function execute():void {
-        switch (this.data) {
-            case "/help":
-                this.addTextLine.dispatch(ChatMessage.make(Parameters.HELP_CHAT_NAME, TextKey.HELP_COMMAND));
-                return;
-            default:
-                this.hudModel.gameSprite.gsc_.playerText(this.data);
+        if(this.data.charAt(0) == "/") {
+            var command:Array = this.data.substr(1, this.data.length).split(" ");
+            switch (command[0]) {
+                case "help":
+                    this.addTextLine.dispatch(ChatMessage.make(Parameters.HELP_CHAT_NAME, TextKey.HELP_COMMAND));
+                    return;
+                case "mscale":
+                    if(command.length > 1) {
+                        var mscale:Number = Number(command[1]);
+                        if(mscale)
+                            Parameters.data_.mscale = mscale;
+                            Parameters.save();
+                    }
+                    this.addTextLine.dispatch(ChatMessage.make(Parameters.HELP_CHAT_NAME, "Map Scale: " + Parameters.data_.mscale));
+                    return;
+            }
         }
+        this.hudModel.gameSprite.gsc_.playerText(this.data);
     }
 
 
