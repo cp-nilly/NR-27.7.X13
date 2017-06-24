@@ -64,7 +64,6 @@ public class Map extends AbstractMap {
     private var idsToRemove_:Vector.<int>;
     private var forceSoftwareMap:Dictionary;
     private var lastSoftwareClear:Boolean = false;
-    private var darkness:DisplayObject;
     private var graphicsData_:Vector.<IGraphicsData>;
     private var graphicsDataStageSoftware_:Vector.<IGraphicsData>;
     private var graphicsData3d_:Vector.<Object3DStage3D>;
@@ -79,7 +78,6 @@ public class Map extends AbstractMap {
         this.objsToAdd_ = new Vector.<BasicObject>();
         this.idsToRemove_ = new Vector.<int>();
         this.forceSoftwareMap = new Dictionary();
-        this.darkness = new EmbeddedAssets.DarknessBackground();
         this.graphicsData_ = new Vector.<IGraphicsData>();
         this.graphicsDataStageSoftware_ = new Vector.<IGraphicsData>();
         this.graphicsData3d_ = new Vector.<Object3DStage3D>();
@@ -530,19 +528,6 @@ public class Map extends AbstractMap {
 
         mapOverlay_.draw(camera, currentTime);
         partyOverlay_.draw(camera, currentTime);
-
-        // draw darkness
-        if (player_ && player_.isDarkness()) {
-            this.darkness.x = -300;
-            this.darkness.y = Parameters.data_.centerOnPlayer ? -525 : -515;
-            this.darkness.alpha = 0.95;
-            addChild(this.darkness);
-        }
-        else {
-            if (contains(this.darkness)) {
-                removeChild(this.darkness);
-            }
-        }
     }
 
     private function getFilterIndex():uint {

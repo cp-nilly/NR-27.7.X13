@@ -4,12 +4,14 @@ import com.company.assembleegameclient.game.GameSprite;
 import com.company.assembleegameclient.map.GradientOverlay;
 import com.company.assembleegameclient.objects.GameObject;
 import com.company.assembleegameclient.objects.Player;
+import com.company.assembleegameclient.parameters.Parameters;
 import com.company.assembleegameclient.ui.TradePanel;
 import com.company.assembleegameclient.ui.panels.InteractPanel;
 import com.company.assembleegameclient.ui.panels.itemgrids.EquippedGrid;
 import com.company.util.GraphicsUtil;
 import com.company.util.SpriteUtil;
 
+import flash.display.DisplayObject;
 import flash.display.GraphicsPath;
 import flash.display.GraphicsSolidFill;
 import flash.display.IGraphicsData;
@@ -17,6 +19,7 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.geom.Point;
 
+import kabam.rotmg.assets.EmbeddedAssets;
 import kabam.rotmg.game.view.components.TabStripView;
 import kabam.rotmg.messaging.impl.incoming.TradeAccepted;
 import kabam.rotmg.messaging.impl.incoming.TradeChanged;
@@ -33,6 +36,8 @@ public class HUDView extends Sprite implements UnFocusAble {
     private const TAB_STRIP_POSITION:Point = new Point(7, 346);
     private const INTERACT_PANEL_POSITION:Point = new Point(0, 500);
     private const GRADIENT_OVERLAY_POSITION:Point = new Point(-10, 0);
+    private const DARKNESS_Y_POSITION:Point = new Point(-175, -50); // x: center, y: offset
+    private const DARKNESS_X_POSITION:int = -600;
 
     private var background:CharacterWindowBackground;
     private var miniMap:MiniMapImp;
@@ -42,6 +47,7 @@ public class HUDView extends Sprite implements UnFocusAble {
     private var equippedGridBG:Sprite;
     private var player:Player;
     private var gradientOverlay:GradientOverlay;
+    private var darkness:DisplayObject;
     public var tabStrip:TabStripView;
     public var interactPanel:InteractPanel;
     public var tradePanel:TradePanel;
@@ -59,6 +65,8 @@ public class HUDView extends Sprite implements UnFocusAble {
         this.characterDetails = new CharacterDetailsView();
         this.statMeters = new StatMetersView();
         this.gradientOverlay = new GradientOverlay();
+        this.darkness = new EmbeddedAssets.DarknessBackground();
+        this.darkness.alpha = 0.95;
     }
 
     private function addAssets():void {
@@ -83,6 +91,7 @@ public class HUDView extends Sprite implements UnFocusAble {
         this.statMeters.y = this.STAT_METERS_POSITION.y;
         this.gradientOverlay.x = this.GRADIENT_OVERLAY_POSITION.x;
         this.gradientOverlay.y = this.GRADIENT_OVERLAY_POSITION.y;
+        this.darkness.x = this.DARKNESS_X_POSITION;
     }
 
     public function setPlayerDependentAssets(_arg1:GameSprite):void {
@@ -125,6 +134,18 @@ public class HUDView extends Sprite implements UnFocusAble {
         }
         if (this.interactPanel) {
             this.interactPanel.draw();
+        }
+
+        // draw darkness
+        if (player && player.isDarkness()) {
+            this.darkness.y = Parameters.data_.centerOnPlayer ?
+                    DARKNESS_Y_POSITION.x : DARKNESS_Y_POSITION.y;
+            addChild(this.darkness);
+        }
+        else {
+            if (contains(this.darkness)) {
+                removeChild(this.darkness);
+            }
         }
     }
 
