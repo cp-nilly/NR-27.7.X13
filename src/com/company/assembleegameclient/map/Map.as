@@ -317,19 +317,8 @@ public class Map extends AbstractMap {
         }
 
         var rect:Rectangle = camera.clipRect_;
-        if(Parameters.data_.fullscreenMod && !isBackground) {
-            this.scaleX = 600 / (WebMain.SCALED_WIDTH * (3/4));
-            this.scaleY = 600 / WebMain.SCALED_HEIGHT;
-            x = (-rect.x * 600) / (WebMain.SCALED_WIDTH * (3 / 4));
-            y = (-rect.y * 600) / WebMain.SCALED_HEIGHT;
-        }
-        else {
-            this.scaleX = 1;
-            this.scaleY = 1;
-            x = -rect.x;
-            y = -rect.y;
-        }
-
+        x = -rect.x;
+        y = -rect.y;
         var sy:Number = (-rect.y - rect.height / 2) / 50;
         var plrPos:Point = new Point(
                 camera.x_ + sy * Math.cos(camera.angleRad_ - Math.PI / 2),
