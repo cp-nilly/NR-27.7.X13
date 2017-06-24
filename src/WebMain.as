@@ -2,6 +2,7 @@
 import com.company.assembleegameclient.parameters.Parameters;
 import com.company.assembleegameclient.util.AssetLoader;
 import com.company.assembleegameclient.util.StageProxy;
+import com.demonsters.debugger.MonsterDebugger;
 
 import flash.display.LoaderInfo;
 import flash.display.Sprite;
@@ -68,6 +69,7 @@ public class WebMain extends Sprite {
     protected var context:IContext;
 
     public function WebMain() {
+        //MonsterDebugger.initialize(this);
         if (stage) {
             this.setup();
         }
