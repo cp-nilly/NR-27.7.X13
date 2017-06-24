@@ -68,7 +68,9 @@ public class Player extends Character {
     private static const MAX_ATTACK_FREQ:Number = 0.008;
     private static const MIN_ATTACK_MULT:Number = 0.5;
     private static const MAX_ATTACK_MULT:Number = 2;
+    private static const LOW_HEALTH_CT_OFFSET:int = 128;
 
+    private static var lowHealthCT:Dictionary = new Dictionary();
     public static var rank:int = 0;
     public static var isAdmin:Boolean = false;
     public static var isMod:Boolean = false;
@@ -148,6 +150,7 @@ public class Player extends Character {
     private var breathBackPath_:GraphicsPath = null;
     private var breathFill_:GraphicsSolidFill = null;
     private var breathPath_:GraphicsPath = null;
+    private var hallucinatingMaskedImage_:MaskedImage = null;
     private var slideVec_:Vector3D;
 
     public function Player(_arg1:XML) {
@@ -743,106 +746,120 @@ public class Player extends Character {
         this.isDefaultAnimatedChar = false;
     }
 
-    override protected function getTexture(_arg1:Camera, _arg2:int):BitmapData {
-        var _local5:MaskedImage;
-        var _local10:int;
-        var _local11:Dictionary;
-        var _local12:Number;
-        var _local13:int;
-        var _local14:ColorTransform;
-        var _local3:Number = 0;
-        var _local4:int = AnimatedChar.STAND;
-        if (((this.isShooting) || ((_arg2 < (attackStart_ + this.attackPeriod_))))) {
+    override protected function getTexture(camera:Camera, currentTime:int):BitmapData {
+        var pos:Number = 0;
+        var action:int = AnimatedChar.STAND;
+
+        if (this.isShooting || currentTime < (attackStart_ + this.attackPeriod_)) {
             facing_ = attackAngle_;
-            _local3 = (((_arg2 - attackStart_) % this.attackPeriod_) / this.attackPeriod_);
-            _local4 = AnimatedChar.ATTACK;
+            pos = ((currentTime - attackStart_) % this.attackPeriod_) / this.attackPeriod_;
+            action = AnimatedChar.ATTACK;
         }
         else {
-            if (((!((moveVec_.x == 0))) || (!((moveVec_.y == 0))))) {
-                _local10 = (3.5 / this.getMoveSpeed());
-                if (((!((moveVec_.y == 0))) || (!((moveVec_.x == 0))))) {
+            if (moveVec_.x != 0 || moveVec_.y != 0) {
+                var movPeriod:int = 3.5 / this.getMoveSpeed();
+                if (moveVec_.y != 0 || moveVec_.x != 0) {
                     facing_ = Math.atan2(moveVec_.y, moveVec_.x);
                 }
-                _local3 = ((_arg2 % _local10) / _local10);
-                _local4 = AnimatedChar.WALK;
+                pos = (currentTime % movPeriod) / movPeriod;
+                action = AnimatedChar.WALK;
             }
         }
+
         if (this.isHexed()) {
-            ((this.isDefaultAnimatedChar) && (this.setToRandomAnimatedCharacter()));
+            this.isDefaultAnimatedChar && this.setToRandomAnimatedCharacter();
         }
         else {
             if (!this.isDefaultAnimatedChar) {
                 this.makeSkinTexture();
             }
         }
-        if (_arg1.isHallucinating_) {
-            _local5 = new MaskedImage(getHallucinatingTexture(), null);
+
+        var maskImg:MaskedImage;
+        if (camera.isHallucinating_) {
+            maskImg = getHallucinatingMaskedImage();
         }
         else {
-            if (_arg1.isPartyVision_) {
+            if (camera.isPartyVision_) {
                 if (partySkin == null)
                     partySkin = AnimatedChars.getAnimatedChar("partySkin", 0);
-                _local5 = partySkin.imageFromFacing(facing_, _arg1, _local4, _local3);
+                maskImg = partySkin.imageFromFacing(facing_, camera, action, pos);
             }
-                    else if (_arg1.isXMasVision_) {
+                    else if (camera.isXMasVision_) {
                 if (reindeerSkin == null)
                     reindeerSkin = AnimatedChars.getAnimatedChar("reindeerSkin", 0);
                 if (santaSkin == null)
                     santaSkin =     AnimatedChars.getAnimatedChar("santaSkin", 0);
                 if (this.admin_)
-                    _local5 = santaSkin.imageFromFacing(facing_, _arg1, _local4, _local3);
+                    maskImg = santaSkin.imageFromFacing(facing_, camera, action, pos);
                 else
-                    _local5 = reindeerSkin.imageFromFacing(facing_, _arg1, _local4, _local3);
+                    maskImg = reindeerSkin.imageFromFacing(facing_, camera, action, pos);
             }
             else
-                _local5 = animatedChar_.imageFromFacing(facing_, _arg1, _local4, _local3);
+                maskImg = animatedChar_.imageFromFacing(facing_, camera, action, pos);
         }
-        var _local6:int = tex1Id_;
-        var _local7:int = tex2Id_;
-        var _local8:BitmapData;
+
+        var tex1Id:int = tex1Id_;
+        var tex2Id:int = tex2Id_;
+        var tex:BitmapData;
         if (this.nearestMerchant_) {
-            _local11 = texturingCache_[this.nearestMerchant_];
-            if (_local11 == null) {
+            var merchDict:Dictionary = texturingCache_[this.nearestMerchant_];
+            if (merchDict == null) {
                 texturingCache_[this.nearestMerchant_] = new Dictionary();
             }
             else {
-                _local8 = _local11[_local5];
+                tex = merchDict[maskImg];
             }
-            _local6 = this.nearestMerchant_.getTex1Id(tex1Id_);
-            _local7 = this.nearestMerchant_.getTex2Id(tex2Id_);
+            tex1Id = this.nearestMerchant_.getTex1Id(tex1Id_);
+            tex2Id = this.nearestMerchant_.getTex2Id(tex2Id_);
         }
         else {
-            _local8 = texturingCache_[_local5];
+            tex = texturingCache_[maskImg];
         }
-        if (_local8 == null) {
-            _local8 = TextureRedrawer.resize(_local5.image_, _local5.mask_, size_, false, _local6, _local7);
+        if (tex == null) {
+            tex = TextureRedrawer.resize(maskImg.image_, maskImg.mask_, size_, false, tex1Id, tex2Id);
             if (this.nearestMerchant_ != null) {
-                texturingCache_[this.nearestMerchant_][_local5] = _local8;
+                texturingCache_[this.nearestMerchant_][maskImg] = tex;
             }
             else {
-                texturingCache_[_local5] = _local8;
+                texturingCache_[maskImg] = tex;
             }
         }
-        if (hp_ < (maxHP_ * 0.2)) {
-            _local12 = (int((Math.abs(Math.sin((_arg2 / 200))) * 10)) / 10);
-            _local13 = 128;
-            _local14 = new ColorTransform(1, 1, 1, 1, (_local12 * _local13), (-(_local12) * _local13), (-(_local12) * _local13));
-            _local8 = CachingColorTransformer.transformBitmapData(_local8, _local14);
+
+        if (hp_ < maxHP_ * 0.2) {
+            var intensity:Number = int(Math.abs(Math.sin(currentTime / 200)) * 10) / 10;
+            var ct = lowHealthCT[intensity];
+            if (ct == null) {
+                ct = new ColorTransform(1, 1, 1, 1,
+                        intensity * LOW_HEALTH_CT_OFFSET,
+                        -intensity * LOW_HEALTH_CT_OFFSET,
+                        -intensity * LOW_HEALTH_CT_OFFSET);
+                lowHealthCT[intensity] = ct;
+            }
+            tex = CachingColorTransformer.transformBitmapData(tex, ct);
         }
-        var _local9:BitmapData = texturingCache_[_local8];
-        if (_local9 == null) {
-            _local9 = GlowRedrawer.outlineGlow(_local8, this.glowColor_);
-            texturingCache_[_local8] = _local9;
+
+        var plrTex:BitmapData = texturingCache_[tex];
+        if (plrTex == null) {
+            plrTex = GlowRedrawer.outlineGlow(tex, this.glowColor_);
+            texturingCache_[tex] = plrTex;
         }
-        if (((((isPaused()) || (isStasis()))) || (isPetrified()))) {
-            _local9 = CachingColorTransformer.filterBitmapData(_local9, PAUSED_FILTER);
+        if (isPaused() || isStasis() || isPetrified()) {
+            plrTex = CachingColorTransformer.filterBitmapData(plrTex, PAUSED_FILTER);
         }
         else {
             if (isInvisible()) {
-                _local9 = CachingColorTransformer.alphaBitmapData(_local9, 0.4);
+                plrTex = CachingColorTransformer.alphaBitmapData(plrTex, 40);
             }
         }
-        return (_local9);
+        return plrTex;
+    }
+
+    private function getHallucinatingMaskedImage():MaskedImage {
+        if (hallucinatingMaskedImage_ == null) {
+            hallucinatingMaskedImage_ = new MaskedImage(getHallucinatingTexture(), null);
+        }
+        return hallucinatingMaskedImage_;
     }
 
     override public function getPortrait():BitmapData {
@@ -1001,7 +1018,7 @@ public class Player extends Character {
     }
 
     public function isHexed():Boolean {
-        return (!(((condition_[ConditionEffect.CE_FIRST_BATCH] & ConditionEffect.HEXED_BIT) == 0)));
+        return (!(((condition_[ConditionEffect.CE_SECOND_BATCH] & ConditionEffect.HEXED_BIT) == 0)));
     }
 
     public function isInventoryFull():Boolean {

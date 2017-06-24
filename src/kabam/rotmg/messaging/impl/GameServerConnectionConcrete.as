@@ -484,7 +484,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         var qp:QueuePong = (this.messages.require(QUEUE_PONG) as QueuePong);
         qp.serial_ = _arg1.serial_;
         qp.time_ = getTimer();
-        serverConnection.sendMessage(qp);
+        serverConnection.queueMessage(qp);
     }
 
     private function onHatchPet(_arg1:HatchPetMessage):void {
@@ -630,14 +630,14 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         var _local2:Create = (this.messages.require(CREATE) as Create);
         _local2.classType = _local1.id;
         _local2.skinType = _local1.skins.getSelectedSkin().id;
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
     }
 
     private function load():void {
         var _local1:Load = (this.messages.require(LOAD) as Load);
         _local1.charId_ = charId_;
         _local1.isFromArena_ = isFromArena_;
-        serverConnection.sendMessage(_local1);
+        serverConnection.queueMessage(_local1);
         if (isFromArena_) {
             this.openDialog.dispatch(new BattleSummaryDialog());
         }
@@ -651,14 +651,14 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local3.startingPos_.x_ = _arg2.x_;
         _local3.startingPos_.y_ = _arg2.y_;
         _local3.angle_ = _arg2.angle_;
-        serverConnection.sendMessage(_local3);
+        serverConnection.queueMessage(_local3);
     }
 
     override public function playerHit(_arg1:int, _arg2:int):void {
         var _local3:PlayerHit = (this.messages.require(PLAYERHIT) as PlayerHit);
         _local3.bulletId_ = _arg1;
         _local3.objectId_ = _arg2;
-        serverConnection.sendMessage(_local3);
+        serverConnection.queueMessage(_local3);
     }
 
     override public function enemyHit(_arg1:int, _arg2:int, _arg3:int, _arg4:Boolean):void {
@@ -667,7 +667,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local5.bulletId_ = _arg2;
         _local5.targetId_ = _arg3;
         _local5.kill_ = _arg4;
-        serverConnection.sendMessage(_local5);
+        serverConnection.queueMessage(_local5);
     }
 
     override public function otherHit(_arg1:int, _arg2:int, _arg3:int, _arg4:int):void {
@@ -676,7 +676,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local5.bulletId_ = _arg2;
         _local5.objectId_ = _arg3;
         _local5.targetId_ = _arg4;
-        serverConnection.sendMessage(_local5);
+        serverConnection.queueMessage(_local5);
     }
 
     override public function squareHit(_arg1:int, _arg2:int, _arg3:int):void {
@@ -684,7 +684,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local4.time_ = _arg1;
         _local4.bulletId_ = _arg2;
         _local4.objectId_ = _arg3;
-        serverConnection.sendMessage(_local4);
+        serverConnection.queueMessage(_local4);
     }
 
     public function aoeAck(_arg1:int, _arg2:Number, _arg3:Number):void {
@@ -692,7 +692,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local4.time_ = _arg1;
         _local4.position_.x_ = _arg2;
         _local4.position_.y_ = _arg3;
-        serverConnection.sendMessage(_local4);
+        serverConnection.queueMessage(_local4);
     }
 
     override public function groundDamage(_arg1:int, _arg2:Number, _arg3:Number):void {
@@ -700,19 +700,19 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local4.time_ = _arg1;
         _local4.position_.x_ = _arg2;
         _local4.position_.y_ = _arg3;
-        serverConnection.sendMessage(_local4);
+        serverConnection.queueMessage(_local4);
     }
 
     public function shootAck(_arg1:int):void {
         var _local2:ShootAck = (this.messages.require(SHOOTACK) as ShootAck);
         _local2.time_ = _arg1;
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
     }
 
     override public function playerText(_arg1:String):void {
         var _local2:PlayerText = (this.messages.require(PLAYERTEXT) as PlayerText);
         _local2.text_ = _arg1;
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
     }
 
     override public function invSwap(
@@ -733,7 +733,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         swap.slotObject2_.objectId_ = go2.objectId_;
         swap.slotObject2_.slotId_ = go2Slot;
         swap.slotObject2_.objectType_ = go2ObjType;
-        serverConnection.sendMessage(swap);
+        serverConnection.queueMessage(swap);
 
         var temp:int = go1.equipment_[go1Slot];
         go1.equipment_[go1Slot] = go2.equipment_[go2Slot];
@@ -766,7 +766,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
                 _arg1.magicPotionCount_++;
             }
         }
-        serverConnection.sendMessage(_local8);
+        serverConnection.queueMessage(_local8);
         SoundEffectLibrary.play("inventory_move_item");
         return (true);
     }
@@ -776,7 +776,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local4.slotObject_.objectId_ = _arg1.objectId_;
         _local4.slotObject_.slotId_ = _arg2;
         _local4.slotObject_.objectType_ = _arg3;
-        serverConnection.sendMessage(_local4);
+        serverConnection.queueMessage(_local4);
         if (((!((_arg2 == PotionInventoryModel.HEALTH_POTION_SLOT))) && (!((_arg2 == PotionInventoryModel.MAGIC_POTION_SLOT))))) {
             _arg1.equipment_[_arg2] = ItemConstants.NO_ITEM;
         }
@@ -791,7 +791,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local8.itemUsePos_.x_ = _arg5;
         _local8.itemUsePos_.y_ = _arg6;
         _local8.useType_ = _arg7;
-        serverConnection.sendMessage(_local8);
+        serverConnection.queueMessage(_local8);
     }
 
     override public function useItem_new(_arg1:GameObject, _arg2:int):Boolean {
@@ -846,7 +846,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local5.slotObject_.objectType_ = _arg3;
         _local5.itemUsePos_.x_ = 0;
         _local5.itemUsePos_.y_ = 0;
-        serverConnection.sendMessage(_local5);
+        serverConnection.queueMessage(_local5);
         if (_arg4.hasOwnProperty("Consumable")) {
             _arg1.equipment_[_arg2] = -1;
             if (((_arg4.hasOwnProperty("Activate")) && ((_arg4.Activate == "UnlockSkin")))) {
@@ -858,7 +858,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         var _local3:SetCondition = (this.messages.require(SETCONDITION) as SetCondition);
         _local3.conditionEffect_ = _arg1;
         _local3.conditionDuration_ = _arg2;
-        serverConnection.sendMessage(_local3);
+        serverConnection.queueMessage(_local3);
     }
 
     public function move(_arg1:int, _arg2:Player):void {
@@ -888,20 +888,20 @@ public class GameServerConnectionConcrete extends GameServerConnection {
             }
         }
         gs_.moveRecords_.clear(_local5.time_);
-        serverConnection.sendMessage(_local5);
+        serverConnection.queueMessage(_local5);
         ((_arg2) && (_arg2.onMove()));
     }
 
     override public function teleport(_arg1:int):void {
         var _local2:Teleport = (this.messages.require(TELEPORT) as Teleport);
         _local2.objectId_ = _arg1;
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
     }
 
     override public function usePortal(_arg1:int):void {
         var _local2:UsePortal = (this.messages.require(USEPORTAL) as UsePortal);
         _local2.objectId_ = _arg1;
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
         this.checkDavyKeyRemoval();
     }
 
@@ -940,13 +940,13 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         var _local5:Buy = (this.messages.require(BUY) as Buy);
         _local5.objectId_ = _arg3;
         _local5.quantity_ = _arg4;
-        serverConnection.sendMessage(_local5);
+        serverConnection.queueMessage(_local5);
     }
 
     public function gotoAck(_arg1:int):void {
         var _local2:GotoAck = (this.messages.require(GOTOACK) as GotoAck);
         _local2.time_ = _arg1;
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
     }
 
     override public function editAccountList(_arg1:int, _arg2:Boolean, _arg3:int):void {
@@ -954,58 +954,58 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local4.accountListId_ = _arg1;
         _local4.add_ = _arg2;
         _local4.objectId_ = _arg3;
-        serverConnection.sendMessage(_local4);
+        serverConnection.queueMessage(_local4);
     }
 
     override public function chooseName(_arg1:String):void {
         var _local2:ChooseName = (this.messages.require(CHOOSENAME) as ChooseName);
         _local2.name_ = _arg1;
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
     }
 
     override public function createGuild(_arg1:String):void {
         var _local2:CreateGuild = (this.messages.require(CREATEGUILD) as CreateGuild);
         _local2.name_ = _arg1;
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
     }
 
     override public function guildRemove(_arg1:String):void {
         var _local2:GuildRemove = (this.messages.require(GUILDREMOVE) as GuildRemove);
         _local2.name_ = _arg1;
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
     }
 
     override public function guildInvite(_arg1:String):void {
         var _local2:GuildInvite = (this.messages.require(GUILDINVITE) as GuildInvite);
         _local2.name_ = _arg1;
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
     }
 
     override public function requestTrade(_arg1:String):void {
         var _local2:RequestTrade = (this.messages.require(REQUESTTRADE) as RequestTrade);
         _local2.name_ = _arg1;
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
     }
 
     override public function changeTrade(_arg1:Vector.<Boolean>):void {
         var _local2:ChangeTrade = (this.messages.require(CHANGETRADE) as ChangeTrade);
         _local2.offer_ = _arg1;
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
     }
 
     override public function acceptTrade(_arg1:Vector.<Boolean>, _arg2:Vector.<Boolean>):void {
         var _local3:AcceptTrade = (this.messages.require(ACCEPTTRADE) as AcceptTrade);
         _local3.myOffer_ = _arg1;
         _local3.yourOffer_ = _arg2;
-        serverConnection.sendMessage(_local3);
+        serverConnection.queueMessage(_local3);
     }
 
     override public function cancelTrade():void {
-        serverConnection.sendMessage(this.messages.require(CANCELTRADE));
+        serverConnection.queueMessage(this.messages.require(CANCELTRADE));
     }
 
     override public function checkCredits():void {
-        serverConnection.sendMessage(this.messages.require(CHECKCREDITS));
+        serverConnection.queueMessage(this.messages.require(CHECKCREDITS));
     }
 
     override public function escape():void {
@@ -1032,20 +1032,20 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     }
 
     override public function gotoQuestRoom():void {
-        serverConnection.sendMessage(this.messages.require(QUEST_ROOM_MSG));
+        serverConnection.queueMessage(this.messages.require(QUEST_ROOM_MSG));
     }
 
     override public function joinGuild(_arg1:String):void {
         var _local2:JoinGuild = (this.messages.require(JOINGUILD) as JoinGuild);
         _local2.guildName_ = _arg1;
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
     }
 
     override public function changeGuildRank(_arg1:String, _arg2:int):void {
         var _local3:ChangeGuildRank = (this.messages.require(CHANGEGUILDRANK) as ChangeGuildRank);
         _local3.name_ = _arg1;
         _local3.guildRank_ = _arg2;
-        serverConnection.sendMessage(_local3);
+        serverConnection.queueMessage(_local3);
     }
 
     private function rsaEncrypt(_arg1:String):String {
@@ -1248,7 +1248,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         var _local3:int;
         var _local4:GroundTileData;
         var _local2:Message = this.messages.require(UPDATEACK);
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
         _local3 = 0;
         while (_local3 < _arg1.tiles_.length) {
             _local4 = _arg1.tiles_[_local3];
@@ -1838,7 +1838,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         var _local2:Pong = (this.messages.require(PONG) as Pong);
         _local2.serial_ = _arg1.serial_;
         _local2.time_ = getTimer();
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
     }
 
     private function parseXML(_arg1:String):void {
@@ -2049,7 +2049,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
     }
 
     override public function questFetch():void {
-        serverConnection.sendMessage(this.messages.require(QUEST_FETCH_ASK));
+        serverConnection.queueMessage(this.messages.require(QUEST_FETCH_ASK));
     }
 
     private function onQuestFetchResponse(_arg1:QuestFetchResponse):void {
@@ -2065,13 +2065,13 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         _local4.slotObject.objectId_ = _arg1;
         _local4.slotObject.slotId_ = _arg2;
         _local4.slotObject.objectType_ = _arg3;
-        serverConnection.sendMessage(_local4);
+        serverConnection.queueMessage(_local4);
     }
 
     override public function keyInfoRequest(_arg1:int):void {
         var _local2:KeyInfoRequest = (this.messages.require(KEY_INFO_REQUEST) as KeyInfoRequest);
         _local2.itemType_ = _arg1;
-        serverConnection.sendMessage(_local2);
+        serverConnection.queueMessage(_local2);
     }
 
     private function onKeyInfoResponse(_arg1:KeyInfoResponse):void {

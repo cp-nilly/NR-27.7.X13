@@ -57,9 +57,9 @@ public class ConditionEffect {
     public static const ATT_BOOST:uint = 42;
     public static const DEF_BOOST:uint = 43;
     public static const SPD_BOOST:uint = 44;
-    public static const VIT_BOOST:uint = 45;
-    public static const WIS_BOOST:uint = 46;
-    public static const DEX_BOOST:uint = 47;
+    public static const DEX_BOOST:uint = 45;
+    public static const VIT_BOOST:uint = 46;
+    public static const WIS_BOOST:uint = 47;
     public static const HIDDEN:uint = 48;
     public static const MUTED:uint = 49;
     public static const PARTY_VISION:uint = 50;
@@ -116,7 +116,8 @@ public class ConditionEffect {
     public static const MUTED_BIT:uint = (1 << (MUTED - NEW_CON_THREASHOLD));
     public static const PARTY_VISION_BIT:uint = (1 << (PARTY_VISION - NEW_CON_THREASHOLD));
     public static const XMAS_VISION_BIT:uint = (1 << (XMAS_VISION - NEW_CON_THREASHOLD));
-    public static const MAP_FILTER_BITMASK:uint = ((DRUNK_BIT | BLIND_BIT) | PAUSED_BIT);
+    public static const MAP_FILTER_BITMASK:uint = DRUNK_BIT | BLIND_BIT | PAUSED_BIT;
+    public static const PROJ_NOHIT_BITMASK:uint = INVINCIBLE_BIT | STASIS_BIT | PAUSED_BIT;
     public static const CE_FIRST_BATCH:uint = 0;
     public static const CE_SECOND_BATCH:uint = 1;
     public static const NUMBER_CE_BATCHES:uint = 2;
