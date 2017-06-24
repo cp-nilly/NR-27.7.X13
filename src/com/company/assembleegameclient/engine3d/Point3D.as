@@ -22,6 +22,7 @@ public class Point3D {
     private const path_:GraphicsPath = new GraphicsPath(commands_, data_);
     private const bitmapFill_:GraphicsBitmapFill = new GraphicsBitmapFill(null, new Matrix(), false, false);
     private const solidFill_:GraphicsSolidFill = new GraphicsSolidFill(0, 1);
+    private const fieldOfView:int = 48;
 
     public var size_:Number;
     public var posS_:Vector3D;
@@ -46,7 +47,7 @@ public class Point3D {
         if (this.posS_.w < 0) {
             return;
         }
-        var _local8:Number = (this.posS_.w * Math.sin(((_arg5.pp_.fieldOfView / 2) * Trig.toRadians)));
+        var _local8:Number = this.posS_.w * Math.sin((fieldOfView / 2) * Trig.toRadians);
         var _local9:Number = (this.size_ / _local8);
         this.data_.length = 0;
         if (_arg3 == 0) {
