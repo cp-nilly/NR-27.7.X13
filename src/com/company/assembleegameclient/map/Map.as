@@ -53,7 +53,6 @@ public class Map extends AbstractMap {
     protected static const BLIND_FILTER:ColorMatrixFilter = new ColorMatrixFilter([0.05, 0.05, 0.05, 0, 0, 0.05, 0.05, 0.05, 0, 0, 0.05, 0.05, 0.05, 0, 0, 0.05, 0.05, 0.05, 1, 0]);
 
     public static var forceSoftwareRender:Boolean = false;
-    protected static var BREATH_CT:ColorTransform = new ColorTransform((0xFF / 0xFF), (55 / 0xFF), (0 / 0xFF), 0);
     public static var texture:BitmapData;
 
     public var ifDrawEffectFlag:Boolean = true;
@@ -88,7 +87,6 @@ public class Map extends AbstractMap {
         this.topSquares_ = new Vector.<Square>();
         super();
         gs_ = _arg1;
-        hurtOverlay_ = new HurtOverlay();
         mapOverlay_ = new MapOverlay();
         partyOverlay_ = new PartyOverlay(this);
         party_ = new Party(this);
@@ -133,7 +131,6 @@ public class Map extends AbstractMap {
             addChild(background_);
         }
         addChild(map_);
-        addChild(hurtOverlay_);
         addChild(mapOverlay_);
         addChild(partyOverlay_);
         isPetYard = (name_.substr(0, 8) == "Pet Yard");
@@ -146,7 +143,6 @@ public class Map extends AbstractMap {
         gs_ = null;
         background_ = null;
         map_ = null;
-        hurtOverlay_ = null;
         mapOverlay_ = null;
         partyOverlay_ = null;
         for each (_local1 in squareList_) {
@@ -450,20 +446,6 @@ public class Map extends AbstractMap {
             for each (sqr in this.topSquares_) {
                 sqr.drawTop(this.graphicsData_, camera, currentTime);
             }
-        }
-
-        // draw breath overlay
-        if (player_ != null && player_.breath_ >= 0 && player_.breath_ < Parameters.BREATH_THRESH) {
-            var bMult:Number = Parameters.BREATH_THRESH - player_.breath_ / Parameters.BREATH_THRESH;
-            var btMult:Number = Math.abs(Math.sin(currentTime / 300)) * 0.75;
-            BREATH_CT.alphaMultiplier = bMult * btMult;
-            hurtOverlay_.transform.colorTransform = BREATH_CT;
-            hurtOverlay_.visible = true;
-            hurtOverlay_.x = rect.left;
-            hurtOverlay_.y = rect.top;
-        }
-        else {
-            hurtOverlay_.visible = false;
         }
 
         // draw hw capable screen filters

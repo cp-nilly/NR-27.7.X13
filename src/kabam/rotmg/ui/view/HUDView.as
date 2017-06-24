@@ -2,6 +2,7 @@
 import com.company.assembleegameclient.game.AGameSprite;
 import com.company.assembleegameclient.game.GameSprite;
 import com.company.assembleegameclient.map.GradientOverlay;
+import com.company.assembleegameclient.map.HurtOverlay;
 import com.company.assembleegameclient.objects.GameObject;
 import com.company.assembleegameclient.objects.Player;
 import com.company.assembleegameclient.parameters.Parameters;
@@ -17,7 +18,9 @@ import flash.display.GraphicsSolidFill;
 import flash.display.IGraphicsData;
 import flash.display.Sprite;
 import flash.events.Event;
+import flash.geom.ColorTransform;
 import flash.geom.Point;
+import flash.utils.getTimer;
 
 import kabam.rotmg.assets.EmbeddedAssets;
 import kabam.rotmg.game.view.components.TabStripView;
@@ -38,6 +41,8 @@ public class HUDView extends Sprite implements UnFocusAble {
     private const GRADIENT_OVERLAY_POSITION:Point = new Point(-10, 0);
     private const DARKNESS_Y_POSITION:Point = new Point(-175, -50); // x: center, y: offset
     private const DARKNESS_X_POSITION:int = -600;
+    private const HURT_OVERLAY_POSITION:Point = new Point(-600, 0);
+    private const BREATH_CT:ColorTransform = new ColorTransform(0xFF / 0xFF, 55 / 0xFF, 0 / 0xFF, 0);
 
     private var background:CharacterWindowBackground;
     private var miniMap:MiniMapImp;
@@ -48,6 +53,7 @@ public class HUDView extends Sprite implements UnFocusAble {
     private var player:Player;
     private var gradientOverlay:GradientOverlay;
     private var darkness:DisplayObject;
+    private var hurtOverlay_:HurtOverlay;
     public var tabStrip:TabStripView;
     public var interactPanel:InteractPanel;
     public var tradePanel:TradePanel;
@@ -65,6 +71,7 @@ public class HUDView extends Sprite implements UnFocusAble {
         this.characterDetails = new CharacterDetailsView();
         this.statMeters = new StatMetersView();
         this.gradientOverlay = new GradientOverlay();
+        this.hurtOverlay_ = new HurtOverlay();
         this.darkness = new EmbeddedAssets.DarknessBackground();
         this.darkness.alpha = 0.95;
     }
@@ -76,6 +83,7 @@ public class HUDView extends Sprite implements UnFocusAble {
         addChild(this.characterDetails);
         addChild(this.statMeters);
         addChild(this.gradientOverlay);
+        addChild(this.hurtOverlay_);
     }
 
     private function positionAssets():void {
@@ -92,6 +100,8 @@ public class HUDView extends Sprite implements UnFocusAble {
         this.gradientOverlay.x = this.GRADIENT_OVERLAY_POSITION.x;
         this.gradientOverlay.y = this.GRADIENT_OVERLAY_POSITION.y;
         this.darkness.x = this.DARKNESS_X_POSITION;
+        this.hurtOverlay_.x = this.HURT_OVERLAY_POSITION.x;
+        this.hurtOverlay_.y = this.HURT_OVERLAY_POSITION.y;
     }
 
     public function setPlayerDependentAssets(_arg1:GameSprite):void {
@@ -146,6 +156,18 @@ public class HUDView extends Sprite implements UnFocusAble {
             if (contains(this.darkness)) {
                 removeChild(this.darkness);
             }
+        }
+
+        // draw breath overlay
+        if (player != null && player.breath_ >= 0 && player.breath_ < Parameters.BREATH_THRESH) {
+            var bMult:Number = (Parameters.BREATH_THRESH - player.breath_) / Parameters.BREATH_THRESH;
+            var btMult:Number = Math.abs(Math.sin(getTimer() / 300)) * 0.75;
+            BREATH_CT.alphaMultiplier = bMult * btMult;
+            hurtOverlay_.transform.colorTransform = BREATH_CT;
+            hurtOverlay_.visible = true;
+        }
+        else {
+            hurtOverlay_.visible = false;
         }
     }
 
