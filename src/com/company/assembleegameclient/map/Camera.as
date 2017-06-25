@@ -9,6 +9,7 @@ import flash.geom.Vector3D;
 
 public class Camera {
 
+    public static var vToS_scale:int = 48;
     public static const CENTER_SCREEN_RECT:Rectangle = new Rectangle(-300, -325, 600, 600);
     public static const OFFSET_SCREEN_RECT:Rectangle = new Rectangle(-300, -450, 600, 600);
     private static const SCREENSHOT_SCREEN_RECT:Rectangle = new Rectangle(-400, -325, 800, 600);
@@ -37,7 +38,7 @@ public class Camera {
     private var rd_:Vector.<Number> = new Vector.<Number>(16, true);
 
     public function Camera() {
-        this.vToS_.appendScale(50, 50, 50);
+        this.vToS_.appendScale(vToS_scale, vToS_scale, vToS_scale);
     }
 
     public function configureCamera(go:GameObject, isHallucinating:Boolean):void {
@@ -108,10 +109,14 @@ public class Camera {
         this.wToS_.identity();
         this.wToS_.append(this.wToV_);
         this.wToS_.append(this.vToS_);
-        var wTileDist:Number = this.clipRect_.width / (2 * 50);
-        var hTileDist:Number = this.clipRect_.height / (2 * 50);
+        var wTileDist:Number = this.clipRect_.width / (2 * vToS_scale);
+        var hTileDist:Number = this.clipRect_.height / (2 * vToS_scale);
         this.maxDist_ = Math.sqrt(wTileDist * wTileDist + hTileDist * hTileDist) + 1;
         this.maxDistSq_ = this.maxDist_ * this.maxDist_;
+    }
+
+    public static function setViewDist(numTiles:int):void {
+        vToS_scale = 4 * numTiles;
     }
 
 

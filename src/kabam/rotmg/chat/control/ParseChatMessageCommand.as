@@ -1,4 +1,5 @@
 ﻿package kabam.rotmg.chat.control {
+import com.company.assembleegameclient.map.Camera;
 import com.company.assembleegameclient.parameters.Parameters;
 
 import kabam.rotmg.account.core.Account;
@@ -38,9 +39,11 @@ public class ParseChatMessageCommand {
                 case "mscale":
                     if(command.length > 1) {
                         var mscale:Number = Number(command[1]);
-                        if(mscale)
+                        if (mscale) {
                             Parameters.data_.mscale = mscale;
                             Parameters.save();
+                            Camera.setViewDist(mscale);
+                        }
                     }
                     this.addTextLine.dispatch(ChatMessage.make(Parameters.HELP_CHAT_NAME, "Map Scale: " + Parameters.data_.mscale));
                     return;

@@ -63,7 +63,7 @@ public class Particle extends BasicObject {
     }
 
     override public function draw(_arg1:Vector.<IGraphicsData>, _arg2:Camera, _arg3:int):void {
-        var _local4:BitmapData = TextureRedrawer.redrawSolidSquare(this.color_, this.size_);
+        var _local4:BitmapData = TextureRedrawer.redrawSolidSquare(this.color_, this.size_ * Camera.vToS_scale / 50);
         var _local5:int = _local4.width;
         var _local6:int = _local4.height;
         this.vS_.length = 0;

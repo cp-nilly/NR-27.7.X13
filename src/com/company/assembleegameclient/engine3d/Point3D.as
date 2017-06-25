@@ -1,5 +1,6 @@
 ﻿package com.company.assembleegameclient.engine3d {
 import com.company.assembleegameclient.map.Camera;
+import com.company.assembleegameclient.map.Camera;
 import com.company.util.Trig;
 
 import flash.display.BitmapData;
@@ -48,7 +49,7 @@ public class Point3D {
             return;
         }
         var _local8:Number = this.posS_.w * Math.sin((fieldOfView / 2) * Trig.toRadians);
-        var _local9:Number = (this.size_ / _local8);
+        var _local9:Number = (this.size_ / _local8) * Camera.vToS_scale / 50;
         this.data_.length = 0;
         if (_arg3 == 0) {
             this.data_.push((this.posS_.x - _local9), (this.posS_.y - _local9), (this.posS_.x + _local9), (this.posS_.y - _local9), (this.posS_.x + _local9), (this.posS_.y + _local9), (this.posS_.x - _local9), (this.posS_.y + _local9));

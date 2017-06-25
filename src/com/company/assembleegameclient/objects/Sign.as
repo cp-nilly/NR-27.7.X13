@@ -48,7 +48,7 @@ public class Sign extends GameObject {
         _local3.text = _local5.split("|").join("\n");
         var _local6:BitmapData = new BitmapDataSpy(_local3.width, _local3.height, true, 0);
         _local6.draw(_local3);
-        texture_ = TextureRedrawer.redraw(_local6, size_, false, 0);
+        texture_ = TextureRedrawer.redraw(_local6, size_, false, 0, true, 5 * Camera.vToS_scale / 50);
         return (texture_);
     }
 

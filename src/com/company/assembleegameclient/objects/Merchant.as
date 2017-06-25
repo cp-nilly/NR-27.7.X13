@@ -241,7 +241,7 @@ public class Merchant extends SellableObject implements IInteractiveObject {
 
     public function setMerchandiseType(_arg1:int):void {
         this.merchandiseType_ = _arg1;
-        this.merchandiseTexture_ = ObjectLibrary.getRedrawnTextureFromType(this.merchandiseType_, 100, false);
+        this.merchandiseTexture_ = ObjectLibrary.getRedrawnTextureFromType(this.merchandiseType_, 100, false, true, 5 * Camera.vToS_scale / 50);
     }
 
 

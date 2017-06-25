@@ -1,6 +1,7 @@
 ﻿package com.company.assembleegameclient.map {
 import com.company.assembleegameclient.background.Background;
 import com.company.assembleegameclient.game.AGameSprite;
+import com.company.assembleegameclient.map.Camera;
 import com.company.assembleegameclient.map.mapoverlay.MapOverlay;
 import com.company.assembleegameclient.map.partyoverlay.PartyOverlay;
 import com.company.assembleegameclient.objects.BasicObject;
@@ -319,10 +320,10 @@ public class Map extends AbstractMap {
         var rect:Rectangle = camera.clipRect_;
         x = -rect.x;
         y = -rect.y;
-        var sy:Number = (-rect.y - rect.height / 2) / 50;
+        var viewDist2Plr:Number = (-rect.y - rect.height / 2) / Camera.vToS_scale;
         var plrPos:Point = new Point(
-                camera.x_ + sy * Math.cos(camera.angleRad_ - Math.PI / 2),
-                camera.y_ + sy * Math.sin(camera.angleRad_ - Math.PI / 2));
+                camera.x_ + viewDist2Plr * Math.sin(camera.angleRad_),
+                camera.y_ - viewDist2Plr * Math.cos(camera.angleRad_));
 
         if (background_ != null) {
             background_.draw(camera, currentTime);

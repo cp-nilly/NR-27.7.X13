@@ -884,7 +884,7 @@ public class GameObject extends BasicObject {
             this.nameFill_ = new GraphicsBitmapFill(null, new Matrix(), false, false);
             this.namePath_ = new GraphicsPath(GraphicsUtil.QUAD_COMMANDS, new Vector.<Number>());
         }
-        var _local3:int = ((this.nameBitmapData_.width / 2) + 1);
+        var _local3:Number = ((this.nameBitmapData_.width / 2) + 1) * 10 / 50;
         var _local4:int = 30;
         var _local5:Vector.<Number> = this.namePath_.data;
         _local5.length = 0;
@@ -982,7 +982,7 @@ public class GameObject extends BasicObject {
             _local3 = CachingColorTransformer.filterBitmapData(_local3, PAUSED_FILTER);
         }
         if ((((this.tex1Id_ == 0)) && ((this.tex2Id_ == 0)))) {
-            _local3 = TextureRedrawer.redraw(_local3, _local4, false, 0);
+            _local3 = TextureRedrawer.redraw(_local3, _local4, false, 0, true, 5 * Camera.vToS_scale / 50);
         }
         else {
             _local13 = null;
@@ -993,7 +993,7 @@ public class GameObject extends BasicObject {
                 _local13 = this.texturingCache_[_local3];
             }
             if (_local13 == null) {
-                _local13 = TextureRedrawer.resize(_local3, _local5, _local4, false, this.tex1Id_, this.tex2Id_);
+                _local13 = TextureRedrawer.resize(_local3, _local5, _local4, false, this.tex1Id_, this.tex2Id_, 5 * Camera.vToS_scale / 50);
                 _local13 = GlowRedrawer.outlineGlow(_local13, 0);
                 this.texturingCache_[_local3] = _local13;
             }
@@ -1268,7 +1268,7 @@ public class GameObject extends BasicObject {
             this.shadowGradientFill_ = new GraphicsGradientFill(GradientType.RADIAL, [this.props_.shadowColor_, this.props_.shadowColor_], [0.5, 0], null, new Matrix());
             this.shadowPath_ = new GraphicsPath(GraphicsUtil.QUAD_COMMANDS, new Vector.<Number>());
         }
-        var _local4:Number = (((this.size_ / 100) * (this.props_.shadowSize_ / 100)) * this.sizeMult_);
+        var _local4:Number = (((this.size_ / 100) * (this.props_.shadowSize_ / 100)) * this.sizeMult_) * Camera.vToS_scale / 50;
         var _local5:Number = (30 * _local4);
         var _local6:Number = (15 * _local4);
         this.shadowGradientFill_.matrix.createGradientBox((_local5 * 2), (_local6 * 2), 0, (posS_[0] - _local5), (posS_[1] - _local6));

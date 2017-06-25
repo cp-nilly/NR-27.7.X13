@@ -1,5 +1,6 @@
 ﻿package com.company.assembleegameclient.objects {
 import com.company.assembleegameclient.map.Camera;
+import com.company.assembleegameclient.map.Camera;
 import com.company.assembleegameclient.map.Square;
 import com.company.assembleegameclient.map.mapoverlay.CharacterStatusText;
 import com.company.assembleegameclient.objects.particles.HealingEffect;
@@ -795,7 +796,7 @@ public class Player extends Character {
             tex = texturingCache_[maskImg];
         }
         if (tex == null) {
-            tex = TextureRedrawer.resize(maskImg.image_, maskImg.mask_, size_, false, tex1Id, tex2Id);
+            tex = TextureRedrawer.resize(maskImg.image_, maskImg.mask_, size_, false, tex1Id, tex2Id, 5 * Camera.vToS_scale / 50);
             if (this.nearestMerchant_ != null) {
                 texturingCache_[this.nearestMerchant_][maskImg] = tex;
             }
