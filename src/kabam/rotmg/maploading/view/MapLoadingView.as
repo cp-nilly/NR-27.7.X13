@@ -40,7 +40,7 @@ public class MapLoadingView extends Sprite {
     private function addBackground():void {
         var _local1:Sprite = new Sprite();
         _local1.graphics.beginFill(0);
-        _local1.graphics.drawRect(0, 0, 800, 600);
+        _local1.graphics.drawRect(0, 0, WebMain.STAGE.stageWidth, WebMain.STAGE.stageHeight);
         _local1.graphics.endFill();
         addChild(_local1);
     }
@@ -96,8 +96,8 @@ public class MapLoadingView extends Sprite {
         this.animation = _arg1;
         addChild(_arg1);
         _arg1.start();
-        _arg1.x = ((399.5 - (_arg1.width * 0.5)) + 5);
-        _arg1.y = (245.85 - (_arg1.height * 0.5));
+        _arg1.x = ((WebMain.STAGE.stageWidth / 2 - (_arg1.width * 0.5)) + 5);
+        _arg1.y = (WebMain.STAGE.stageHeight * 0.4 - (_arg1.height * 0.5));
     }
 
     public function disable():void {
