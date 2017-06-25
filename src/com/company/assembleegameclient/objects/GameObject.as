@@ -62,6 +62,8 @@ public class GameObject extends BasicObject {
     protected static const IDENTITY_MATRIX:Matrix = new Matrix();
     private static const ZERO_LIMIT:Number = 1E-5;
     private static const NEGATIVE_ZERO_LIMIT:Number = -(ZERO_LIMIT);
+    private static const SHOCKED_CT:ColorTransform = new ColorTransform(-1, -1, -1, 1, 0xFF, 0xFF, 0xFF, 0);
+    private static const CHARGE_CT:ColorTransform = new ColorTransform(1, 1, 1, 1, 0xFF, 0xFF, 0xFF, 0);
     public static const ATTACK_PERIOD:int = 300;
 
     public var nameBitmapData_:BitmapData = null;
@@ -1073,108 +1075,143 @@ public class GameObject extends BasicObject {
         GraphicsFillExtra.setSoftwareDrawSolid(this.hpbarBackFill_, true);
     }
 
-    override public function draw(_arg1:Vector.<IGraphicsData>, _arg2:Camera, _arg3:int):void {
-        var _local8:BitmapData;
-        var _local9:uint;
-        var _local10:uint;
-        var _local4:BitmapData = this.getTexture(_arg2, _arg3);
+    override public function draw(gfxData:Vector.<IGraphicsData>, camera:Camera, currentTime:int):void {
+        var txt:BitmapData = this.getTexture(camera, currentTime);
+
+        // draw on ground
         if (this.props_.drawOnGround_) {
             if (square_.faces_.length == 0) {
                 return;
             }
             this.path_.data = square_.faces_[0].face_.vout_;
-            this.bitmapFill_.bitmapData = _local4;
+            this.bitmapFill_.bitmapData = txt;
             square_.baseTexMatrix_.calculateTextureMatrix(this.path_.data);
             this.bitmapFill_.matrix = square_.baseTexMatrix_.tToS_;
-            _arg1.push(this.bitmapFill_);
-            _arg1.push(this.path_);
-            _arg1.push(GraphicsUtil.END_FILL);
+            gfxData.push(this.bitmapFill_);
+            gfxData.push(this.path_);
+            gfxData.push(GraphicsUtil.END_FILL);
             return;
         }
-        if (((!((this.obj3D_ == null))) && (!(Parameters.isGpuRender())))) {
-            this.obj3D_.draw(_arg1, _arg2, this.props_.color_, _local4);
+
+        // draw 3d obj
+        if (this.obj3D_ != null) {
+            if (Parameters.isGpuRender()) {
+                gfxData.push(null);
+                return;
+            }
+            this.obj3D_.draw(gfxData, camera, this.props_.color_, txt);
             return;
         }
-        if (((!((this.obj3D_ == null))) && (Parameters.isGpuRender()))) {
-            _arg1.push(null);
-            return;
+
+        var width:int = txt.width;
+        var height:int = txt.height;
+        var sink:int = (square_.sink_ + this.sinkLevel_);
+        if ((sink > 0 && this.flying_) || (square_.obj_ != null && square_.obj_.props_.protectFromSink_)) {
+            sink = 0;
         }
-        var _local5:int = _local4.width;
-        var _local6:int = _local4.height;
-        var _local7:int = (square_.sink_ + this.sinkLevel_);
-        if ((((_local7 > 0)) && (((this.flying_) || (((!((square_.obj_ == null))) && (square_.obj_.props_.protectFromSink_))))))) {
-            _local7 = 0;
-        }
+
+        // set sink level
         if (Parameters.isGpuRender()) {
-            if (_local7 != 0) {
-                GraphicsFillExtra.setSinkLevel(this.bitmapFill_, Math.max((((_local7 / _local6) * 1.65) - 0.02), 0));
-                _local7 = (-(_local7) + 0.02);
+            if (sink != 0) {
+                GraphicsFillExtra.setSinkLevel(this.bitmapFill_, Math.max(sink / height * 1.65 - 0.02, 0));
+                sink = -sink + 0.02;
             }
             else {
-                if ((((_local7 == 0)) && (!((GraphicsFillExtra.getSinkLevel(this.bitmapFill_) == 0))))) {
+                if (sink == 0 && GraphicsFillExtra.getSinkLevel(this.bitmapFill_) != 0) {
                     GraphicsFillExtra.clearSink(this.bitmapFill_);
                 }
             }
         }
+
         this.vS_.length = 0;
-        this.vS_.push((posS_[3] - (_local5 / 2)), ((posS_[4] - _local6) + _local7), (posS_[3] + (_local5 / 2)), ((posS_[4] - _local6) + _local7), (posS_[3] + (_local5 / 2)), posS_[4], (posS_[3] - (_local5 / 2)), posS_[4]);
+        this.vS_.push(
+                posS_[3] - (width / 2),
+                (posS_[4] - height) + sink,
+                posS_[3] + (width / 2),
+                (posS_[4] - height) + sink,
+                posS_[3] + (width / 2),
+                posS_[4],
+                posS_[3] - (width / 2),
+                posS_[4]);
         this.path_.data = this.vS_;
+
+        // draw flash
         if (this.flash_ != null) {
-            if (!this.flash_.doneAt(_arg3)) {
+            if (!this.flash_.doneAt(currentTime)) {
                 if (Parameters.isGpuRender()) {
-                    this.flash_.applyGPUTextureColorTransform(_local4, _arg3);
+                    this.flash_.applyGPUTextureColorTransform(txt, currentTime);
                 }
                 else {
-                    _local4 = this.flash_.apply(_local4, _arg3);
+                    txt = this.flash_.apply(txt, currentTime);
                 }
             }
             else {
                 this.flash_ = null;
             }
         }
-        if (((this.isShocked) && (!(this.isShockedTransformSet)))) {
+
+        // draw shocked
+        if (this.isShocked && !this.isShockedTransformSet) {
             if (Parameters.isGpuRender()) {
-                GraphicsFillExtra.setColorTransform(_local4, new ColorTransform(-1, -1, -1, 1, 0xFF, 0xFF, 0xFF, 0));
+                GraphicsFillExtra.setColorTransform(txt, SHOCKED_CT);
             }
             else {
-                _local8 = _local4.clone();
-                _local8.colorTransform(_local8.rect, new ColorTransform(-1, -1, -1, 1, 0xFF, 0xFF, 0xFF, 0));
-                _local8 = CachingColorTransformer.filterBitmapData(_local8, SHOCKED_FILTER);
-                _local4 = _local8;
+                var bmp:BitmapData = txt.clone();
+                bmp.colorTransform(bmp.rect, SHOCKED_CT);
+                bmp = CachingColorTransformer.filterBitmapData(bmp, SHOCKED_FILTER);
+                txt = bmp;
             }
             this.isShockedTransformSet = true;
         }
-        if (((this.isCharging) && (!(this.isChargingTransformSet)))) {
+
+        // draw charging
+        if (this.isCharging && !this.isChargingTransformSet) {
             if (Parameters.isGpuRender()) {
-                GraphicsFillExtra.setColorTransform(_local4, new ColorTransform(1, 1, 1, 1, 0xFF, 0xFF, 0xFF, 0));
+                GraphicsFillExtra.setColorTransform(txt, CHARGE_CT);
             }
             else {
-                _local8 = _local4.clone();
-                _local8.colorTransform(_local8.rect, new ColorTransform(1, 1, 1, 1, 0xFF, 0xFF, 0xFF, 0));
-                _local4 = _local8;
+                var bmp:BitmapData = txt.clone();
+                bmp.colorTransform(bmp.rect, CHARGE_CT);
+                txt = bmp;
             }
             this.isChargingTransformSet = true;
         }
-        this.bitmapFill_.bitmapData = _local4;
+
+        this.bitmapFill_.bitmapData = txt;
         this.fillMatrix_.identity();
         this.fillMatrix_.translate(this.vS_[0], this.vS_[1]);
         this.bitmapFill_.matrix = this.fillMatrix_;
-        _arg1.push(this.bitmapFill_);
-        _arg1.push(this.path_);
-        _arg1.push(GraphicsUtil.END_FILL);
-        if (((((((!(this.isPaused())) && (((this.condition_[ConditionEffect.CE_FIRST_BATCH]) || (this.condition_[ConditionEffect.CE_SECOND_BATCH]))))) && (!(Parameters.screenShotMode_)))) && (!((this is Pet))))) {
-            this.drawConditionIcons(_arg1, _arg2, _arg3);
+        gfxData.push(this.bitmapFill_);
+        gfxData.push(this.path_);
+        gfxData.push(GraphicsUtil.END_FILL);
+
+        // draw condition effect icons
+        if (!this.isPaused() &&
+                (this.condition_[ConditionEffect.CE_FIRST_BATCH] || this.condition_[ConditionEffect.CE_SECOND_BATCH]) &&
+                !Parameters.screenShotMode_ &&
+                !(this is Pet)) {
+            this.drawConditionIcons(gfxData, camera, currentTime);
         }
-        if (((((this.props_.showName_) && (!((this.name_ == null))))) && (!((this.name_.length == 0))))) {
-            this.drawName(_arg1, _arg2);
+
+        // draw name
+        if (this.props_.showName_ && this.name_ != null && this.name_.length != 0) {
+            this.drawName(gfxData, camera);
         }
-        if (((((((((this.props_) && (((this.props_.isEnemy_) || (this.props_.isPlayer_))))) && (!(this.isInvisible())))) && (!(this.isInvulnerable())))) && (!(this.props_.noMiniMap_)))) {
-            _local9 = ((_local4.getPixel32((_local4.width / 4), (_local4.height / 4)) | _local4.getPixel32((_local4.width / 2), (_local4.height / 2))) | _local4.getPixel32(((_local4.width * 3) / 4), ((_local4.height * 3) / 4)));
-            _local10 = (_local9 >> 24);
-            if (_local10 != 0) {
+
+        // set shadow visibility + draw hpbar
+        if (this.props_ &&
+                (this.props_.isEnemy_ || this.props_.isPlayer_) &&
+                !this.isInvisible() &&
+                !this.isInvulnerable() &&
+                !this.props_.noMiniMap_) {
+            var color:uint = txt.getPixel32(txt.width / 4, txt.height / 4) |
+                    txt.getPixel32(txt.width / 2, txt.height / 2) |
+                    txt.getPixel32(txt.width * 3 / 4, txt.height * 3 / 4);
+            var alpha:uint = color >> 24;
+            if (alpha != 0) {
                 hasShadow_ = true;
                 if (Parameters.data_.HPBar) {
-                    this.drawHpBar(_arg1, _arg3);
+                    this.drawHpBar(gfxData, currentTime);
                 }
             }
             else {
