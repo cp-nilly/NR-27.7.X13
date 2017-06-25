@@ -63,8 +63,8 @@ public class WebMain extends Sprite {
 
     public static var ENV:String;
     public static var STAGE:Stage;
-    public static var SCALED_WIDTH;
-    public static var SCALED_HEIGHT;
+    public static var SCALED_WIDTH:Number;
+    public static var SCALED_HEIGHT:Number;
 
     protected var context:IContext;
 
