@@ -21,7 +21,7 @@ public class BasicObject {
     public var drawn_:Boolean;
     public var posW_:Vector.<Number>;
     public var posS_:Vector.<Number>;
-    public var sortVal_:Number;
+    public var sortVal_:int;
 
     public function BasicObject() {
         this.posW_ = new Vector.<Number>();
@@ -74,7 +74,7 @@ public class BasicObject {
         this.posW_.push(this.x_, this.y_, 0, this.x_, this.y_, this.z_);
         this.posS_.length = 0;
         _arg1.wToS_.transformVectors(this.posW_, this.posS_);
-        this.sortVal_ = this.posS_[1];
+        this.sortVal_ = int(this.posS_[1]);
     }
 
     public function computeSortValNoCamera(_arg1:Number = 12):void {
@@ -82,7 +82,7 @@ public class BasicObject {
         this.posW_.push(this.x_, this.y_, 0, this.x_, this.y_, this.z_);
         this.posS_.length = 0;
         this.posS_.push((this.x_ * _arg1), (this.y_ * _arg1), 0, (this.x_ * _arg1), (this.y_ * _arg1), 0);
-        this.sortVal_ = this.posS_[1];
+        this.sortVal_ = int(this.posS_[1]);
     }
 
     public function addTo(_arg1:Map, _arg2:Number, _arg3:Number):Boolean {

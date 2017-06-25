@@ -46,26 +46,26 @@ public class SocketServer {
         super();
     }
 
-    public function setOutgoingCipher(_arg1:ICipher):SocketServer {
-        this.outgoingCipher = _arg1;
-        return (this);
+    public function setOutgoingCipher(cipher:ICipher):SocketServer {
+        this.outgoingCipher = cipher;
+        return this;
     }
 
-    public function setIncomingCipher(_arg1:ICipher):SocketServer {
-        this.incomingCipher = _arg1;
-        return (this);
+    public function setIncomingCipher(cipher:ICipher):SocketServer {
+        this.incomingCipher = cipher;
+        return this;
     }
 
-    public function connect(_arg1:String, _arg2:int):void {
-        this.server = _arg1;
-        this.port = _arg2;
+    public function connect(address:String, port:int):void {
+        this.server = address;
+        this.port = port;
         this.addListeners();
         this.messageLen = -1;
         if (this.socketServerModel.connectDelayMS) {
             this.connectWithDelay();
         }
         else {
-            this.socket.connect(_arg1, _arg2);
+            this.socket.connect(address, port);
         }
     }
 
@@ -105,63 +105,79 @@ public class SocketServer {
         this.socket.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, this.onSecurityError);
     }
 
-    public function sendMessage(_arg1:Message):void {
-        this.tail.next = _arg1;
-        this.tail = _arg1;
-        ((this.socket.connected) && (this.sendPendingMessages()));
+    public function sendMessage(msg:Message):void {
+        this.tail.next = msg;
+        this.tail = msg;
+        this.socket.connected && this.sendPendingMessages();
+    }
+
+    public function queueMessage(msg:Message):void {
+        this.tail.next = msg;
+        this.tail = msg;
     }
 
     private function sendPendingMessages():void {
-        var _local1:Message = this.head.next;
-        var _local2:Message = _local1;
-        while (_local2) {
-            this.data.clear();
-            _local2.writeToOutput(this.data);
+        var temp:Message = this.head.next;
+        var msg:Message = temp;
+
+        if (!this.socket.connected) {
+            return;
+        }
+
+        var i:int = 0;
+        while (msg) {
+            this.data.position = 0;
+            this.data.length = 0;
+            msg.writeToOutput(this.data);
             this.data.position = 0;
             if (this.outgoingCipher != null) {
                 this.outgoingCipher.encrypt(this.data);
                 this.data.position = 0;
             }
-            this.socket.writeInt((this.data.bytesAvailable + 5));
-            this.socket.writeByte(_local2.id);
+            this.socket.writeInt(this.data.bytesAvailable + 5);
+            this.socket.writeByte(msg.id);
             this.socket.writeBytes(this.data);
-            _local2.consume();
-            _local2 = _local2.next;
+            temp = msg;
+            msg = msg.next;
+            temp.consume();
+            i++;
         }
-        this.socket.flush();
+        if (i > 0) {
+            this.socket.flush();
+        }
         this.unsentPlaceholder.next = null;
         this.unsentPlaceholder.prev = null;
         this.head = (this.tail = this.unsentPlaceholder);
     }
 
-    private function onConnect(_arg1:Event):void {
-        this.sendPendingMessages();
+    private function onConnect(evt:Event):void {
         this.connected.dispatch();
     }
 
-    private function onClose(_arg1:Event):void {
+    private function onClose(evt:Event):void {
         this.closed.dispatch();
     }
 
-    private function onIOError(_arg1:IOErrorEvent):void {
-        var _local2:String = this.parseString("Socket-Server IO Error: {0}", [_arg1.text]);
-        this.error.dispatch(_local2);
+    private function onIOError(evt:IOErrorEvent):void {
+        var errMsg:String = this.parseString("Socket-Server IO Error: {0}", [evt.text]);
+        this.error.dispatch(errMsg);
         this.closed.dispatch();
     }
 
-    private function onSecurityError(_arg1:SecurityErrorEvent):void {
-        var _local2:String = this.parseString((("Socket-Server Security: {0}. Please open port " + Parameters.PORT) + " in your firewall and/or router settings and try again"), [_arg1.text]);
-        this.error.dispatch(_local2);
+    private function onSecurityError(evt:SecurityErrorEvent):void {
+        var errMsg:String = this.parseString(
+                "Socket-Server Security: {0}. Please open port " + Parameters.PORT +
+                " in your firewall and/or router settings and try again", [evt.text]);
+        this.error.dispatch(errMsg);
         this.closed.dispatch();
     }
 
     private function onSocketData(_:ProgressEvent = null):void {
         var messageId:uint;
         var message:Message;
-        var data:ByteArray;
         var errorMessage:String;
         while (true) {
-            if ((((this.socket == null)) || (!(this.socket.connected)))) break;
+            if (this.socket == null || !this.socket.connected) break;
             if (this.messageLen == -1) {
                 if (this.socket.bytesAvailable < 4) break;
                 try {
@@ -174,12 +190,13 @@ public class SocketServer {
                     return;
                 }
             }
-            if (this.socket.bytesAvailable < (this.messageLen - MESSAGE_LENGTH_SIZE_IN_BYTES)) break;
+            if (this.socket.bytesAvailable < this.messageLen - MESSAGE_LENGTH_SIZE_IN_BYTES) break;
             messageId = this.socket.readUnsignedByte();
             message = this.messages.require(messageId);
-            data = new ByteArray();
-            if ((this.messageLen - 5) > 0) {
-                this.socket.readBytes(data, 0, (this.messageLen - 5));
+            data.position = 0;
+            data.length = 0;
+            if (this.messageLen - 5 > 0) {
+                this.socket.readBytes(data, 0, this.messageLen - 5);
             }
             data.position = 0;
             if (this.incomingCipher != null) {
@@ -199,26 +216,26 @@ public class SocketServer {
                 return;
             }
             message.consume();
+            sendPendingMessages();
         }
     }
 
-    private function logErrorAndClose(_arg1:String, _arg2:Array = null):void {
-        this.error.dispatch(this.parseString(_arg1, _arg2));
+    private function logErrorAndClose(errorPrefix:String, errMsgs:Array = null):void {
+        this.error.dispatch(this.parseString(errorPrefix, errMsgs));
         this.disconnect();
     }
 
-    private function parseString(_arg1:String, _arg2:Array):String {
-        var _local3:int = _arg2.length;
-        var _local4:int;
-        while (_local4 < _local3) {
-            _arg1 = _arg1.replace((("{" + _local4) + "}"), _arg2[_local4]);
-            _local4++;
+    private function parseString(msgTemplate:String, msgs:Array):String {
+        var numMsgs:int = msgs.length;
+        for (var i:int = 0; i < numMsgs; i++) {
+            msgTemplate = msgTemplate.replace("{" + i + "}", msgs[i]);
+            i++;
         }
-        return (_arg1);
+        return msgTemplate;
     }
 
     public function isConnected():Boolean {
-        return (this.socket.connected);
+        return this.socket.connected;
     }
 
 

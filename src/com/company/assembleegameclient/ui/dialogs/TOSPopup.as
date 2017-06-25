@@ -60,7 +60,7 @@ public class TOSPopup extends Sprite {
     protected const graphicsData_:Vector.<IGraphicsData> = new <IGraphicsData>[lineStyle_, backgroundFill_, path_, GraphicsUtil.END_FILL, GraphicsUtil.END_STROKE];
 
     public function TOSPopup() {
-        this.dialogWidth = this.setDialogWidth()
+        this.dialogWidth = this.setDialogWidth();
         super();
         this._makeUIAndAdd();
         addChild(this.box_);
@@ -106,8 +106,8 @@ public class TOSPopup extends Sprite {
         this.textText2_.x = this.textMargin;
         this.textText2_.y = ((this.textText_.y + this.textText_.height) + 15);
         this.textText2_.setMultiLine(true).setWordWrap(true).setAutoSize(TextFieldAutoSize.CENTER);
-        var _local1 = (('<font color="#7777EE"><a href="' + Parameters.TERMS_OF_USE_URL) + '" target="_blank">');
-        var _local2 = (('<font color="#7777EE"><a href="' + Parameters.PRIVACY_POLICY_URL) + '" target="_blank">');
+        var _local1:String = (('<font color="#7777EE"><a href="' + Parameters.TERMS_OF_USE_URL) + '" target="_blank">');
+        var _local2:String = (('<font color="#7777EE"><a href="' + Parameters.PRIVACY_POLICY_URL) + '" target="_blank">');
         var _local3:LineBuilder = new LineBuilder().setParams("Legal.tos2", {
             "tou": _local1,
             "_tou": "</a></font>",
@@ -128,7 +128,7 @@ public class TOSPopup extends Sprite {
         this.textText3_.setMultiLine(true).setWordWrap(true).setAutoSize(TextFieldAutoSize.CENTER);
         var _local1:ApplicationSetup = StaticInjectorContext.getInjector().getInstance(ApplicationSetup);
         var _local2:String = (_local1.getAppEngineUrl(true) + Parameters.USER_GENERATED_CONTENT_TERMS);
-        var _local3 = (((((((("I agree to Kabam's <font color=\"#7777EE\"><a href=\"" + Parameters.TERMS_OF_USE_URL) + '">terms of service</a></font>, ') + '<font color="#7777EE"><a href="') + Parameters.PRIVACY_POLICY_URL) + '">privacy policy</a></font>, and ') + '<font color="#7777EE"><a href="') + _local2) + '">user generated content terms</a></font>.');
+        var _local3:String = (((((((("I agree to Kabam's <font color=\"#7777EE\"><a href=\"" + Parameters.TERMS_OF_USE_URL) + '">terms of service</a></font>, ') + '<font color="#7777EE"><a href="') + Parameters.PRIVACY_POLICY_URL) + '">privacy policy</a></font>, and ') + '<font color="#7777EE"><a href="') + _local2) + '">user generated content terms</a></font>.');
         var _local4:StaticStringBuilder = new StaticStringBuilder(_local3);
         this.textText3_.setStringBuilder(_local4);
         this.textText3_.setHTML(true);

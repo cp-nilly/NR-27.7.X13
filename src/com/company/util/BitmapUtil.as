@@ -64,7 +64,7 @@ public class BitmapUtil {
     }
 
     public static function mostCommonColor(_arg1:BitmapData):uint {
-        var _local3:uint;
+        var _local3:*;
         var _local7:String;
         var _local8:int;
         var _local9:int;

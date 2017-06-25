@@ -66,7 +66,9 @@ public class Player extends Character {
     private static const MAX_ATTACK_FREQ:Number = 0.008;
     private static const MIN_ATTACK_MULT:Number = 0.5;
     private static const MAX_ATTACK_MULT:Number = 2;
+    private static const LOW_HEALTH_CT_OFFSET:int = 128;
 
+    private static var lowHealthCT:Dictionary = new Dictionary();
     public static var rank:int = 0;
     public static var isAdmin:Boolean = false;
     public static var isMod:Boolean = false;
@@ -142,6 +144,8 @@ public class Player extends Character {
     private var breathBackPath_:GraphicsPath = null;
     private var breathFill_:GraphicsSolidFill = null;
     private var breathPath_:GraphicsPath = null;
+    private var hallucinatingMaskedImage_:MaskedImage = null;
+    private var slideVec_:Vector3D;
 
     public function Player(_arg1:XML) {
         this.ip_ = new IntPoint();
@@ -158,6 +162,7 @@ public class Player extends Character {
         this.maxHPMax_ = int(_arg1.MaxHitPoints.@max);
         this.maxMPMax_ = int(_arg1.MaxMagicPoints.@max);
         texturingCache_ = new Dictionary();
+        this.slideVec_ = new Vector3D();
     }
 
     public static function fromPlayerXML(_arg1:String, _arg2:XML):Player {
@@ -500,33 +505,27 @@ public class Player extends Character {
         return ((((((_local3 == null)) || ((_local3.tileType_ == 0xFF)))) || (((!((_local3.obj_ == null))) && (_local3.obj_.props_.fullOccupy_)))));
     }
 
-    override public function update(_arg1:int, _arg2:int):Boolean {
-        var _local3:Number;
-        var _local4:Number;
-        var _local5:Number;
-        var _local6:Vector3D;
-        var _local7:Number;
-        var _local8:int;
-        var _local9:Vector.<uint>;
-        if (((this.tierBoost) && (!(isPaused())))) {
-            this.tierBoost = (this.tierBoost - _arg2);
+    override public function update(currentTime:int, deltaMS:int):Boolean {
+        if (this.tierBoost && !isPaused()) {
+            this.tierBoost = this.tierBoost - deltaMS;
             if (this.tierBoost < 0) {
                 this.tierBoost = 0;
             }
         }
-        if (((this.dropBoost) && (!(isPaused())))) {
-            this.dropBoost = (this.dropBoost - _arg2);
+        if (this.dropBoost && !isPaused()) {
+            this.dropBoost = this.dropBoost - deltaMS;
             if (this.dropBoost < 0) {
                 this.dropBoost = 0;
             }
         }
-        if (((this.xpTimer) && (!(isPaused())))) {
-            this.xpTimer = (this.xpTimer - _arg2);
+        if (this.xpTimer && !isPaused()) {
+            this.xpTimer = this.xpTimer - deltaMS;
             if (this.xpTimer < 0) {
                 this.xpTimer = 0;
             }
         }
-        if (((isHealing()) && (!(isPaused())))) {
+
+        if (isHealing() && !isPaused()) {
             if (this.healingEffect_ == null) {
                 this.healingEffect_ = new HealingEffect(this);
                 map_.addObj(this.healingEffect_, x_, y_);
@@ -538,37 +537,38 @@ public class Player extends Character {
                 this.healingEffect_ = null;
             }
         }
-        if ((((map_.player_ == this)) && (isPaused()))) {
-            return (true);
+
+        var angle:Number = Parameters.data_.cameraAngle;
+        if (this.rotate_ != 0) {
+            angle = angle + deltaMS * Parameters.PLAYER_ROTATE_SPEED * this.rotate_;
+            Parameters.data_.cameraAngle = angle;
         }
+
+        if (map_.player_ == this && isPaused()) {
+            return true;
+        }
+
         if (this.relMoveVec_ != null) {
-            _local3 = Parameters.data_.cameraAngle;
-            if (this.rotate_ != 0) {
-                _local3 = (_local3 + ((_arg2 * Parameters.PLAYER_ROTATE_SPEED) * this.rotate_));
-                Parameters.data_.cameraAngle = _local3;
-            }
-            if (((!((this.relMoveVec_.x == 0))) || (!((this.relMoveVec_.y == 0))))) {
-                _local4 = this.getMoveSpeed();
-                _local5 = Math.atan2(this.relMoveVec_.y, this.relMoveVec_.x);
+            if (this.relMoveVec_.x != 0 || this.relMoveVec_.y != 0) {
+                var mvSpd:Number = this.getMoveSpeed();
+                var mvAngle:Number = Math.atan2(this.relMoveVec_.y, this.relMoveVec_.x);
                 if (square_.props_.slideAmount_ > 0) {
-                    _local6 = new Vector3D();
-                    _local6.x = (_local4 * Math.cos((_local3 + _local5)));
-                    _local6.y = (_local4 * Math.sin((_local3 + _local5)));
-                    _local6.z = 0;
-                    _local7 = _local6.length;
-                    _local6.scaleBy((-1 * (square_.props_.slideAmount_ - 1)));
+                    slideVec_.x = mvSpd * Math.cos(angle + mvAngle);
+                    slideVec_.y = mvSpd * Math.sin(angle + mvAngle);
+                    slideVec_.z = 0;
                     moveVec_.scaleBy(square_.props_.slideAmount_);
-                    if (moveVec_.length < _local7) {
-                        moveVec_ = moveVec_.add(_local6);
+                    if (moveVec_.length < slideVec_.length) {
+                        slideVec_.scaleBy(1 - square_.props_.slideAmount_);
+                        moveVec_ = moveVec_.add(slideVec_);
                     }
                 }
                 else {
-                    moveVec_.x = (_local4 * Math.cos((_local3 + _local5)));
-                    moveVec_.y = (_local4 * Math.sin((_local3 + _local5)));
+                    moveVec_.x = mvSpd * Math.cos(angle + mvAngle);
+                    moveVec_.y = mvSpd * Math.sin(angle + mvAngle);
                 }
             }
             else {
-                if ((((moveVec_.length > 0.00012)) && ((square_.props_.slideAmount_ > 0)))) {
+                if (moveVec_.length > 0.00012 && square_.props_.slideAmount_ > 0) {
                     moveVec_.scaleBy(square_.props_.slideAmount_);
                 }
                 else {
@@ -576,26 +576,30 @@ public class Player extends Character {
                     moveVec_.y = 0;
                 }
             }
-            if (((!((square_ == null))) && (square_.props_.push_))) {
-                moveVec_.x = (moveVec_.x - (square_.props_.animate_.dx_ / 1000));
-                moveVec_.y = (moveVec_.y - (square_.props_.animate_.dy_ / 1000));
+            if (square_ != null && square_.props_.push_) {
+                moveVec_.x = moveVec_.x - square_.props_.animate_.dx_ / 1000;
+                moveVec_.y = moveVec_.y - square_.props_.animate_.dy_ / 1000;
             }
-            this.walkTo((x_ + (_arg2 * moveVec_.x)), (y_ + (_arg2 * moveVec_.y)));
+            this.walkTo(x_ + deltaMS * moveVec_.x, y_ + deltaMS * moveVec_.y);
         }
         else {
-            if (!super.update(_arg1, _arg2)) {
-                return (false);
+            if (!super.update(currentTime, deltaMS)) {
+                return false;
             }
         }
-        if ((((((((((map_.player_ == this)) && ((square_.props_.maxDamage_ > 0)))) && (((square_.lastDamage_ + 500) < _arg1)))) && (!(isInvincible())))) && ((((square_.obj_ == null)) || (!(square_.obj_.props_.protectFromGroundDamage_)))))) {
-            _local8 = map_.gs_.gsc_.getNextDamage(square_.props_.minDamage_, square_.props_.maxDamage_);
-            _local9 = new Vector.<uint>();
-            _local9.push(ConditionEffect.GROUND_DAMAGE);
-            damage(-1, _local8, _local9, (hp_ <= _local8), null);
-            map_.gs_.gsc_.groundDamage(_arg1, x_, y_);
-            square_.lastDamage_ = _arg1;
+        if (map_.player_ == this &&
+                square_.props_.maxDamage_ > 0 &&
+                (square_.lastDamage_ + 500) < currentTime &&
+                !isInvincible() &&
+                (square_.obj_ == null || !square_.obj_.props_.protectFromGroundDamage_)) {
+            var dmg:int = map_.gs_.gsc_.getNextDamage(square_.props_.minDamage_, square_.props_.maxDamage_);
+            var conditionEffects:Vector.<uint> = new Vector.<uint>();
+            conditionEffects.push(ConditionEffect.GROUND_DAMAGE);
+            damage(-1, dmg, conditionEffects, hp_ <= dmg, null);
+            map_.gs_.gsc_.groundDamage(currentTime, x_, y_);
+            square_.lastDamage_ = currentTime;
         }
-        return (true);
+        return true;
     }
 
     public function onMove():void {
@@ -736,90 +740,104 @@ public class Player extends Character {
         this.isDefaultAnimatedChar = false;
     }
 
-    override protected function getTexture(_arg1:Camera, _arg2:int):BitmapData {
-        var _local5:MaskedImage;
-        var _local10:int;
-        var _local11:Dictionary;
-        var _local12:Number;
-        var _local13:int;
-        var _local14:ColorTransform;
-        var _local3:Number = 0;
-        var _local4:int = AnimatedChar.STAND;
-        if (((this.isShooting) || ((_arg2 < (attackStart_ + this.attackPeriod_))))) {
+    override protected function getTexture(camera:Camera, currentTime:int):BitmapData {
+        var pos:Number = 0;
+        var action:int = AnimatedChar.STAND;
+
+        if (this.isShooting || currentTime < (attackStart_ + this.attackPeriod_)) {
             facing_ = attackAngle_;
-            _local3 = (((_arg2 - attackStart_) % this.attackPeriod_) / this.attackPeriod_);
-            _local4 = AnimatedChar.ATTACK;
+            pos = ((currentTime - attackStart_) % this.attackPeriod_) / this.attackPeriod_;
+            action = AnimatedChar.ATTACK;
         }
         else {
-            if (((!((moveVec_.x == 0))) || (!((moveVec_.y == 0))))) {
-                _local10 = (3.5 / this.getMoveSpeed());
-                if (((!((moveVec_.y == 0))) || (!((moveVec_.x == 0))))) {
+            if (moveVec_.x != 0 || moveVec_.y != 0) {
+                var movPeriod:int = 3.5 / this.getMoveSpeed();
+                if (moveVec_.y != 0 || moveVec_.x != 0) {
                     facing_ = Math.atan2(moveVec_.y, moveVec_.x);
                 }
-                _local3 = ((_arg2 % _local10) / _local10);
-                _local4 = AnimatedChar.WALK;
+                pos = (currentTime % movPeriod) / movPeriod;
+                action = AnimatedChar.WALK;
             }
         }
+
         if (this.isHexed()) {
-            ((this.isDefaultAnimatedChar) && (this.setToRandomAnimatedCharacter()));
+            this.isDefaultAnimatedChar && this.setToRandomAnimatedCharacter();
         }
         else {
             if (!this.isDefaultAnimatedChar) {
                 this.makeSkinTexture();
             }
         }
-        if (_arg1.isHallucinating_) {
-            _local5 = new MaskedImage(getHallucinatingTexture(), null);
+
+        var maskImg:MaskedImage;
+        if (camera.isHallucinating_) {
+            maskImg = getHallucinatingMaskedImage();
         }
         else {
-            _local5 = animatedChar_.imageFromFacing(facing_, _arg1, _local4, _local3);
+            maskImg = animatedChar_.imageFromFacing(facing_, camera, action, pos);
         }
-        var _local6:int = tex1Id_;
-        var _local7:int = tex2Id_;
-        var _local8:BitmapData;
+
+        var tex1Id:int = tex1Id_;
+        var tex2Id:int = tex2Id_;
+        var tex:BitmapData;
         if (this.nearestMerchant_) {
-            _local11 = texturingCache_[this.nearestMerchant_];
-            if (_local11 == null) {
+            var merchDict:Dictionary = texturingCache_[this.nearestMerchant_];
+            if (merchDict == null) {
                 texturingCache_[this.nearestMerchant_] = new Dictionary();
             }
             else {
-                _local8 = _local11[_local5];
+                tex = merchDict[maskImg];
             }
-            _local6 = this.nearestMerchant_.getTex1Id(tex1Id_);
-            _local7 = this.nearestMerchant_.getTex2Id(tex2Id_);
+            tex1Id = this.nearestMerchant_.getTex1Id(tex1Id_);
+            tex2Id = this.nearestMerchant_.getTex2Id(tex2Id_);
         }
         else {
-            _local8 = texturingCache_[_local5];
+            tex = texturingCache_[maskImg];
         }
-        if (_local8 == null) {
-            _local8 = TextureRedrawer.resize(_local5.image_, _local5.mask_, size_, false, _local6, _local7);
+        if (tex == null) {
+            tex = TextureRedrawer.resize(maskImg.image_, maskImg.mask_, size_, false, tex1Id, tex2Id);
             if (this.nearestMerchant_ != null) {
-                texturingCache_[this.nearestMerchant_][_local5] = _local8;
+                texturingCache_[this.nearestMerchant_][maskImg] = tex;
             }
             else {
-                texturingCache_[_local5] = _local8;
+                texturingCache_[maskImg] = tex;
             }
         }
-        if (hp_ < (maxHP_ * 0.2)) {
-            _local12 = (int((Math.abs(Math.sin((_arg2 / 200))) * 10)) / 10);
-            _local13 = 128;
-            _local14 = new ColorTransform(1, 1, 1, 1, (_local12 * _local13), (-(_local12) * _local13), (-(_local12) * _local13));
-            _local8 = CachingColorTransformer.transformBitmapData(_local8, _local14);
+
+        if (hp_ < maxHP_ * 0.2) {
+            var intensity:Number = int(Math.abs(Math.sin(currentTime / 200)) * 10) / 10;
+            var ct = lowHealthCT[intensity];
+            if (ct == null) {
+                ct = new ColorTransform(1, 1, 1, 1,
+                        intensity * LOW_HEALTH_CT_OFFSET,
+                        -intensity * LOW_HEALTH_CT_OFFSET,
+                        -intensity * LOW_HEALTH_CT_OFFSET);
+                lowHealthCT[intensity] = ct;
+            }
+            tex = CachingColorTransformer.transformBitmapData(tex, ct);
         }
-        var _local9:BitmapData = texturingCache_[_local8];
-        if (_local9 == null) {
-            _local9 = GlowRedrawer.outlineGlow(_local8, this.glowColor_);
-            texturingCache_[_local8] = _local9;
+
+        var plrTex:BitmapData = texturingCache_[tex];
+        if (plrTex == null) {
+            plrTex = GlowRedrawer.outlineGlow(tex, this.glowColor_);
+            texturingCache_[tex] = plrTex;
         }
-        if (((((isPaused()) || (isStasis()))) || (isPetrified()))) {
-            _local9 = CachingColorTransformer.filterBitmapData(_local9, PAUSED_FILTER);
+        if (isPaused() || isStasis() || isPetrified()) {
+            plrTex = CachingColorTransformer.filterBitmapData(plrTex, PAUSED_FILTER);
         }
         else {
             if (isInvisible()) {
-                _local9 = CachingColorTransformer.alphaBitmapData(_local9, 0.4);
+                plrTex = CachingColorTransformer.alphaBitmapData(plrTex, 40);
             }
         }
-        return (_local9);
+        return plrTex;
+    }
+
+    private function getHallucinatingMaskedImage():MaskedImage {
+        if (hallucinatingMaskedImage_ == null) {
+            hallucinatingMaskedImage_ = new MaskedImage(getHallucinatingTexture(), null);
+        }
+        return hallucinatingMaskedImage_;
     }
 
     override public function getPortrait():BitmapData {

@@ -58,7 +58,7 @@ public class ContinueOrQuitMediator extends Mediator {
             this.closeDialogs.dispatch();
             _local3 = (this.messages.require(GameServerConnection.ENTER_ARENA) as EnterArena);
             _local3.currency = _arg1;
-            this.socketServer.sendMessage(_local3);
+            this.socketServer.queueMessage(_local3);
         }
         else {
             this.view.setProcessing(true);
