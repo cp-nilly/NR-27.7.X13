@@ -19,7 +19,7 @@ public class Chat extends Sprite {
 
     public function setup(_arg1:ChatModel, _arg2:Boolean):void {
         this.model = _arg1;
-        this.y = (600 - _arg1.bounds.height);
+        this.y = (WebMain.STAGE.stageHeight - _arg1.bounds.height);
         this.list.y = _arg1.bounds.height;
         if (_arg2) {
             this.addChatInput();
