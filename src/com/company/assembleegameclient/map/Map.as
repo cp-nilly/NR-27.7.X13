@@ -318,10 +318,10 @@ public class Map extends AbstractMap {
 
         var rect:Rectangle = camera.clipRect_;
         if(Parameters.data_.fullscreenMod && !isBackground) {
-            this.scaleX = 600 / (WebMain.SCALED_WIDTH * (3/4));
-            this.scaleY = 600 / WebMain.SCALED_HEIGHT;
-            x = (-rect.x * 600) / (WebMain.SCALED_WIDTH * (3 / 4));
-            y = (-rect.y * 600) / WebMain.SCALED_HEIGHT;
+            this.scaleX = 600 / (Parameters.data_.mscale * 50);
+            this.scaleY = 600 / (Parameters.data_.mscale * 50);
+            x = (-rect.x * 600) / (Parameters.data_.mscale * 50);
+            y = (-rect.y * 600) / (Parameters.data_.mscale * 50);
         }
         else {
             this.scaleX = 1;
