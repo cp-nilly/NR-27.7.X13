@@ -42,7 +42,7 @@ public class ParseChatMessageCommand {
                         if (mscale) {
                             Parameters.data_.mscale = mscale;
                             Parameters.save();
-                            Camera.setViewDist(mscale);
+                            Camera.vToS_scale = mscale;
                         }
                     }
                     this.addTextLine.dispatch(ChatMessage.make(Parameters.HELP_CHAT_NAME, "Map Scale: " + Parameters.data_.mscale));

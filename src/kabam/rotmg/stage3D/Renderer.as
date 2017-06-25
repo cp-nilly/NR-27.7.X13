@@ -173,7 +173,7 @@ public class Renderer {
             this.resizeStage3DBackBuffer();
         }
         if (Renderer.inGame == true) {
-            this.setTranslationToGame();
+            this.setTranslationToGame(_arg5);
         }
         else {
             this.setTranslationToTitle();
@@ -299,9 +299,9 @@ public class Renderer {
         }
     }
 
-    private function setTranslationToGame():void {
+    private function setTranslationToGame(camera:Camera):void {
         this.tX = 0;
-        this.tY = ((Parameters.data_.centerOnPlayer) ? -50 : ((Camera.OFFSET_SCREEN_RECT.y + (Camera.CENTER_SCREEN_RECT.height / 2)) * 2));
+        this.tY = ((Parameters.data_.centerOnPlayer) ? -50 : ((camera.clipRect_.y + (camera.clipRect_.height / 2)) * 2));
     }
 
     private function setTranslationToTitle():void {
