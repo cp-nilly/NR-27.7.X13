@@ -217,7 +217,7 @@ public class GameSprite extends AGameSprite {
         else {
             this.creditDisplay_ = new CreditDisplay(this);
         }
-        this.creditDisplay_.x = 594;
+        this.creditDisplay_.x = WebMain.STAGE.stageWidth - 206;//594;
         this.creditDisplay_.y = 0;
         addChild(this.creditDisplay_);
         var _local2:AppEngineClient = StaticInjectorContext.getInjector().getInstance(AppEngineClient);
