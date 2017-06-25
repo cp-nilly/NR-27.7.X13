@@ -183,7 +183,7 @@ public class GameSprite extends AGameSprite {
 
     public function hudModelInitialized():void {
         hudView = new HUDView();
-        hudView.x = 600;
+        hudView.x = WebMain.STAGE.stageWidth - 200;
         addChild(hudView);
     }
 
