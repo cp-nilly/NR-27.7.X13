@@ -35,7 +35,7 @@ public class ServersScreen extends Sprite {
     }
 
     private function onScrollBarChange(_arg1:Event):void {
-        this.serverBoxes_.y = (8 - (this.scrollBar_.pos() * (this.serverBoxes_.height - 400)));
+        this.serverBoxes_.y = 8 - this.scrollBar_.pos() * (this.serverBoxes_.height - (WebMain.STAGE.stageHeight - 200));
     }
 
     public function initialize(_arg1:Vector.<Server>):void {
@@ -44,7 +44,7 @@ public class ServersScreen extends Sprite {
         this.makeLines();
         this.makeContainer();
         this.makeServerBoxes();
-        (((this.serverBoxes_.height > 400)) && (this.makeScrollbar()));
+        this.serverBoxes_.height > (WebMain.STAGE.stageHeight - 200) && this.makeScrollbar();
         this.makeMenuBar();
     }
 
@@ -57,10 +57,10 @@ public class ServersScreen extends Sprite {
     }
 
     private function makeScrollbar():void {
-        this.scrollBar_ = new Scrollbar(16, 400);
-        this.scrollBar_.x = ((800 - this.scrollBar_.width) - 4);
+        this.scrollBar_ = new Scrollbar(16, WebMain.STAGE.stageHeight - 200);
+        this.scrollBar_.x = ((WebMain.STAGE.stageWidth - this.scrollBar_.width) - 4);
         this.scrollBar_.y = 104;
-        this.scrollBar_.setIndicatorSize(400, this.serverBoxes_.height);
+        this.scrollBar_.setIndicatorSize(WebMain.STAGE.stageHeight - 200, this.serverBoxes_.height);
         this.scrollBar_.addEventListener(Event.CHANGE, this.onScrollBarChange);
         addChild(this.scrollBar_);
     }
@@ -78,7 +78,7 @@ public class ServersScreen extends Sprite {
         this.content_.y = 100;
         var _local1:Shape = new Shape();
         _local1.graphics.beginFill(0xFFFFFF);
-        _local1.graphics.drawRect(0, 0, 776, 430);
+        _local1.graphics.drawRect(0, 0, WebMain.STAGE.stageWidth - 24, WebMain.STAGE.stageHeight - 170);
         _local1.graphics.endFill();
         this.content_.addChild(_local1);
         this.content_.mask = _local1;

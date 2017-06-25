@@ -12,9 +12,8 @@ import kabam.rotmg.text.view.stringBuilder.StaticStringBuilder;
 
 public class ServerBox extends Sprite {
 
-    public static const WIDTH:int = 384;
-    public static const HEIGHT:int = 52;
-
+    public static var width_:int = WebMain.STAGE.stageWidth / 2 - 16;
+    public static var height_:int = 52;
     public var value_:String;
     private var nameText_:TextFieldDisplayConcrete;
     private var statusText_:TextFieldDisplayConcrete;
@@ -33,7 +32,7 @@ public class ServerBox extends Sprite {
         this.nameText_.filters = [new DropShadowFilter(0, 0, 0, 1, 8, 8)];
         this.nameText_.x = 18;
         this.nameText_.setVerticalAlign(TextFieldDisplayConcrete.MIDDLE);
-        this.nameText_.y = (ServerBox.HEIGHT / 2);
+        this.nameText_.y = (ServerBox.height_ / 2);
         addChild(this.nameText_);
         this.addUI(_arg1);
         this.draw();
@@ -69,8 +68,8 @@ public class ServerBox extends Sprite {
         this.statusText_ = new TextFieldDisplayConcrete().setSize(18).setColor(_arg1).setBold(true).setAutoSize(TextFieldAutoSize.CENTER);
         this.statusText_.setStringBuilder(new LineBuilder().setParams(_arg2));
         this.statusText_.filters = [new DropShadowFilter(0, 0, 0, 1, 8, 8)];
-        this.statusText_.x = ((WIDTH / 2) + (WIDTH / 4));
-        this.statusText_.y = ((ServerBox.HEIGHT / 2) - (this.nameText_.height / 2));
+        this.statusText_.x = ((width_ / 2) + (width_ / 4));
+        this.statusText_.y = ((ServerBox.height_ / 2) - (this.nameText_.height / 2));
         addChild(this.statusText_);
     }
 
@@ -95,7 +94,7 @@ public class ServerBox extends Sprite {
             graphics.lineStyle(2, 16777103);
         }
         graphics.beginFill(((this.over_) ? 0x6B6B6B : 0x5C5C5C), 1);
-        graphics.drawRect(0, 0, WIDTH, HEIGHT);
+        graphics.drawRect(0, 0, width_, height_);
         if (this.selected_) {
             graphics.lineStyle();
         }
