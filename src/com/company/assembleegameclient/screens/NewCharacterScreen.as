@@ -64,8 +64,8 @@ public class NewCharacterScreen extends Sprite {
             if (!_arg1.isClassAvailability(_local5, SavedCharactersList.UNAVAILABLE)) {
                 _local6 = _arg1.isClassAvailability(_local5, SavedCharactersList.UNRESTRICTED);
                 _local7 = new CharacterBox(_local3, _arg1.getCharStats()[_local4], _arg1, _local6);
-                _local7.x = (((50 + (140 * int((_local2 % 5)))) + 70) - (_local7.width / 2));
-                _local7.y = (88 + (140 * int((_local2 / 5))));
+                _local7.x = (stage.stageWidth - 800) / 2 + 50 + 140 * int(_local2 % 5) + 70 - _local7.width / 2;
+                _local7.y = (stage.stageHeight - 600) / 2 + 88 + 140 * int(_local2 / 5);
                 this.boxes_[_local4] = _local7;
                 _local7.addEventListener(MouseEvent.ROLL_OVER, this.onCharBoxOver);
                 _local7.addEventListener(MouseEvent.ROLL_OUT, this.onCharBoxOut);
@@ -79,7 +79,7 @@ public class NewCharacterScreen extends Sprite {
             _local2++;
         }
         this.backButton_.x = ((stage.stageWidth / 2) - (this.backButton_.width / 2));
-        this.backButton_.y = 550;
+        this.backButton_.y = stage.stageHeight - 50;
         this.creditDisplay_.x = stage.stageWidth;
         this.creditDisplay_.y = 20;
     }

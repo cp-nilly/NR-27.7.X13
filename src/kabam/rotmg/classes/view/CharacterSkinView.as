@@ -54,7 +54,7 @@ public class CharacterSkinView extends Sprite {
         if (_local2 != null) {
             _local1.draw(_local2.getCredits(), _local2.getFame(), _local2.getTokens());
         }
-        _local1.x = 800;
+        _local1.x = WebMain.STAGE.stageWidth;
         _local1.y = 20;
         addChild(_local1);
         return (_local1);
@@ -65,9 +65,9 @@ public class CharacterSkinView extends Sprite {
         _local1.graphics.clear();
         _local1.graphics.lineStyle(2, 0x545454);
         _local1.graphics.moveTo(0, 105);
-        _local1.graphics.lineTo(800, 105);
+        _local1.graphics.lineTo(WebMain.STAGE.stageWidth, 105);
         _local1.graphics.moveTo(346, 105);
-        _local1.graphics.lineTo(346, 526);
+        _local1.graphics.lineTo(346, WebMain.STAGE.stageHeight - 74);
         addChild(_local1);
         return (_local1);
     }
@@ -83,8 +83,8 @@ public class CharacterSkinView extends Sprite {
         _local1 = new TitleMenuOption(ScreenTypes.PLAY, 36, false);
         _local1.setAutoSize(TextFieldAutoSize.CENTER);
         _local1.setVerticalAlign(TextFieldDisplayConcrete.MIDDLE);
-        _local1.x = (400 - (_local1.width / 2));
-        _local1.y = 550;
+        _local1.x = (WebMain.STAGE.stageWidth / 2 - (_local1.width / 2));
+        _local1.y = WebMain.STAGE.stageHeight - 50;
         addChild(_local1);
         return (_local1);
     }
@@ -94,7 +94,7 @@ public class CharacterSkinView extends Sprite {
         _local1 = new TitleMenuOption(ScreenTypes.BACK, 22, false);
         _local1.setVerticalAlign(TextFieldDisplayConcrete.MIDDLE);
         _local1.x = 30;
-        _local1.y = 550;
+        _local1.y = WebMain.STAGE.stageHeight - 50;
         addChild(_local1);
         return (_local1);
     }

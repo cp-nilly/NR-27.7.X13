@@ -32,7 +32,7 @@ public class CharacterSelectionAndNewsScreen extends Sprite {
     private static const TAB_UNSELECTED:uint = 0xB3B3B3;
     private static const TAB_SELECTED:uint = 0xFFFFFF;
 
-    private const SCROLLBAR_REQUIREMENT_HEIGHT:Number = 400;
+    private const SCROLLBAR_REQUIREMENT_HEIGHT:Number = WebMain.STAGE.stageHeight - 200;//400;
     private const CHARACTER_LIST_Y_POS:int = 108;
     private const CHARACTER_LIST_X_POS:int = 18;
     private const DROP_SHADOW:DropShadowFilter = new DropShadowFilter(0, 0, 0, 1, 8, 8);
@@ -123,10 +123,10 @@ public class CharacterSelectionAndNewsScreen extends Sprite {
     }
 
     private function createScrollbar():void {
-        this.scrollBar = new Scrollbar(16, 399);
+        this.scrollBar = new Scrollbar(16, WebMain.STAGE.stageHeight - 201);
         this.scrollBar.x = 443;
         this.scrollBar.y = 113;
-        this.scrollBar.setIndicatorSize(399, this.characterList.height);
+        this.scrollBar.setIndicatorSize(WebMain.STAGE.stageHeight - 201, this.characterList.height);
         this.scrollBar.addEventListener(Event.CHANGE, this.onScrollBarChange);
         addChild(this.scrollBar);
     }
@@ -258,7 +258,7 @@ public class CharacterSelectionAndNewsScreen extends Sprite {
         this.lines.graphics.moveTo(0, this.BOUNDARY_LINE_ONE_Y);
         this.lines.graphics.lineTo(this.getReferenceRectangle().width, this.BOUNDARY_LINE_ONE_Y);
         this.lines.graphics.moveTo(466, 107);
-        this.lines.graphics.lineTo(466, 526);
+        this.lines.graphics.lineTo(466, stage.stageHeight - 74);
         this.lines.graphics.lineStyle();
         addChild(this.lines);
     }
@@ -269,7 +269,7 @@ public class CharacterSelectionAndNewsScreen extends Sprite {
 
     private function onScrollBarChange(_arg1:Event):void {
         if (this.characterList != null) {
-            this.characterList.setPos((-(this.scrollBar.pos()) * (this.characterListHeight - 400)));
+            this.characterList.setPos((-(this.scrollBar.pos()) * (this.characterListHeight - (stage.stageHeight - 200))));
         }
     }
 

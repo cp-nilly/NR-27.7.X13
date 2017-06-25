@@ -18,7 +18,7 @@ public class CharacterSkinListView extends Sprite {
 
     private function makeList():VerticalScrollingList {
         var _local1:VerticalScrollingList = new VerticalScrollingList();
-        _local1.setSize(new Size(WIDTH, HEIGHT));
+        _local1.setSize(new Size(WIDTH, WebMain.STAGE.stageHeight - 200));
         _local1.scrollStateChanged.add(this.onScrollStateChanged);
         _local1.setPadding(PADDING);
         addChild(_local1);

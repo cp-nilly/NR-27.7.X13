@@ -9,8 +9,8 @@ import kabam.rotmg.core.model.PlayerModel;
 
 public class CharacterList extends Sprite {
 
-    public static const WIDTH:int = 760;
-    public static const HEIGHT:int = 415;
+    public static const WIDTH:int = WebMain.STAGE.stageWidth - 40;// 760;
+    public static const HEIGHT:int = WebMain.STAGE.stageHeight - 185;// * 415 / 600;
     public static const TYPE_CHAR_SELECT:int = 1;
     public static const TYPE_GRAVE_SELECT:int = 2;
 
@@ -31,7 +31,7 @@ public class CharacterList extends Sprite {
                 this.charRectList_ = new Sprite();
         }
         addChild(this.charRectList_);
-        if (height > 400) {
+        if (height > WebMain.STAGE.stageHeight - 200) {
             _local3 = new Shape();
             _local4 = _local3.graphics;
             _local4.beginFill(0);
