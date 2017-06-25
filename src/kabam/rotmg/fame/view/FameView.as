@@ -144,7 +144,7 @@ public class FameView extends Sprite {
     }
 
     public function setScore(_arg1:int, _arg2:XML):void {
-        this.scoringBox = new ScoringBox(new Rectangle(0, 0, 784, 150), _arg2);
+        this.scoringBox = new ScoringBox(new Rectangle(0, 0, WebMain.STAGE.stageWidth - 16, WebMain.STAGE.stageHeight - 450), _arg2);
         this.scoringBox.x = 8;
         this.scoringBox.y = 316;
         addChild(this.scoringBox);
@@ -153,7 +153,7 @@ public class FameView extends Sprite {
         _local3 = BitmapUtil.cropToBitmapData(_local3, 6, 6, (_local3.width - 12), (_local3.height - 12));
         this.finalLine = new ScoreTextLine(24, 0xCCCCCC, 0xFFC800, TextKey.FAMEVIEW_TOTAL_FAME_EARNED, null, 0, _arg1, "", "", new Bitmap(_local3));
         this.finalLine.x = 10;
-        this.finalLine.y = 470;
+        this.finalLine.y = WebMain.STAGE.stageHeight - 130;// 470;
         this.infoContainer.addChild(this.finalLine);
         this.isDataPopulated = true;
         if (((!(this.isAnimation)) || (this.isFadeComplete))) {
@@ -164,7 +164,7 @@ public class FameView extends Sprite {
     private function makeContinueButton():void {
         this.infoContainer.addChild(new ScreenGraphic());
         this.continueBtn.x = (stage.stageWidth / 2);
-        this.continueBtn.y = 550;
+        this.continueBtn.y = stage.stageHeight - 50;
         this.infoContainer.addChild(this.continueBtn);
         if (this.isAnimation) {
             this.scoringBox.animateScore();

@@ -48,14 +48,14 @@ public class ScoreTextLine extends Sprite implements TooltipAble {
         this.nameText_.setBold(true);
         this.nameText_.setAutoSize(TextFieldAutoSize.RIGHT);
         this.nameText_.setStringBuilder(new LineBuilder().setParams(_arg4));
-        this.nameText_.x = 410;
+        this.nameText_.x = WebMain.STAGE.stageWidth * 410 / 800;
         this.nameText_.filters = [new DropShadowFilter(0, 0, 0, 1, 4, 4, 2)];
         addChild(this.nameText_);
         if (this.number_ != -1) {
             this.numberText_ = new TextFieldDisplayConcrete().setSize(_arg1).setColor(_arg3);
             this.numberText_.setBold(true);
             this.numberText_.setStringBuilder(new StaticStringBuilder((((_arg8 + "0") + " ") + _arg9)));
-            this.numberText_.x = 450;
+            this.numberText_.x = WebMain.STAGE.stageWidth * 450 / 800;// 450;
             this.numberText_.filters = [new DropShadowFilter(0, 0, 0, 1, 4, 4, 2)];
             addChild(this.numberText_);
         }
@@ -78,7 +78,7 @@ public class ScoreTextLine extends Sprite implements TooltipAble {
             this.unitIcon_.y = (((this.numberText_.height / 2) - (this.unitIcon_.height / 2)) + 2);
         }
         else {
-            this.unitIcon_.x = 450;
+            this.unitIcon_.x = WebMain.STAGE.stageWidth * 450 / 800;
             this.unitIcon_.y = (((this.nameText_.height / 2) - (this.unitIcon_.height / 2)) + 2);
         }
     }

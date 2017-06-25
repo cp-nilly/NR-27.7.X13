@@ -62,7 +62,7 @@ public class LegendsView extends Sprite {
         this.title.setBold(true);
         this.title.setStringBuilder(new LineBuilder().setParams(TextKey.SCREENS_LEGENDS));
         this.title.filters = [new DropShadowFilter(0, 0, 0, 1, 8, 8)];
-        this.title.x = (400 - (this.title.width / 2));
+        this.title.x = (WebMain.STAGE.stageWidth / 2) - (this.title.width / 2);
         this.title.y = 24;
         addChild(this.title);
     }
@@ -73,8 +73,8 @@ public class LegendsView extends Sprite {
         this.loadingBanner.setAutoSize(TextFieldAutoSize.CENTER).setVerticalAlign(TextFieldDisplayConcrete.MIDDLE);
         this.loadingBanner.setStringBuilder(new LineBuilder().setParams(TextKey.LOADING_TEXT));
         this.loadingBanner.filters = [new DropShadowFilter(0, 0, 0, 1, 8, 8)];
-        this.loadingBanner.x = (800 / 2);
-        this.loadingBanner.y = (600 / 2);
+        this.loadingBanner.x = WebMain.STAGE.stageWidth / 2;
+        this.loadingBanner.y = WebMain.STAGE.stageHeight / 2;
         this.loadingBanner.visible = false;
         addChild(this.loadingBanner);
     }
@@ -85,8 +85,8 @@ public class LegendsView extends Sprite {
         this.noLegendsBanner.setAutoSize(TextFieldAutoSize.CENTER).setVerticalAlign(TextFieldDisplayConcrete.MIDDLE);
         this.noLegendsBanner.setStringBuilder(new LineBuilder().setParams(TextKey.EMPTY_LEGENDS_LIST));
         this.noLegendsBanner.filters = [new DropShadowFilter(0, 0, 0, 1, 8, 8)];
-        this.noLegendsBanner.x = (800 / 2);
-        this.noLegendsBanner.y = (600 / 2);
+        this.noLegendsBanner.x = WebMain.STAGE.stageWidth / 2;
+        this.noLegendsBanner.y = WebMain.STAGE.stageHeight / 2;
         this.noLegendsBanner.visible = false;
         addChild(this.noLegendsBanner);
     }
@@ -96,7 +96,7 @@ public class LegendsView extends Sprite {
         _local1 = new Shape();
         var _local2:Graphics = _local1.graphics;
         _local2.beginFill(0);
-        _local2.drawRect(0, 0, LegendListItem.WIDTH, 430);
+        _local2.drawRect(0, 0, LegendListItem.WIDTH, WebMain.STAGE.stageHeight - 170);
         _local2.endFill();
         this.mainContainer = new Sprite();
         this.mainContainer.x = 10;
@@ -116,12 +116,12 @@ public class LegendsView extends Sprite {
         var _local2:Graphics = _local1.graphics;
         _local2.lineStyle(2, 0x545454);
         _local2.moveTo(0, 100);
-        _local2.lineTo(800, 100);
+        _local2.lineTo(WebMain.STAGE.stageWidth, 100);
     }
 
     private function makeScrollbar():void {
-        this.scrollBar = new Scrollbar(16, 400);
-        this.scrollBar.x = ((800 - this.scrollBar.width) - 4);
+        this.scrollBar = new Scrollbar(16, WebMain.STAGE.stageHeight - 200);
+        this.scrollBar.x = ((WebMain.STAGE.stageWidth - this.scrollBar.width) - 4);
         this.scrollBar.y = 104;
         addChild(this.scrollBar);
     }
@@ -167,8 +167,8 @@ public class LegendsView extends Sprite {
         this.closeButton = new TitleMenuOption(TextKey.DONE_TEXT, 36, false);
         this.closeButton.setAutoSize(TextFieldAutoSize.CENTER);
         this.closeButton.setVerticalAlign(TextFieldDisplayConcrete.MIDDLE);
-        this.closeButton.x = 400;
-        this.closeButton.y = 553;
+        this.closeButton.x = WebMain.STAGE.stageWidth / 2;
+        this.closeButton.y = WebMain.STAGE.stageHeight - 50;
         addChild(this.closeButton);
         this.closeButton.addEventListener(MouseEvent.CLICK, this.onCloseClick);
     }
@@ -227,7 +227,7 @@ public class LegendsView extends Sprite {
     private function updateScrollbar():void {
         if (this.listContainer.height > 400) {
             this.scrollBar.visible = true;
-            this.scrollBar.setIndicatorSize(400, this.listContainer.height);
+            this.scrollBar.setIndicatorSize(WebMain.STAGE.stageHeight - 200, this.listContainer.height);
             this.scrollBar.addEventListener(Event.CHANGE, this.onScrollBarChange);
             this.positionScrollbarToDisplayFocussedLegend();
         }
@@ -244,7 +244,7 @@ public class LegendsView extends Sprite {
         if (_local1) {
             _local2 = this.legends.indexOf(_local1);
             _local3 = ((_local2 + 0.5) * LegendListItem.HEIGHT);
-            this.scrollBar.setPos(((_local3 - 200) / (this.listContainer.height - 400)));
+            this.scrollBar.setPos((_local3 - 200) / (this.listContainer.height - (WebMain.STAGE.stageHeight - 200)));
         }
     }
 
@@ -265,7 +265,7 @@ public class LegendsView extends Sprite {
     }
 
     private function onScrollBarChange(_arg1:Event):void {
-        this.listContainer.y = (-(this.scrollBar.pos()) * (this.listContainer.height - 400));
+        this.listContainer.y = (-(this.scrollBar.pos()) * (this.listContainer.height - (WebMain.STAGE.stageHeight - 200)));
     }
 
     public function showLoading():void {

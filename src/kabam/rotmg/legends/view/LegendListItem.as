@@ -21,7 +21,8 @@ import org.osflash.signals.Signal;
 public class LegendListItem extends Sprite {
 
     private static const FONT_SIZE:int = 22;
-    public static const WIDTH:int = 756;
+    private static const OFFSET:int = WebMain.STAGE.stageWidth / 2 - 378;
+    public static const WIDTH:int = WebMain.STAGE.stageWidth - 44;//756;
     public static const HEIGHT:int = 56;
 
     public const selected:Signal = new Signal(Legend);
@@ -53,14 +54,14 @@ public class LegendListItem extends Sprite {
         this.placeText.setBold(!((this.legend.place == -1)));
         this.placeText.setStringBuilder(new StaticStringBuilder(_local1));
         this.placeText.filters = [new DropShadowFilter(0, 0, 0, 1, 8, 8)];
-        this.placeText.x = (82 - this.placeText.width);
+        this.placeText.x = OFFSET + (82 - this.placeText.width);
         this.placeText.y = ((HEIGHT - FONT_SIZE) * 0.5);
         addChild(this.placeText);
     }
 
     private function makeCharacterBitmap():void {
         this.characterBitmap = new Bitmap(this.legend.character);
-        this.characterBitmap.x = (104 + 12);
+        this.characterBitmap.x = OFFSET + (104 + 12);
         this.characterBitmap.y = (((HEIGHT / 2) - (this.characterBitmap.height / 2)) - 2);
         addChild(this.characterBitmap);
     }
@@ -70,7 +71,7 @@ public class LegendListItem extends Sprite {
         this.nameText.setBold(true);
         this.nameText.setStringBuilder(new StaticStringBuilder(this.legend.name));
         this.nameText.filters = [new DropShadowFilter(0, 0, 0, 1, 8, 8)];
-        this.nameText.x = 170;
+        this.nameText.x = OFFSET + 170;
         this.nameText.y = ((HEIGHT - FONT_SIZE) * 0.5);
         addChild(this.nameText);
     }
@@ -84,7 +85,7 @@ public class LegendListItem extends Sprite {
             _local2.setInteractive(false);
         }
         this.inventoryGrid.setItems(this.legend.equipment);
-        this.inventoryGrid.x = 400;
+        this.inventoryGrid.x = OFFSET + 400;
         this.inventoryGrid.y = ((HEIGHT / 2) - (Slot.HEIGHT / 2));
         addChild(this.inventoryGrid);
     }
@@ -94,7 +95,7 @@ public class LegendListItem extends Sprite {
         this.totalFameText.setBold(true);
         this.totalFameText.setStringBuilder(new StaticStringBuilder(this.legend.totalFame.toString()));
         this.totalFameText.filters = [new DropShadowFilter(0, 0, 0, 1, 8, 8)];
-        this.totalFameText.x = (660 - this.totalFameText.width);
+        this.totalFameText.x = OFFSET + (660 - this.totalFameText.width);
         this.totalFameText.y = ((HEIGHT - FONT_SIZE) * 0.5);
         addChild(this.totalFameText);
     }
@@ -102,7 +103,7 @@ public class LegendListItem extends Sprite {
     private function makeFameIcon():void {
         var _local1:BitmapData = AssetLibrary.getImageFromSet("lofiObj3", 224);
         this.fameIcon = new Bitmap(TextureRedrawer.redraw(_local1, 40, true, 0));
-        this.fameIcon.x = 630;
+        this.fameIcon.x = OFFSET + 630;
         this.fameIcon.y = ((HEIGHT / 2) - (this.fameIcon.height / 2));
         addChild(this.fameIcon);
     }
