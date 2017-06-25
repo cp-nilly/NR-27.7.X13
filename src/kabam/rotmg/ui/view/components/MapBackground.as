@@ -6,6 +6,7 @@ import com.company.assembleegameclient.map.serialization.MapDecoder;
 import com.company.util.IntPoint;
 
 import flash.display.Sprite;
+import flash.display.Stage;
 import flash.events.Event;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
@@ -14,11 +15,11 @@ import flash.utils.getTimer;
 public class MapBackground extends Sprite {
 
     private static const BORDER:int = 10;
-    private static const RECTANGLE:Rectangle = new Rectangle(-400, -300, 800, 600);
     private static const ANGLE:Number = ((7 * Math.PI) / 4);//5.49778714378214
     private static const TO_MILLISECONDS:Number = (1 / 1000);//0.001
     private static const EMBEDDED_BACKGROUNDMAP:Class = MapBackground_EMBEDDED_BACKGROUNDMAP;
 
+    private static var rect:Rectangle = new Rectangle(-1/2, -1/2, 1, 1);
     private static var backgroundMap:Map;
     private static var mapSize:IntPoint;
     private static var xVal:Number;
@@ -29,6 +30,11 @@ public class MapBackground extends Sprite {
     private var time:Number;
 
     public function MapBackground() {
+        var stage:Stage = WebMain.STAGE;
+        rect.x = -1/2 * stage.stageWidth;
+        rect.y = -1/2 * stage.stageHeight;
+        rect.width = stage.stageWidth;
+        rect.height = stage.stageHeight;
         addEventListener(Event.ADDED_TO_STAGE, this.onAddedToStage);
         addEventListener(Event.REMOVED_FROM_STAGE, this.onRemovedFromStage);
     }
@@ -49,7 +55,7 @@ public class MapBackground extends Sprite {
         if (xVal > (mapSize.x_ + BORDER)) {
             xVal = (xVal - mapSize.x_);
         }
-        camera.configure(xVal, yVal, 12, ANGLE, RECTANGLE);
+        camera.configure(xVal, yVal, 12, ANGLE, rect);
         backgroundMap.draw(camera, this.time);
         this.lastUpdate = this.time;
     }
