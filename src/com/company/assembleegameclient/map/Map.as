@@ -53,7 +53,6 @@ public class Map extends AbstractMap {
     protected static const BLIND_FILTER:ColorMatrixFilter = new ColorMatrixFilter([0.05, 0.05, 0.05, 0, 0, 0.05, 0.05, 0.05, 0, 0, 0.05, 0.05, 0.05, 0, 0, 0.05, 0.05, 0.05, 1, 0]);
 
     public static var forceSoftwareRender:Boolean = false;
-    protected static var BREATH_CT:ColorTransform = new ColorTransform((0xFF / 0xFF), (55 / 0xFF), (0 / 0xFF), 0);
     public static var texture:BitmapData;
 
     public var ifDrawEffectFlag:Boolean = true;
@@ -64,7 +63,6 @@ public class Map extends AbstractMap {
     private var idsToRemove_:Vector.<int>;
     private var forceSoftwareMap:Dictionary;
     private var lastSoftwareClear:Boolean = false;
-    private var darkness:DisplayObject;
     private var graphicsData_:Vector.<IGraphicsData>;
     private var graphicsDataStageSoftware_:Vector.<IGraphicsData>;
     private var graphicsData3d_:Vector.<Object3DStage3D>;
@@ -79,7 +77,6 @@ public class Map extends AbstractMap {
         this.objsToAdd_ = new Vector.<BasicObject>();
         this.idsToRemove_ = new Vector.<int>();
         this.forceSoftwareMap = new Dictionary();
-        this.darkness = new EmbeddedAssets.DarknessBackground();
         this.graphicsData_ = new Vector.<IGraphicsData>();
         this.graphicsDataStageSoftware_ = new Vector.<IGraphicsData>();
         this.graphicsData3d_ = new Vector.<Object3DStage3D>();
@@ -90,7 +87,6 @@ public class Map extends AbstractMap {
         this.topSquares_ = new Vector.<Square>();
         super();
         gs_ = _arg1;
-        hurtOverlay_ = new HurtOverlay();
         mapOverlay_ = new MapOverlay();
         partyOverlay_ = new PartyOverlay(this);
         party_ = new Party(this);
@@ -135,7 +131,6 @@ public class Map extends AbstractMap {
             addChild(background_);
         }
         addChild(map_);
-        addChild(hurtOverlay_);
         addChild(mapOverlay_);
         addChild(partyOverlay_);
         isPetYard = (name_.substr(0, 8) == "Pet Yard");
@@ -148,7 +143,6 @@ public class Map extends AbstractMap {
         gs_ = null;
         background_ = null;
         map_ = null;
-        hurtOverlay_ = null;
         mapOverlay_ = null;
         partyOverlay_ = null;
         for each (_local1 in squareList_) {
@@ -454,20 +448,6 @@ public class Map extends AbstractMap {
             }
         }
 
-        // draw breath overlay
-        if (player_ != null && player_.breath_ >= 0 && player_.breath_ < Parameters.BREATH_THRESH) {
-            var bMult:Number = Parameters.BREATH_THRESH - player_.breath_ / Parameters.BREATH_THRESH;
-            var btMult:Number = Math.abs(Math.sin(currentTime / 300)) * 0.75;
-            BREATH_CT.alphaMultiplier = bMult * btMult;
-            hurtOverlay_.transform.colorTransform = BREATH_CT;
-            hurtOverlay_.visible = true;
-            hurtOverlay_.x = rect.left;
-            hurtOverlay_.y = rect.top;
-        }
-        else {
-            hurtOverlay_.visible = false;
-        }
-
         // draw hw capable screen filters
         if (Parameters.isGpuRender() && Renderer.inGame) {
             var fIndex:uint = this.getFilterIndex();
@@ -530,19 +510,6 @@ public class Map extends AbstractMap {
 
         mapOverlay_.draw(camera, currentTime);
         partyOverlay_.draw(camera, currentTime);
-
-        // draw darkness
-        if (player_ && player_.isDarkness()) {
-            this.darkness.x = -300;
-            this.darkness.y = Parameters.data_.centerOnPlayer ? -525 : -515;
-            this.darkness.alpha = 0.95;
-            addChild(this.darkness);
-        }
-        else {
-            if (contains(this.darkness)) {
-                removeChild(this.darkness);
-            }
-        }
     }
 
     private function getFilterIndex():uint {
