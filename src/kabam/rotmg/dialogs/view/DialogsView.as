@@ -23,7 +23,7 @@ public class DialogsView extends Sprite {
         var _local2:Graphics = this.background.graphics;
         _local2.clear();
         _local2.beginFill(_arg1, 0.6);
-        _local2.drawRect(0, 0, 800, 600);
+        _local2.drawRect(0, 0, WebMain.STAGE.stageWidth, WebMain.STAGE.stageHeight);
         _local2.endFill();
         this.background.visible = true;
     }

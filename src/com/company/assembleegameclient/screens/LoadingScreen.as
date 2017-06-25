@@ -21,7 +21,7 @@ public class LoadingScreen extends Sprite {
         addChild(new ScreenBase());
         addChild(new ScreenGraphic());
         this.text.setSize(30).setColor(0xFFFFFF).setVerticalAlign(TextFieldDisplayConcrete.MIDDLE).setAutoSize(TextFieldAutoSize.CENTER).setBold(true);
-        this.text.y = 550;
+        this.text.y = WebMain.STAGE.stageHeight - 50;
         addEventListener(Event.ADDED_TO_STAGE, this.onAdded);
         this.text.setStringBuilder(new LineBuilder().setParams(TextKey.LOADING_TEXT));
         this.text.filters = [new DropShadowFilter(0, 0, 0, 1, 4, 4)];

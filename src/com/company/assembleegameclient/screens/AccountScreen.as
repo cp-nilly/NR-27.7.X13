@@ -41,7 +41,7 @@ public class AccountScreen extends Sprite {
     private function returnHeaderBackground():DisplayObject {
         var _local1:Shape = new Shape();
         _local1.graphics.beginFill(0, 0.5);
-        _local1.graphics.drawRect(0, 0, 800, 35);
+        _local1.graphics.drawRect(0, 0, WebMain.STAGE.stageWidth, 35);
         return (_local1);
     }
 

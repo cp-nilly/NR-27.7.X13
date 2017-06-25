@@ -7,7 +7,6 @@ import flash.geom.Rectangle;
 
 public class MenuOptionsBar extends Sprite {
 
-    private static const Y_POSITION:Number = 550;
     private static const SPACING:int = 20;
     public static const CENTER:String = "CENTER";
     public static const RIGHT:String = "RIGHT";
@@ -16,9 +15,11 @@ public class MenuOptionsBar extends Sprite {
     private const leftObjects:Array = [];
     private const rightObjects:Array = [];
 
+    private var yPos:Number;
     private var screenGraphic:ScreenGraphic;
 
     public function MenuOptionsBar() {
+        this.yPos = WebMain.STAGE.stageHeight - 50;
         this.makeScreenGraphic();
     }
 
@@ -28,12 +29,12 @@ public class MenuOptionsBar extends Sprite {
     }
 
     public function addButton(_arg1:TitleMenuOption, _arg2:String):void {
-        this.screenGraphic.addChild(_arg1);
+        this.addChild(_arg1);
         switch (_arg2) {
             case CENTER:
                 this.leftObjects[0] = (this.rightObjects[0] = _arg1);
-                _arg1.x = (this.screenGraphic.width / 2);
-                _arg1.y = Y_POSITION;
+                _arg1.x = WebMain.STAGE.stageWidth / 2;
+                _arg1.y = yPos;
                 return;
             case LEFT:
                 this.layoutToLeftOf(this.leftObjects[(this.leftObjects.length - 1)], _arg1);
@@ -60,7 +61,7 @@ public class MenuOptionsBar extends Sprite {
         var _local3:Rectangle = _arg1.getBounds(_arg1);
         var _local4:Rectangle = _arg2.getBounds(_arg2);
         _arg2.x = (((_arg1.x + _local3.left) - _local4.right) - SPACING);
-        _arg2.y = Y_POSITION;
+        _arg2.y = yPos;
     }
 
     private function layoutRightButtons():void {
@@ -75,7 +76,7 @@ public class MenuOptionsBar extends Sprite {
         var _local3:Rectangle = _arg1.getBounds(_arg1);
         var _local4:Rectangle = _arg2.getBounds(_arg2);
         _arg2.x = (((_arg1.x + _local3.right) - _local4.left) + SPACING);
-        _arg2.y = Y_POSITION;
+        _arg2.y = yPos;
     }
 
 

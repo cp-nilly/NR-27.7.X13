@@ -25,7 +25,7 @@ import org.osflash.signals.natives.NativeMappedSignal;
 
 public class TitleView extends Sprite {
 
-    public static const MIDDLE_OF_BOTTOM_BAND:Number = 589.45;
+    private static const CHILDREN_POS_FROM_BOTTOM:Number = 10.55;
 
     static var TitleScreenGraphic:Class = TitleView_TitleScreenGraphic;
     public static var queueEmailConfirmation:Boolean = false;
@@ -90,13 +90,13 @@ public class TitleView extends Sprite {
 
     private function makeChildren():void {
         this.versionText = this.makeText().setHTML(true).setAutoSize(TextFieldAutoSize.LEFT).setVerticalAlign(TextFieldDisplayConcrete.MIDDLE);
-        this.versionText.y = MIDDLE_OF_BOTTOM_BAND;
+        this.versionText.y = WebMain.STAGE.stageHeight - CHILDREN_POS_FROM_BOTTOM;
         addChild(this.versionText);
         this.copyrightText = this.makeText().setAutoSize(TextFieldAutoSize.RIGHT).setVerticalAlign(TextFieldDisplayConcrete.MIDDLE);
         this.copyrightText.setStringBuilder(new LineBuilder().setParams(TextKey.COPYRIGHT));
         this.copyrightText.filters = [new DropShadowFilter(0, 0, 0)];
-        this.copyrightText.x = 800;
-        this.copyrightText.y = MIDDLE_OF_BOTTOM_BAND;
+        this.copyrightText.x = WebMain.STAGE.stageWidth;
+        this.copyrightText.y = this.versionText.y;
         addChild(this.copyrightText);
     }
 
