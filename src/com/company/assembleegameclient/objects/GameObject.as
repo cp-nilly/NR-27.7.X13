@@ -884,7 +884,7 @@ public class GameObject extends BasicObject {
             this.nameFill_ = new GraphicsBitmapFill(null, new Matrix(), false, false);
             this.namePath_ = new GraphicsPath(GraphicsUtil.QUAD_COMMANDS, new Vector.<Number>());
         }
-        var _local3:Number = ((this.nameBitmapData_.width / 2) + 1) * 10 / 50;
+        var _local3:Number = ((this.nameBitmapData_.width / 2) + 1) * Camera.vToS_scale / 50;
         var _local4:int = 30;
         var _local5:Vector.<Number> = this.namePath_.data;
         _local5.length = 0;
