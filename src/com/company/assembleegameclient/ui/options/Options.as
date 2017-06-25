@@ -36,7 +36,6 @@ import kabam.rotmg.ui.UIUtils;
 public class Options extends Sprite {
 
     private static const TABS:Vector.<String> = new <String>[TextKey.OPTIONS_CONTROLS, TextKey.OPTIONS_HOTKEYS, TextKey.OPTIONS_CHAT, TextKey.OPTIONS_GRAPHICS, TextKey.OPTIONS_SOUND, TextKey.OPTIONS_FRIEND, TextKey.OPTIONS_MISC];
-    public static const Y_POSITION:int = 550;
     public static const CHAT_COMMAND:String = "chatCommand";
     public static const CHAT:String = "chat";
     public static const TELL:String = "tell";
@@ -64,18 +63,18 @@ public class Options extends Sprite {
         this.gs_ = _arg1;
         graphics.clear();
         graphics.beginFill(0x2B2B2B, 0.8);
-        graphics.drawRect(0, 0, 800, 600);
+        graphics.drawRect(0, 0, WebMain.STAGE.stageWidth, WebMain.STAGE.stageHeight);
         graphics.endFill();
         graphics.lineStyle(1, 0x5E5E5E);
         graphics.moveTo(0, 100);
-        graphics.lineTo(800, 100);
+        graphics.lineTo(WebMain.STAGE.stageWidth, 100);
         graphics.lineStyle();
         _local2 = new TextFieldDisplayConcrete().setSize(36).setColor(0xFFFFFF);
         _local2.setBold(true);
         _local2.setStringBuilder(new LineBuilder().setParams(TextKey.OPTIONS_TITLE));
         _local2.setAutoSize(TextFieldAutoSize.CENTER);
         _local2.filters = [new DropShadowFilter(0, 0, 0)];
-        _local2.x = ((800 / 2) - (_local2.width / 2));
+        _local2.x = ((WebMain.STAGE.stageWidth / 2) - (_local2.width / 2));
         _local2.y = 8;
         addChild(_local2);
         addChild(new ScreenGraphic());
@@ -250,12 +249,13 @@ public class Options extends Sprite {
     }
 
     private function onAddedToStage(_arg1:Event):void {
+        var yPos:Number = WebMain.STAGE.stageHeight - 50;
         this.continueButton_.x = (stage.stageWidth / 2);
-        this.continueButton_.y = Y_POSITION;
+        this.continueButton_.y = yPos;
         this.resetToDefaultsButton_.x = 20;
-        this.resetToDefaultsButton_.y = Y_POSITION;
+        this.resetToDefaultsButton_.y = yPos;
         this.homeButton_.x = (stage.stageWidth - 20);
-        this.homeButton_.y = Y_POSITION;
+        this.homeButton_.y = yPos;
         if (Capabilities.playerType == "Desktop") {
             Parameters.data_.fullscreenMode = (stage.displayState == "fullScreenInteractive");
             Parameters.save();
