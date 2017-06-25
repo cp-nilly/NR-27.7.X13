@@ -48,7 +48,7 @@ public class Camera {
         if (!Parameters.data_.centerOnPlayer) {
             mlt = OFFSET_MULT;
         }
-        clipRect_.x = mlt.x * stage.stageWidth;
+        clipRect_.x = mlt.x * (stage.stageWidth - 200); // 200 for hud
         clipRect_.y = mlt.y * stage.stageHeight;
         clipRect_.width = mlt.width * stage.stageWidth;
         clipRect_.height = mlt.height * stage.stageHeight;
