@@ -1,7 +1,6 @@
 ﻿package kabam.rotmg.stage3D {
 import com.adobe.utils.AGALMiniAssembler;
 import com.company.assembleegameclient.map.Camera;
-import com.company.assembleegameclient.parameters.Parameters;
 
 import flash.display.GraphicsBitmapFill;
 import flash.display.GraphicsGradientFill;
@@ -210,7 +209,6 @@ public class Renderer {
     }
 
     private function resizeStage3DBackBuffer(camera:Camera):void {
-        // the - 200 on the width is incorrect
         var w:int = WebMain.STAGE.stageWidth;
         var h:int = WebMain.STAGE.stageHeight;
         var widthPlayable:Number = w * camera.clipRect_.width / (camera.clipRect_.width + 200);
