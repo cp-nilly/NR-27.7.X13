@@ -50,7 +50,7 @@ public class Camera {
         }
         clipRect_.x = mlt.x * (stage.stageWidth - 200); // 200 for hud
         clipRect_.y = mlt.y * stage.stageHeight;
-        clipRect_.width = mlt.width * stage.stageWidth;
+        clipRect_.width = mlt.width * (stage.stageWidth - 200);
         clipRect_.height = mlt.height * stage.stageHeight;
         var angle:Number = Parameters.data_.cameraAngle;
         this.configure(go.x_, go.y_, 12, angle, clipRect_);
