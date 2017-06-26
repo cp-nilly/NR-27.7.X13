@@ -189,12 +189,13 @@ public class Renderer {
     }
 
     private function resizeStage3DBackBuffer():void {
-        if ((((((WebMain.STAGE.stageWidth * 3) / 4) < 1)) || ((WebMain.STAGE.stageHeight < 1)))) {
+        if (WebMain.STAGE.stageWidth - 200 < 1 || WebMain.STAGE.stageHeight < 1) {
             return;
         }
-        var _local1:Stage3D = WebMain.STAGE.stage3Ds[0];
-        _local1.context3D.configureBackBuffer(((WebMain.STAGE.stageWidth * 3) / 4), WebMain.STAGE.stageHeight, 2, false);
-        this.stageWidth = ((WebMain.STAGE.stageWidth * 3) / 4);
+        WebMain.STAGE.stage3Ds[0]
+                .context3D
+                .configureBackBuffer(WebMain.STAGE.stageWidth - 200, WebMain.STAGE.stageHeight, 2, false);
+        this.stageWidth = WebMain.STAGE.stageWidth - 200;
         this.stageHeight = WebMain.STAGE.stageHeight;
     }
 
