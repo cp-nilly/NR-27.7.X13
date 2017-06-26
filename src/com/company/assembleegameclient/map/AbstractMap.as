@@ -26,6 +26,7 @@ public class AbstractMap extends Sprite {
     protected var allowPlayerTeleport_:Boolean;
     public var background_:Background = null;
     public var map_:Sprite;
+    public var hurtOverlay_:HurtOverlay = null;
     public var mapOverlay_:MapOverlay = null;
     public var partyOverlay_:PartyOverlay = null;
     public var squareList_:Vector.<Square>;
