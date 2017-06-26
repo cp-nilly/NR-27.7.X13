@@ -325,7 +325,7 @@ public class MapUserInput {
                     return;
                 }
         }
-        var _local3:Player = this.gs_.map.player_;
+        var plr:Player = this.gs_.map.player_;
         switch (_arg1.keyCode) {
             case Parameters.data_.moveUp:
                 doneAction(this.gs_, Tutorial.MOVE_FORWARD_ACTION);
@@ -361,7 +361,7 @@ public class MapUserInput {
                 _local6 = this.gs_.map.player_;
                 if (_local6 == null) break;
                 if (!this.specialKeyDown_) {
-                    if (_local3.isUnstable()) {
+                    if (plr.isUnstable()) {
                         _local7 = ((Math.random() * 600) - 300);
                         _local8 = ((Math.random() * 600) - 325);
                     }
@@ -369,7 +369,7 @@ public class MapUserInput {
                         _local7 = this.gs_.map.mouseX;
                         _local8 = this.gs_.map.mouseY;
                     }
-                    _local9 = _local3.useAltWeapon(_local7, _local8, UseType.START_USE);
+                    _local9 = plr.useAltWeapon(_local7, _local8, UseType.START_USE);
                     if (_local9) {
                         this.specialKeyDown_ = true;
                     }
@@ -411,6 +411,7 @@ public class MapUserInput {
                 }
                 break;
             case Parameters.data_.GPURenderToggle:
+                plr.clearTextureCache();
                 Parameters.data_.GPURender = !(Parameters.data_.GPURender);
                 break;
             case Parameters.data_.useMagicPotion:
