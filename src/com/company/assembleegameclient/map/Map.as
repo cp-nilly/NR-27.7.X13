@@ -523,9 +523,6 @@ public class Map extends AbstractMap {
 
         // draw darkness
         if (player_ && player_.isDarkness()) {
-            this.darkness.x = -300;
-            this.darkness.y = Parameters.data_.centerOnPlayer ? -525 : -515;
-            this.darkness.alpha = 0.95;
             addChild(this.darkness);
         }
         else {
