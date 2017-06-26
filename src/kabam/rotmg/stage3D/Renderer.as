@@ -193,8 +193,8 @@ public class Renderer {
 
         WebMain.STAGE.scaleMode = StageScaleMode.NO_SCALE;
 
-        if (WebMain.STAGE.stageWidth - 200 != this.stageWidth || WebMain.STAGE.stageHeight != this.stageHeight) {
-            this.resizeStage3DBackBuffer();
+        if (WebMain.STAGE.stageWidth != this.stageWidth || WebMain.STAGE.stageHeight != this.stageHeight) {
+            this.resizeStage3DBackBuffer(camera);
         }
 
         Renderer.inGame == true ?
@@ -209,16 +209,19 @@ public class Renderer {
         WebMain.STAGE.scaleMode = StageScaleMode.EXACT_FIT;
     }
 
-    private function resizeStage3DBackBuffer():void {
+    private function resizeStage3DBackBuffer(camera:Camera):void {
         // the - 200 on the width is incorrect
-        if (WebMain.STAGE.stageWidth - 200 < 1 || WebMain.STAGE.stageHeight < 1) {
+        var w:int = WebMain.STAGE.stageWidth;
+        var h:int = WebMain.STAGE.stageHeight;
+        var widthPlayable:Number = w * camera.clipRect_.width / (camera.clipRect_.width + 200);
+        if (widthPlayable - 100 < 1 || h - 100 < 1) {
             return;
         }
         WebMain.STAGE.stage3Ds[0]
                 .context3D
-                .configureBackBuffer(WebMain.STAGE.stageWidth - 200, WebMain.STAGE.stageHeight, 2, false);
-        this.stageWidth = WebMain.STAGE.stageWidth - 200;
-        this.stageHeight = WebMain.STAGE.stageHeight;
+                .configureBackBuffer(widthPlayable, h, 2, false);
+        this.stageWidth = w;
+        this.stageHeight = h;
     }
 
     private function renderWithPostEffect(
@@ -356,8 +359,7 @@ public class Renderer {
 
     private function setTranslationToGame(camera:Camera):void {
         this.tX = 0;
-        this.tY = Parameters.data_.centerOnPlayer ?
-                -50 : (camera.clipRect_.y + camera.clipRect_.height / 2) * 2; // offset condition needs looked at
+        this.tY = (camera.clipRect_.y + camera.clipRect_.height / 2) * 2;
     }
 
     private function setTranslationToTitle():void {

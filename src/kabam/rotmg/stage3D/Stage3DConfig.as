@@ -21,10 +21,10 @@ import robotlegs.bender.framework.api.IConfig;
 
 public class Stage3DConfig implements IConfig {
 
-    public static const WIDTH:int = 600;
-    public static const HALF_WIDTH:int = (WIDTH / 2);//300
-    public static const HEIGHT:int = 600;
-    public static const HALF_HEIGHT:int = (HEIGHT / 2);//300
+    public static var WIDTH:int = 600;
+    public static var HALF_WIDTH:int = (WIDTH / 2);
+    public static var HEIGHT:int = 600;
+    public static var HALF_HEIGHT:int = (HEIGHT / 2);
 
     [Inject]
     public var stageProxy:StageProxy;
@@ -50,6 +50,11 @@ public class Stage3DConfig implements IConfig {
     }
 
     private function onContextCreate(_arg1:Event):void {
+        WIDTH = WebMain.STAGE.stageWidth - 200;
+        HEIGHT = WebMain.STAGE.stageHeight;
+        HALF_WIDTH = WIDTH / 2;
+        HALF_HEIGHT = HEIGHT / 2;
+
         this.stage3D.removeEventListener(Event.CONTEXT3D_CREATE, this.onContextCreate);
         var _local2:Context3DProxy = this.stage3D.getContext3D();
         if (_local2.GetContext3D().driverInfo.toLowerCase().indexOf("software") != -1) {
