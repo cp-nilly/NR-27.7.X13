@@ -67,9 +67,6 @@ public class TitleMediator extends Mediator {
         this.view.accountClicked.add(this.handleIntentionToReviewAccount);
         this.view.legendsClicked.add(this.showLegendsScreen);
         this.view.supportClicked.add(this.openSupportPage);
-        if (this.playerModel.isNewToEditing()) {
-            this.view.putNoticeTagToOption(ButtonFactory.getEditorButton(), "new");
-        }
         if (this.securityQuestionsModel.showSecurityQuestionsOnStartup) {
             this.openDialog.dispatch(new SecurityQuestionsInfoDialog());
         }
