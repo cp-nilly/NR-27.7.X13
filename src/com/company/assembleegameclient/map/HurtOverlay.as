@@ -9,13 +9,20 @@ import flash.display.Shape;
 
 public class HurtOverlay extends Shape {
 
-    private const s:Number = (600 / Math.sin((Math.PI / 4)));
-    private const gradientFill_:GraphicsGradientFill = new GraphicsGradientFill(GradientType.RADIAL, [0xFFFFFF, 0xFFFFFF, 0xFFFFFF], [0, 0, 0.92], [0, 155, 0xFF], GraphicsUtil.getGradientMatrix(s, s, 0, ((600 - s) / 2), ((600 - s) / 2)));
-    private const gradientPath_:GraphicsPath = GraphicsUtil.getRectPath(0, 0, 600, 600);
-    private const gradientGraphicsData_:Vector.<IGraphicsData> = new <IGraphicsData>[gradientFill_, gradientPath_, GraphicsUtil.END_FILL];
-
     public function HurtOverlay() {
-        graphics.drawGraphicsData(this.gradientGraphicsData_);
+        var w:Number = WebMain.STAGE.stageWidth - 200;
+        var h:Number = WebMain.STAGE.stageHeight;
+        var sw:Number = w / Math.sin(Math.PI / 4);
+        var sh:Number = h / Math.sin(Math.PI / 4);
+        var gFill:GraphicsGradientFill = new GraphicsGradientFill(
+                GradientType.RADIAL,
+                [0xFFFFFF, 0xFFFFFF, 0xFFFFFF],
+                [0, 0, 0.92],
+                [0, 155, 0xFF],
+                GraphicsUtil.getGradientMatrix(sw, sh, 0, (w - sw) / 2, (h - sh) / 2));
+        var gPath:GraphicsPath = GraphicsUtil.getRectPath(0, 0, w, h);
+        var gGfxData:Vector.<IGraphicsData> = new <IGraphicsData>[gFill, gPath, GraphicsUtil.END_FILL];
+        graphics.drawGraphicsData(gGfxData);
         visible = false;
     }
 

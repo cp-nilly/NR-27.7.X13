@@ -446,7 +446,7 @@ public class Map extends AbstractMap {
 
         // draw breath overlay
         if (player_ != null && player_.breath_ >= 0 && player_.breath_ < Parameters.BREATH_THRESH) {
-            var bMult:Number = Parameters.BREATH_THRESH - player_.breath_ / Parameters.BREATH_THRESH;
+            var bMult:Number = (Parameters.BREATH_THRESH - player_.breath_) / Parameters.BREATH_THRESH;
             var btMult:Number = Math.abs(Math.sin(currentTime / 300)) * 0.75;
             BREATH_CT.alphaMultiplier = bMult * btMult;
             hurtOverlay_.transform.colorTransform = BREATH_CT;
