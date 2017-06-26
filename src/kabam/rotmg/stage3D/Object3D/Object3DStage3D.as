@@ -52,8 +52,8 @@ public class Object3DStage3D {
 
     public function UpdateModelMatrix(_arg1:Number, _arg2:Number):void {
         this.modelMatrix_.identity();
-        this.modelMatrix_.appendRotation(-90, Vector3D.Z_AXIS);
-        this.modelMatrix_.appendRotation(-(this.zRotation_), Vector3D.Z_AXIS);
+        this.modelMatrix_.appendScale(-1, -1, 1);
+        this.modelMatrix_.appendRotation(-this.zRotation_, Vector3D.Z_AXIS);
         this.modelMatrix_.appendTranslation(this.position.x, this.position.y, 0);
         this.modelMatrix_.appendTranslation(_arg1, _arg2, 0);
     }
