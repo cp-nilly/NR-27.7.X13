@@ -5,18 +5,41 @@ import flash.utils.ByteArray;
 public class Util {
 
 
-    public static function perspectiveProjection(_arg1:Number = 90, _arg2:Number = 1, _arg3:Number = 1, _arg4:Number = 0x0800):Matrix3D {
-        var _local5:Number = (_arg3 * Math.tan(((_arg1 * Math.PI) / 360)));
-        var _local6:Number = -(_local5);
-        var _local7:Number = (_local6 * _arg2);
-        var _local8:Number = (_local5 * _arg2);
-        var _local9:Number = ((2 * _arg3) / (_local8 - _local7));
-        var _local10:Number = ((2 * _arg3) / (_local5 - _local6));
-        var _local11:Number = ((_local8 + _local7) / (_local8 - _local7));
-        var _local12:Number = ((_local5 + _local6) / (_local5 - _local6));
-        var _local13:Number = (-((_arg4 + _arg3)) / (_arg4 - _arg3));
-        var _local14:Number = ((-2 * (_arg4 * _arg3)) / (_arg4 - _arg3));
-        return (new Matrix3D(Vector.<Number>([_local9, 0, 0, 0, 0, _local10, 0, 0, _local11, _local12, _local13, -1, 0, 0, _local14, 0])));
+    public static function perspectiveProjection(fov:Number = 90, scale:Number = 1, zn:Number = 1, _arg4:Number = 0x0800):Matrix3D {
+        var p:Vector.<Number> = new Vector.<Number>(16, true);
+
+        var vh2:Number = zn * Math.tan((fov * Math.PI) / 360);
+        var vh1:Number = -vh2;
+        var vw1:Number = (vh1 * scale);
+        var vw2:Number = (vh2 * scale);
+        var w:Number = (2 * zn) / (vw2 - vw1);
+        var h:Number = (2 * zn) / (vh2 - vh1);
+        var _local11:Number = (vw2 + vw1) / (vw2 - vw1);
+        var _local12:Number = (vh2 + vh1) / (vh2 - vh1);
+        var q:Number = -(_arg4 + zn) / (_arg4 - zn);
+        var _local14:Number = (-2 * _arg4 * zn) / (_arg4 - zn);
+
+        p[0] = w;
+        p[1] = 0;
+        p[2] = 0;
+        p[3] = 0;
+
+        p[4] = 0;
+        p[5] = h;
+        p[6] = 0;
+        p[7] = 0;
+
+        p[8] = _local11;
+        p[9] = _local12;
+        p[10] = q;
+        p[11] = -1;
+
+        p[12] = 0;
+        p[13] = 0;
+        p[14] = _local14;
+        p[15] = 0;
+
+        return new Matrix3D(p);
     }
 
     public static function readString(_arg1:ByteArray, _arg2:int):String {
