@@ -9,4 +9,4 @@ public class ObjectDrawer_transbackgroundEmbed_ extends BitmapAsset {
 
 
 }
-}//package kabam.rotmg.editor.view.components.drawer
+}

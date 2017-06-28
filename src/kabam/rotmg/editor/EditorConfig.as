@@ -106,4 +106,4 @@ public class EditorConfig implements IConfig {
 
 
 }
-}//package kabam.rotmg.editor
+}

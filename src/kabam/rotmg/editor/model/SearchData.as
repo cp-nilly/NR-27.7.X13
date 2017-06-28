@@ -8,4 +8,4 @@ public class SearchData {
 
 
 }
-}//package kabam.rotmg.editor.model
+}

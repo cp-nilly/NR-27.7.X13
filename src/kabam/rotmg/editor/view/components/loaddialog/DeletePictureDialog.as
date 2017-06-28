@@ -15,4 +15,4 @@ public class DeletePictureDialog extends Dialog {
     }
 
 }
-}//package kabam.rotmg.editor.view.components.loaddialog
+}

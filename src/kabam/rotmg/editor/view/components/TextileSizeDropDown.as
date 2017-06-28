@@ -10,4 +10,4 @@ public class TextileSizeDropDown extends SizeDropDown {
     }
 
 }
-}//package kabam.rotmg.editor.view.components
+}

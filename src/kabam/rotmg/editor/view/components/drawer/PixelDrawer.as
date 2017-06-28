@@ -17,4 +17,4 @@ public class PixelDrawer extends Sprite {
 
 
 }
-}//package kabam.rotmg.editor.view.components.drawer
+}

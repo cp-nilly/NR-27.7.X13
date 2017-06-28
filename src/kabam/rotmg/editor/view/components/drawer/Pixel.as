@@ -39,4 +39,4 @@ public class Pixel extends Sprite {
 
 
 }
-}//package kabam.rotmg.editor.view.components.drawer
+}

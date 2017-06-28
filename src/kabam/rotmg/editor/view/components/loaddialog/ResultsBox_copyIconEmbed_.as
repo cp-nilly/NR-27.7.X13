@@ -9,4 +9,4 @@ public class ResultsBox_copyIconEmbed_ extends BitmapAsset {
 
 
 }
-}//package kabam.rotmg.editor.view.components.loaddialog
+}

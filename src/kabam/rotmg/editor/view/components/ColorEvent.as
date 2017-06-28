@@ -15,4 +15,4 @@ public class ColorEvent extends Event {
     }
 
 }
-}//package kabam.rotmg.editor.view.components
+}

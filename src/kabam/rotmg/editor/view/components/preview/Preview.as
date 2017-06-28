@@ -93,7 +93,7 @@ public class Preview extends Sprite {
 
 
 }
-}//package kabam.rotmg.editor.view.components.preview
+}
 
 import flash.events.Event;
 

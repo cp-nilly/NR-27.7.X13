@@ -27,4 +27,4 @@ public class ResultsBoxMediator extends Mediator {
 
 
 }
-}//package kabam.rotmg.editor.view.components.loaddialog
+}

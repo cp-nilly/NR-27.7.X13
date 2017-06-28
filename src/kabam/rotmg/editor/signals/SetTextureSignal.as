@@ -10,4 +10,4 @@ public class SetTextureSignal extends Signal {
     }
 
 }
-}//package kabam.rotmg.editor.signals
+}

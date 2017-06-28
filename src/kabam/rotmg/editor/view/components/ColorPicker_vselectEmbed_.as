@@ -9,4 +9,4 @@ public class ColorPicker_vselectEmbed_ extends BitmapAsset {
 
 
 }
-}//package kabam.rotmg.editor.view.components
+}

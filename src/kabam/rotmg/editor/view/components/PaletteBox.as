@@ -32,4 +32,4 @@ public class PaletteBox extends Sprite {
 
 
 }
-}//package kabam.rotmg.editor.view.components
+}

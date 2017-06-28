@@ -33,4 +33,4 @@ public class PictureType {
 
 
 }
-}//package kabam.rotmg.editor.view.components
+}

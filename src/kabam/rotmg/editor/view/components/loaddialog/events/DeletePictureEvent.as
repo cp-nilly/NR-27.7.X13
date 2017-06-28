@@ -15,4 +15,4 @@ public class DeletePictureEvent extends Event {
     }
 
 }
-}//package kabam.rotmg.editor.view.components.loaddialog.events
+}

@@ -19,4 +19,4 @@ public class PixelEvent extends Event {
     }
 
 }
-}//package kabam.rotmg.editor.view.components.drawer
+}

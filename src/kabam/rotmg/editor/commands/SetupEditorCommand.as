@@ -33,4 +33,4 @@ public class SetupEditorCommand {
 
 
 }
-}//package kabam.rotmg.editor.commands
+}

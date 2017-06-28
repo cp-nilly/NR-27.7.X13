@@ -10,4 +10,4 @@ public class ObjectSizeDropDown extends SizeDropDown {
     }
 
 }
-}//package kabam.rotmg.editor.view.components
+}

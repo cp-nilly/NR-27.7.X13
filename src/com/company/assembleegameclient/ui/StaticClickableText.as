@@ -14,4 +14,4 @@ public class StaticClickableText extends ClickableTextBase {
 
 
 }
-}//package com.company.assembleegameclient.ui
+}

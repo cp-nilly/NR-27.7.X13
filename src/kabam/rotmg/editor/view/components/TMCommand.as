@@ -26,4 +26,4 @@ public class TMCommand extends Command {
 
 
 }
-}//package kabam.rotmg.editor.view.components
+}

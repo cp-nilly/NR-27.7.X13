@@ -13,4 +13,4 @@ public class SetPixelsEvent extends Event {
     }
 
 }
-}//package kabam.rotmg.editor.view.components.drawer
+}

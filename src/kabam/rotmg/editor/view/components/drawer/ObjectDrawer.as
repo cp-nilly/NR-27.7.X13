@@ -172,4 +172,4 @@ public class ObjectDrawer extends PixelDrawer {
 
 
 }
-}//package kabam.rotmg.editor.view.components.drawer
+}

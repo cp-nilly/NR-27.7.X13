@@ -20,4 +20,4 @@ public class StaticTextButton extends TextButtonBase {
 
 
 }
-}//package kabam.rotmg.editor.view
+}

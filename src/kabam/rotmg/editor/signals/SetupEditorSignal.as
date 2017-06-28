@@ -5,4 +5,4 @@ public class SetupEditorSignal extends Signal {
 
 
 }
-}//package kabam.rotmg.editor.signals
+}

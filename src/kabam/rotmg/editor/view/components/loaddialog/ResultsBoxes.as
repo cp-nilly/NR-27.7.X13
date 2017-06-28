@@ -57,4 +57,4 @@ public class ResultsBoxes extends Sprite {
 
 
 }
-}//package kabam.rotmg.editor.view.components.loaddialog
+}

@@ -10,4 +10,4 @@ public class SearchModel {
     }
 
 }
-}//package kabam.rotmg.editor.model
+}

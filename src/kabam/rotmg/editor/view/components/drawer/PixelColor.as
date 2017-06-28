@@ -12,4 +12,4 @@ public class PixelColor {
     }
 
 }
-}//package kabam.rotmg.editor.view.components.drawer
+}

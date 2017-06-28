@@ -52,4 +52,4 @@ public class TermsView extends Sprite {
 
 
 }
-}//package kabam.rotmg.editor.view
+}

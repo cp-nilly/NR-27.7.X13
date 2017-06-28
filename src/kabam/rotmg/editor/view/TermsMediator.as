@@ -23,4 +23,4 @@ public class TermsMediator extends Mediator {
 
 
 }
-}//package kabam.rotmg.editor.view
+}

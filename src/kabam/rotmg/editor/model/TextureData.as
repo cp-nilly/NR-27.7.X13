@@ -11,4 +11,4 @@ public class TextureData {
 
 
 }
-}//package kabam.rotmg.editor.model
+}
