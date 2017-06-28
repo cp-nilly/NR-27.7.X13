@@ -19,8 +19,8 @@ public class TMCommandMenu extends CommandMenu {
         addCommandMenuItem("(R)edo", KeyCodes.R, this.onRedo, NONE_COMMAND);
         addCommandMenuItem("(C)lear", KeyCodes.C, this.onClear, NONE_COMMAND);
         addBreak();
-        addCommandMenuItem("(L)oad", KeyCodes.L, this.onLoad, NONE_COMMAND);
-        addCommandMenuItem("(S)ave", KeyCodes.S, this.onSave, NONE_COMMAND);
+        addBreak();//addCommandMenuItem("(L)oad", KeyCodes.L, this.onLoad, NONE_COMMAND);
+        addBreak();//addCommandMenuItem("(S)ave", KeyCodes.S, this.onSave, NONE_COMMAND);
         addCommandMenuItem("E(X)port", KeyCodes.X, this.onExport, NONE_COMMAND);
         addBreak();
         addCommandMenuItem("(Q)uit", KeyCodes.Q, this.onQuit, NONE_COMMAND);
