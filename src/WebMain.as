@@ -2,6 +2,7 @@
 import com.company.assembleegameclient.parameters.Parameters;
 import com.company.assembleegameclient.util.AssetLoader;
 import com.company.assembleegameclient.util.StageProxy;
+import com.demonsters.debugger.MonsterDebugger;
 
 import flash.display.LoaderInfo;
 import flash.display.Sprite;
@@ -59,6 +60,7 @@ import robotlegs.bender.extensions.signalCommandMap.SignalCommandMapExtension;
 import robotlegs.bender.framework.api.IContext;
 import robotlegs.bender.framework.api.LogLevel;
 
+[SWF(frameRate="60", backgroundColor="#000000", width="800", height="600")]
 public class WebMain extends Sprite {
 
     public static var ENV:String;
@@ -67,6 +69,7 @@ public class WebMain extends Sprite {
     protected var context:IContext;
 
     public function WebMain() {
+        //MonsterDebugger.initialize(this);
         if (stage) {
             this.setup();
         }

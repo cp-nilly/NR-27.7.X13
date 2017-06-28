@@ -73,7 +73,7 @@ public class ArenaPortalPanelMediator extends Mediator {
             _local1.start();
             _local2 = (this.messages.require(GameServerConnection.ENTER_ARENA) as EnterArena);
             _local2.currency = Currency.FAME;
-            this.socketServer.sendMessage(_local2);
+            this.socketServer.queueMessage(_local2);
             this.exitSignal.dispatch();
         }
         else {
@@ -105,7 +105,7 @@ public class ArenaPortalPanelMediator extends Mediator {
                     _local1.start();
                     _local2 = (this.messages.require(GameServerConnection.ENTER_ARENA) as EnterArena);
                     _local2.currency = Currency.GOLD;
-                    this.socketServer.sendMessage(_local2);
+                    this.socketServer.queueMessage(_local2);
                     this.exitSignal.dispatch();
                 }
             }

@@ -29,7 +29,7 @@ public class PetVO {
         this.abilityList = [new AbilityVO(), new AbilityVO(), new AbilityVO()];
         super();
         this.id = _arg1;
-        this.staticData = <data/>
+        this.staticData = <data/>;
         this.listenToAbilities();
     }
 
@@ -42,7 +42,7 @@ public class PetVO {
     }
 
     public static function clone(_arg1:PetVO):PetVO {
-        return (new (PetVO)(_arg1.id));
+        return new PetVO(_arg1.id);
     }
 
 

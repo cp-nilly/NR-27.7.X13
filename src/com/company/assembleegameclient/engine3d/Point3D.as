@@ -11,7 +11,6 @@ import flash.display.GraphicsSolidFill;
 import flash.display.IGraphicsData;
 import flash.geom.Matrix;
 import flash.geom.Matrix3D;
-import flash.geom.Utils3D;
 import flash.geom.Vector3D;
 
 public class Point3D {
@@ -27,8 +26,12 @@ public class Point3D {
     public var size_:Number;
     public var posS_:Vector3D;
 
+    private var n:Vector.<Number>;
+
     public function Point3D(_arg1:Number) {
         this.size_ = _arg1;
+        this.n = new Vector.<Number>(16, true);
+        this.posS_ = new Vector3D();
     }
 
     public function setSize(_arg1:Number):void {
@@ -39,7 +42,7 @@ public class Point3D {
         var _local10:Number;
         var _local11:Number;
         var _local12:Matrix;
-        this.posS_ = Utils3D.projectVector(_arg4, _arg2);
+        projectVector2posS(_arg4, _arg2);
         if (this.posS_.w < 0) {
             return;
         }
@@ -70,6 +73,15 @@ public class Point3D {
         }
         _arg1.push(this.path_);
         _arg1.push(END_FILL);
+    }
+
+    private function projectVector2posS(m:Matrix3D, v:Vector3D):void {
+        m.copyRawDataTo(n);
+        posS_.x = v.x * n[0] + v.y * n[4] + v.z * n[8] + n[12];
+        posS_.y = v.x * n[1] + v.y * n[5] + v.z * n[9] + n[13];
+        posS_.z = v.x * n[2] + v.y * n[6] + v.z * n[10] + n[14];
+        posS_.w = v.x * n[3] + v.y * n[7] + v.z * n[11] + n[15];
+        posS_.project();
     }
 
 
