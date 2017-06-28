@@ -44,7 +44,7 @@ public class Sign extends GameObject {
 
         var signTxt:String = this.stringMap.getValue(this.stripCurlyBrackets(name_));
         if (signTxt == null) {
-            signTxt = "null";
+            signTxt = name_;
         }
         txtField.text = signTxt.split("|").join("\n");
         var bmpData:BitmapData = new BitmapDataSpy(txtField.width, txtField.height, true, 0);
