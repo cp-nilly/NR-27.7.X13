@@ -7,10 +7,10 @@ import kabam.rotmg.text.view.stringBuilder.LineBuilder;
 
 public class StaticTextButton extends TextButtonBase {
 
-    public function StaticTextButton(_arg1:int, _arg2:String, _arg3:int = 0) {
-        super(_arg3);
-        addText(_arg1);
-        text_.setStringBuilder(new LineBuilder().setParams(_arg2));
+    public function StaticTextButton(_arg_1:int, _arg_2:String, _arg_3:int = 0) {
+        super(_arg_3);
+        addText(_arg_1);
+        text_.setStringBuilder(new LineBuilder().setParams(_arg_2));
         initText();
     }
 
