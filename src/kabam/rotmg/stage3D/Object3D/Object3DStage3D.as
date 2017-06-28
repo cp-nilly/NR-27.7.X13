@@ -50,16 +50,17 @@ public class Object3DStage3D {
         this.position = null;
     }
 
-    public function UpdateModelMatrix(_arg1:Number, _arg2:Number):void {
+    public function UpdateModelMatrix(tx:Number = 0, ty:Number = 0):Matrix3D {
         this.modelMatrix_.identity();
         this.modelMatrix_.appendScale(-1, -1, 1);
         this.modelMatrix_.appendRotation(-this.zRotation_, Vector3D.Z_AXIS);
         this.modelMatrix_.appendTranslation(this.position.x, this.position.y, 0);
-        this.modelMatrix_.appendTranslation(_arg1, _arg2, 0);
+        this.modelMatrix_.appendTranslation(tx, ty, 0);
+        return modelMatrix_;
     }
 
     public function GetModelMatrix():Matrix3D {
-        return (this.modelMatrix_);
+        return this.modelMatrix_;
     }
 
     public function draw(_arg1:Context3D):void {

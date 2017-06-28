@@ -335,8 +335,8 @@ public class Renderer {
                 try {
                     ctx.setProgram(this.program2);
                     ctx.setCulling(Context3DTriangleFace.BACK);
-                    gfxData3d[i].UpdateModelMatrix(this.widthOffset_, this.heightOffset_);
-                    finalTransform.copyFrom(gfxData3d[i].GetModelMatrix());
+                    var m:Matrix3D = gfxData3d[i].UpdateModelMatrix(this.widthOffset_, this.heightOffset_);
+                    finalTransform.copyFrom(m);
                     finalTransform.append(this.cameraMatrix_);
                     finalTransform.append(this._projection);
                     finalTransform.appendTranslation(
@@ -345,7 +345,7 @@ public class Renderer {
                     this.context3D.setProgramConstantsFromMatrix(
                             Context3DProgramType.VERTEX, 0, finalTransform, true);
                     this.context3D.setProgramConstantsFromMatrix(
-                            Context3DProgramType.VERTEX, 8, gfxData3d[i].GetModelMatrix(), true);
+                            Context3DProgramType.VERTEX, 8, m, true);
                     gfxData3d[i].draw(ctx);
                     i++;
                 }
