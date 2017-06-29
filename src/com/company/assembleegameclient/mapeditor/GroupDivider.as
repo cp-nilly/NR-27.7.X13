@@ -30,17 +30,13 @@ public class GroupDivider {
 
         var xml:XML;
         for each (xml in ObjectLibrary.xmlLibrary_) {
-            var id:String = xml.@id;
             var type:int = int(xml.@type);
-            var plrModel:PlayerModel = StaticInjectorContext.getInjector().getInstance(PlayerModel);
 
             if (    xml.hasOwnProperty("Item") ||
                     xml.hasOwnProperty("Player") ||
                     xml.Class == "Projectile" ||
                     xml.Class == "PetSkin" ||
-                    xml.Class == "Pet" ||
-                    id.search("Spawner") >= 0 && !plrModel.isAdmin() ||
-                    HIDE_OBJECTS_IDS.indexOf(id) >= 0 && !plrModel.isAdmin()) {
+                    xml.Class == "Pet") {
                 continue;
             }
 
@@ -65,9 +61,8 @@ public class GroupDivider {
                 allObj[type] = xml;
                 added = true;
             }
-            else if (plrModel.isAdmin()) {
-                allObj[type] = xml;
-            }
+
+            allObj[type] = xml;
 
             var dung:String = ObjectLibrary.propsLibrary_[type].belonedDungeon;
             if (added && dung != "") {
@@ -82,14 +77,8 @@ public class GroupDivider {
             ground[int(xml.@type)] = xml;
         }
 
-        if (plrModel.isAdmin()) {
-            for each (xml in RegionLibrary.xmlLibrary_) {
-                regions[int(xml.@type)] = xml;
-            }
-        }
-        else {
-            regions[RegionLibrary.idToType_["Spawn"]] = RegionLibrary.xmlLibrary_[RegionLibrary.idToType_["Spawn"]];
-            regions[RegionLibrary.idToType_["User Dungeon End"]] = RegionLibrary.xmlLibrary_[RegionLibrary.idToType_["User Dungeon End"]];
+        for each (xml in RegionLibrary.xmlLibrary_) {
+            regions[int(xml.@type)] = xml;
         }
 
         GROUPS[GROUP_LABELS[0]] = ground;

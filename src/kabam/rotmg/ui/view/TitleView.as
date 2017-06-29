@@ -126,7 +126,8 @@ public class TitleView extends Sprite {
     }
 
     private function handleOptionalButtons():void {
-        ((this.data.canMapEdit) && (this.createEditorButton()));
+        //((this.data.canMapEdit) && (this.createEditorButton()));
+        this.createEditorButton();
         ((this.data.isDesktop) && (this.createQuitButton()));
         this.optionalButtonsAdded.dispatch();
     }
