@@ -75,7 +75,6 @@ public class TitleView extends Sprite {
         var _local3:TitleMenuOption = ButtonFactory.getAccountButton();
         var _local4:TitleMenuOption = ButtonFactory.getLegendsButton();
         var _local5:TitleMenuOption = ButtonFactory.getSupportButton();
-        _local5.setColor(0xFFA500);
         var _local6:TitleMenuOption = ButtonFactory.getTextureEditorButton();
         this.playClicked = _local1.clicked;
         this.serversClicked = _local2.clicked;
@@ -140,7 +139,6 @@ public class TitleView extends Sprite {
 
     private function createEditorButton():void {
         var _local1:TitleMenuOption = ButtonFactory.getEditorButton();
-        _local1.setColor(0x007BA7);
         this.menuOptionsBar.addButton(_local1, MenuOptionsBar.RIGHT);
         this.editorClicked = _local1.clicked;
     }

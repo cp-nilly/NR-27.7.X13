@@ -32,11 +32,11 @@ public class TitleMenuOption extends Sprite {
     private var color:uint = 0xFFFFFF;
     private var hoverColor:uint;
 
-    public function TitleMenuOption(_arg1:String, _arg2:int, _arg3:Boolean) {
-        this.size = _arg2;
-        this.isPulse = _arg3;
-        this.textField.setSize(_arg2).setColor(0xFFFFFF).setBold(true);
-        this.setTextKey(_arg1);
+    public function TitleMenuOption(text:String, size:int, pulse:Boolean, color:uint = 0xFFFFFF) {
+        this.size = size;
+        this.isPulse = pulse;
+        this.textField.setSize(size).setColor(color).setBold(true);
+        this.setTextKey(text);
         this.originalWidth = width;
         this.originalHeight = height;
         this.activate();
