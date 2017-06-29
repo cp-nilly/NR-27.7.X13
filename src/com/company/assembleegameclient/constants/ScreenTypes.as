@@ -12,6 +12,7 @@ public class ScreenTypes {
     public static const LANGUAGES:String = "Screens.languages";
     public static const SUPPORT:String = "Screens.support";
     public static const TRANSFER_ACCOUNT:String = "Screens.migrate";
+    public static const TEXTURE_EDITOR:String = "texture";
 
 
 }
