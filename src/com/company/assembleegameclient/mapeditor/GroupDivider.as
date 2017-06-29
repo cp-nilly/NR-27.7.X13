@@ -19,90 +19,87 @@ public class GroupDivider {
 
 
     public static function divideObjects():void {
-        var _local9:int;
-        var _local10:String;
-        var _local11:Boolean;
-        var _local12:XML;
-        var _local13:XML;
-        var _local14:PlayerModel;
-        var _local15:String;
-        var _local16:XML;
-        var _local1:Dictionary = new Dictionary(true);
-        var _local2:Dictionary = new Dictionary(true);
-        var _local3:Dictionary = new Dictionary(true);
-        var _local4:Dictionary = new Dictionary(true);
-        var _local5:Dictionary = new Dictionary(true);
-        var _local6:Dictionary = new Dictionary(true);
-        var _local7:Dictionary = new Dictionary(true);
-        var _local8:Dictionary = new Dictionary(true);
-        for each (_local12 in ObjectLibrary.xmlLibrary_) {
-            _local10 = _local12.@id;
-            _local9 = int(_local12.@type);
-            _local14 = StaticInjectorContext.getInjector().getInstance(PlayerModel);
-            if (!((((((((((_local12.hasOwnProperty("Item")) || (_local12.hasOwnProperty("Player")))) || ((_local12.Class == "Projectile")))) || ((_local12.Class == "PetSkin")))) || ((_local12.Class == "Pet")))) || ((((_local10.search("Spawner") >= 0)) && (!(_local14.isAdmin())))))) {
-                if (!((!(_local14.isAdmin())) && ((HIDE_OBJECTS_IDS.indexOf(_local10) >= 0)))) {
-                    _local11 = false;
-                    if (((_local12.hasOwnProperty("Class")) && (String(_local12.Class).match(/wall$/i)))) {
-                        _local6[_local9] = _local12;
-                        _local7[_local9] = _local12;
-                        _local11 = true;
-                    }
-                    else {
-                        if (_local12.hasOwnProperty("Model")) {
-                            _local5[_local9] = _local12;
-                            _local7[_local9] = _local12;
-                            _local11 = true;
-                        }
-                        else {
-                            if (_local12.hasOwnProperty("Enemy")) {
-                                _local4[_local9] = _local12;
-                                _local7[_local9] = _local12;
-                                _local11 = true;
-                            }
-                            else {
-                                if (((_local12.hasOwnProperty("Static")) && (!(_local12.hasOwnProperty("Price"))))) {
-                                    _local3[_local9] = _local12;
-                                    _local7[_local9] = _local12;
-                                    _local11 = true;
-                                }
-                                else {
-                                    if (_local14.isAdmin()) {
-                                        _local7[_local9] = _local12;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    _local15 = ObjectLibrary.propsLibrary_[_local9].belonedDungeon;
-                    if (((_local11) && (!((_local15 == ""))))) {
-                        if (_local8[_local15] == null) {
-                            _local8[_local15] = new Dictionary(true);
-                        }
-                        _local8[_local15][_local9] = _local12;
-                    }
+        var ground:Dictionary = new Dictionary(true);
+        var regions:Dictionary = new Dictionary(true);
+        var basicObj:Dictionary = new Dictionary(true);
+        var enemies:Dictionary = new Dictionary(true);
+        var obj3d:Dictionary = new Dictionary(true);
+        var walls:Dictionary = new Dictionary(true);
+        var allObj:Dictionary = new Dictionary(true);
+        var dungeons:Dictionary = new Dictionary(true);
+
+        var xml:XML;
+        for each (xml in ObjectLibrary.xmlLibrary_) {
+            var id:String = xml.@id;
+            var type:int = int(xml.@type);
+            var plrModel:PlayerModel = StaticInjectorContext.getInjector().getInstance(PlayerModel);
+
+            if (    xml.hasOwnProperty("Item") ||
+                    xml.hasOwnProperty("Player") ||
+                    xml.Class == "Projectile" ||
+                    xml.Class == "PetSkin" ||
+                    xml.Class == "Pet" ||
+                    id.search("Spawner") >= 0 && !plrModel.isAdmin() ||
+                    HIDE_OBJECTS_IDS.indexOf(id) >= 0 && !plrModel.isAdmin()) {
+                continue;
+            }
+
+            var added:Boolean = false;
+            if (xml.hasOwnProperty("Class") && String(xml.Class).match(/wall$/i)) {
+                walls[type] = xml;
+                allObj[type] = xml;
+                added = true;
+            }
+            else if (xml.hasOwnProperty("Model")) {
+                obj3d[type] = xml;
+                allObj[type] = xml;
+                added = true;
+            }
+            else if (xml.hasOwnProperty("Enemy")) {
+                enemies[type] = xml;
+                allObj[type] = xml;
+                added = true;
+            }
+            else if (xml.hasOwnProperty("Static") && !xml.hasOwnProperty("Price")) {
+                basicObj[type] = xml;
+                allObj[type] = xml;
+                added = true;
+            }
+            else if (plrModel.isAdmin()) {
+                allObj[type] = xml;
+            }
+
+            var dung:String = ObjectLibrary.propsLibrary_[type].belonedDungeon;
+            if (added && dung != "") {
+                if (dungeons[dung] == null) {
+                    dungeons[dung] = new Dictionary(true);
                 }
+                dungeons[dung][type] = xml;
             }
         }
-        for each (_local13 in GroundLibrary.xmlLibrary_) {
-            _local1[int(_local13.@type)] = _local13;
+
+        for each (xml in GroundLibrary.xmlLibrary_) {
+            ground[int(xml.@type)] = xml;
         }
-        if (_local14.isAdmin()) {
-            for each (_local16 in RegionLibrary.xmlLibrary_) {
-                _local2[int(_local16.@type)] = _local16;
+
+        if (plrModel.isAdmin()) {
+            for each (xml in RegionLibrary.xmlLibrary_) {
+                regions[int(xml.@type)] = xml;
             }
         }
         else {
-            _local2[RegionLibrary.idToType_["Spawn"]] = RegionLibrary.xmlLibrary_[RegionLibrary.idToType_["Spawn"]];
-            _local2[RegionLibrary.idToType_["User Dungeon End"]] = RegionLibrary.xmlLibrary_[RegionLibrary.idToType_["User Dungeon End"]];
+            regions[RegionLibrary.idToType_["Spawn"]] = RegionLibrary.xmlLibrary_[RegionLibrary.idToType_["Spawn"]];
+            regions[RegionLibrary.idToType_["User Dungeon End"]] = RegionLibrary.xmlLibrary_[RegionLibrary.idToType_["User Dungeon End"]];
         }
-        GROUPS[GROUP_LABELS[0]] = _local1;
-        GROUPS[GROUP_LABELS[1]] = _local3;
-        GROUPS[GROUP_LABELS[2]] = _local4;
-        GROUPS[GROUP_LABELS[3]] = _local6;
-        GROUPS[GROUP_LABELS[4]] = _local5;
-        GROUPS[GROUP_LABELS[5]] = _local7;
-        GROUPS[GROUP_LABELS[6]] = _local2;
-        GROUPS[GROUP_LABELS[7]] = _local8;
+
+        GROUPS[GROUP_LABELS[0]] = ground;
+        GROUPS[GROUP_LABELS[1]] = basicObj;
+        GROUPS[GROUP_LABELS[2]] = enemies;
+        GROUPS[GROUP_LABELS[3]] = walls;
+        GROUPS[GROUP_LABELS[4]] = obj3d;
+        GROUPS[GROUP_LABELS[5]] = allObj;
+        GROUPS[GROUP_LABELS[6]] = regions;
+        GROUPS[GROUP_LABELS[7]] = dungeons;
     }
 
     public static function getDungeonsLabel():Vector.<String> {
