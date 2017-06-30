@@ -38,7 +38,7 @@ class BanMenu extends Frame {
         addPlainText("Ban Lift Format:");
         addPlainText("yyyy-MM-dd HH:mm:ss");
         addPlainText("Timezone: UTC");
-        addPlainText("Pernament Ban: -1");
+        addPlainText("Permanent Ban: -1");
         leftButton_.addEventListener(MouseEvent.CLICK, onCancel);
         rightButton_.addEventListener(MouseEvent.CLICK, this.onAction);
     }
@@ -52,10 +52,14 @@ class BanMenu extends Frame {
         var BanLiftTime:Number = NaN;
         var jsonString:String = null;
         if(!StringUtil.trim(this.banReasons.text())) {
-            this.banReasons.setError("Please add a ban reason.");
+            this.banReasons.setError("Specify some ban reasons.");
             return;
         }
-        if(isValidDate(this.liftTime.text()) && this.liftTime.text() != "-1") {
+        if (this.liftTime.text() == "-1") {
+            GameServerConnection.instance.playerText("/ban " + this.player.accountId_ +  " " + this.banReasons.text());
+            StaticInjectorContext.getInjector().getInstance(CloseDialogsSignal).dispatch();
+        }
+        else if(isValidDate(this.liftTime.text()) && this.liftTime.text() != "-1") {
             BanDate = parseUTCDate(this.liftTime.text());
             BanLiftTime = Math.round(BanDate.getTime() / 1000);
             jsonString = com.adobe.serialization.json.JSON.encode({
