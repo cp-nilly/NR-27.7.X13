@@ -35,7 +35,7 @@ public class ButtonFactory {
     }
 
     public static function getTextureEditorButton():TitleMenuOption {
-        return ((textureEditorButton = ((textureEditorButton) || (makeButton(ScreenTypes.TEXTURE_EDITOR, BUTTON_SIZE_SMALL, LEFT)))));
+        return textureEditorButton = textureEditorButton || makeButton(ScreenTypes.TEXTURE_EDITOR, BUTTON_SIZE_SMALL, LEFT, false, 0x007BA7);
     }
 
     public static function getClassesButton():TitleMenuOption {
