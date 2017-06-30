@@ -13,6 +13,7 @@ import flash.geom.Rectangle;
 import flash.system.Capabilities;
 
 import kabam.lib.net.NetConfig;
+import kabam.lib.resizing.ResizeExtension;
 import kabam.lib.resizing.signals.Resize;
 import kabam.rotmg.account.AccountConfig;
 import kabam.rotmg.appengine.AppEngineConfig;
@@ -126,6 +127,7 @@ public class WebMain extends Sprite {
         this.context
                 .extend(MVCSBundle)
                 .extend(SignalCommandMapExtension)
+                .extend(ResizeExtension)
                 .configure(BuildConfig)
                 .configure(StartupConfig)
                 .configure(NetConfig)
