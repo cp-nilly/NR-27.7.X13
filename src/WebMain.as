@@ -9,9 +9,11 @@ import flash.display.Sprite;
 import flash.display.Stage;
 import flash.display.StageScaleMode;
 import flash.events.Event;
+import flash.geom.Rectangle;
 import flash.system.Capabilities;
 
 import kabam.lib.net.NetConfig;
+import kabam.lib.resizing.signals.Resize;
 import kabam.rotmg.account.AccountConfig;
 import kabam.rotmg.appengine.AppEngineConfig;
 import kabam.rotmg.application.ApplicationConfig;
@@ -55,6 +57,8 @@ import kabam.rotmg.tooltips.TooltipsConfig;
 import kabam.rotmg.ui.UIConfig;
 import kabam.rotmg.ui.UIUtils;
 
+import org.osflash.signals.Signal;
+
 import robotlegs.bender.bundles.mvcs.MVCSBundle;
 import robotlegs.bender.extensions.signalCommandMap.SignalCommandMapExtension;
 import robotlegs.bender.framework.api.IContext;
@@ -67,6 +71,7 @@ public class WebMain extends Sprite {
     public static var STAGE:Stage;
 
     protected var context:IContext;
+    private var resize:Signal;
 
     public function WebMain() {
         //MonsterDebugger.initialize(this);
@@ -88,10 +93,9 @@ public class WebMain extends Sprite {
         this.hackParameters();
         this.createContext();
         new AssetLoader().load();
-        stage.scaleMode = StageScaleMode.EXACT_FIT;
+        this.setScaleMode();
         this.context.injector.getInstance(StartupSignal).dispatch();
         this.configureForAirIfDesktopPlayer();
-        STAGE = stage;
         UIUtils.toggleQuality(Parameters.data_.uiQuality);
     }
     
@@ -104,14 +108,21 @@ public class WebMain extends Sprite {
     }
 
     private function hackParameters():void {
+        STAGE = stage;
         Parameters.root = stage.root;
+    }
+
+    private function setScaleMode():void {
+        stage.align = "TL"; // top left
+        stage.scaleMode = StageScaleMode.NO_SCALE;
+        this.resize = this.context.injector.getInstance(Resize);
+        stage.addEventListener(Event.RESIZE, this.onResize);
     }
 
     private function createContext():void {
         this.context = new StaticInjectorContext();
         this.context.injector.map(LoaderInfo).toValue(root.stage.root.loaderInfo);
-        var _local1:StageProxy = new StageProxy(this);
-        this.context.injector.map(StageProxy).toValue(_local1);
+        this.context.injector.map(StageProxy).toValue(new StageProxy(this));
         this.context
                 .extend(MVCSBundle)
                 .extend(SignalCommandMapExtension)
@@ -164,6 +175,10 @@ public class WebMain extends Sprite {
             Parameters.data_.fullscreenMode = false;
             Parameters.save();
         }
+    }
+
+    private function onResize(e:Event):void {
+        this.resize.dispatch(new Rectangle(0, 0, stage.stageWidth, stage.stageHeight));
     }
 
 

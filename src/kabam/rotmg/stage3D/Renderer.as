@@ -190,8 +190,6 @@ public class Renderer {
             gfxData:Vector.<IGraphicsData>, obj3dStage:Vector.<Object3DStage3D>,
             mapWidth:Number, mapHeight:Number, camera:Camera, postEffect:uint):void {
 
-        WebMain.STAGE.scaleMode = StageScaleMode.NO_SCALE;
-
         if (WebMain.STAGE.stageWidth != this.stageWidth || WebMain.STAGE.stageHeight != this.stageHeight) {
             this.resizeStage3DBackBuffer(camera);
         }
@@ -205,7 +203,6 @@ public class Renderer {
             this.renderScene(gfxData, obj3dStage, mapWidth, mapHeight, camera);
 
         this.context3D.present();
-        WebMain.STAGE.scaleMode = StageScaleMode.EXACT_FIT;
     }
 
     private function resizeStage3DBackBuffer(camera:Camera):void {
