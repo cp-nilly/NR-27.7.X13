@@ -3,10 +3,7 @@ import com.company.assembleegameclient.game.GameSprite;
 import com.company.assembleegameclient.game.events.ReconnectEvent;
 import com.company.assembleegameclient.objects.Player;
 
-import flash.geom.Rectangle;
 import flash.utils.getTimer;
-
-import kabam.lib.resizing.signals.Resize;
 
 import kabam.rotmg.core.StaticInjectorContext;
 import kabam.rotmg.core.model.MapModel;
@@ -103,8 +100,6 @@ public class GameSpriteMediator extends Mediator {
     public var addToQueueSignal:AddPopupToStartupQueueSignal;
     [Inject]
     public var flushQueueSignal:FlushPopupStartupQueueSignal;
-    [Inject]
-    public var resize:Resize;
 
 
     public static function sleepForMs(_arg1:int):void {
@@ -137,7 +132,6 @@ public class GameSpriteMediator extends Mediator {
         this.view.openDailyCalendarPopupSignal = this.showDailyCalendarSignal;
         this.view.showPackage.add(this.onShowPackage);
         this.newsButtonRefreshSignal.add(this.onNewsButtonRefreshSignal);
-        this.resize.add(this.onResize);
     }
 
     private function onShowPackage():void {
@@ -162,7 +156,6 @@ public class GameSpriteMediator extends Mediator {
         this.view.closed.remove(this.onClosed);
         this.view.monitor.remove(this.onMonitor);
         this.newsButtonRefreshSignal.remove(this.onNewsButtonRefreshSignal);
-        this.resize.remove(this.onResize);
         this.view.disconnect();
     }
 
@@ -228,10 +221,6 @@ public class GameSpriteMediator extends Mediator {
 
     private function onNewsButtonRefreshSignal():void {
         this.view.refreshNewsUpdateButton();
-    }
-
-    private function onResize(rect:Rectangle):void {
-        this.view.resize(rect);
     }
 
 

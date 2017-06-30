@@ -127,7 +127,6 @@ public class WebMain extends Sprite {
         this.context
                 .extend(MVCSBundle)
                 .extend(SignalCommandMapExtension)
-                .extend(ResizeExtension)
                 .configure(BuildConfig)
                 .configure(StartupConfig)
                 .configure(NetConfig)
@@ -168,6 +167,7 @@ public class WebMain extends Sprite {
                 .configure(FortuneConfig)
                 .configure(FriendConfig)
                 .configure(QueueConfig)
+                .extend(ResizeExtension) // done last to ensure its initializer is run after others
                 .configure(this);
         this.context.logLevel = LogLevel.DEBUG;
     }
@@ -180,7 +180,7 @@ public class WebMain extends Sprite {
     }
 
     private function onResize(e:Event):void {
-        this.resize.dispatch(new Rectangle(0, 0, stage.stageWidth, stage.stageHeight));
+        this.resize.dispatch(new Rectangle(stage.x, stage.y, stage.stageWidth, stage.stageHeight));
     }
 
 

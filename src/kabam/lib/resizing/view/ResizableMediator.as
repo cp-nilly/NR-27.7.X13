@@ -16,10 +16,10 @@ public class ResizableMediator extends Mediator {
 
 
     override public function initialize():void {
-        var _local1:Stage = (this.view as DisplayObject).stage;
-        var _local2:Rectangle = new Rectangle(0, 0, _local1.stageWidth, _local1.stageHeight);
+        var stage:Stage = (this.view as DisplayObject).stage;
+        var rect:Rectangle = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
         this.resize.add(this.onResize);
-        this.view.resize(_local2);
+        this.view.resize(rect);
     }
 
     override public function destroy():void {

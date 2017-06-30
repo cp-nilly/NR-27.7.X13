@@ -3,8 +3,6 @@ import com.company.assembleegameclient.objects.GameObject;
 import com.company.assembleegameclient.parameters.Parameters;
 import com.company.assembleegameclient.util.RandomUtil;
 
-import flash.display.Stage;
-
 import flash.geom.Matrix3D;
 import flash.geom.Rectangle;
 import flash.geom.Vector3D;
@@ -12,8 +10,8 @@ import flash.geom.Vector3D;
 public class Camera {
 
     public static var vToS_scale:int = 50;
-    private static const CENTER_MULT:Rectangle = new Rectangle(-1/2, -13/24, 1, 1); // 3/8 3/4
-    private static const OFFSET_MULT:Rectangle = new flash.geom.Rectangle(-1/2, -3/4, 1, 1);
+    private static const CENTER_MULT:Rectangle = new Rectangle(-1/2, -13/24, 1, 1);
+    private static const OFFSET_MULT:Rectangle = new Rectangle(-1/2, -3/4, 1, 1);
 
     private const MAX_JITTER:Number = 0.5;
     private const JITTER_BUILDUP_MS:int = 10000;
@@ -36,24 +34,18 @@ public class Camera {
     private var isJittering_:Boolean = false;
     private var jitter_:Number = 0;
     private var rd_:Vector.<Number> = new Vector.<Number>(16, true);
+    private var centerRect = new Rectangle();
+    private var offsetRect = new Rectangle();
 
     public function Camera() {
-        this.clipRect_ = new flash.geom.Rectangle();
         this.vToS_.appendScale(vToS_scale, vToS_scale, vToS_scale);
     }
 
     public function configureCamera(go:GameObject, isHallucinating:Boolean):void {
-        var stage:Stage = WebMain.STAGE;
-        var mlt:Rectangle = CENTER_MULT;
-        if (!Parameters.data_.centerOnPlayer) {
-            mlt = OFFSET_MULT;
-        }
-        clipRect_.x = mlt.x * (stage.stageWidth - 200); // 200 for hud
-        clipRect_.y = mlt.y * stage.stageHeight;
-        clipRect_.width = mlt.width * (stage.stageWidth - 200);
-        clipRect_.height = mlt.height * stage.stageHeight;
-        var angle:Number = Parameters.data_.cameraAngle;
-        this.configure(go.x_, go.y_, 12, angle, clipRect_);
+        Parameters.data_.centerOnPlayer ?
+            clipRect_ = centerRect :
+            clipRect_ = offsetRect;
+        this.configure(go.x_, go.y_, 12, Parameters.data_.cameraAngle, clipRect_);
         this.isHallucinating_ = isHallucinating;
     }
 
@@ -114,6 +106,18 @@ public class Camera {
         var hTileDist:Number = this.clipRect_.height / (2 * vToS_scale);
         this.maxDist_ = Math.sqrt(wTileDist * wTileDist + hTileDist * hTileDist) + 1;
         this.maxDistSq_ = this.maxDist_ * this.maxDist_;
+    }
+
+    public function resize(rect:Rectangle):void {
+        centerRect.x = CENTER_MULT.x * (rect.width - 200);
+        centerRect.y = CENTER_MULT.y * rect.height;
+        centerRect.width = CENTER_MULT.width * (rect.width - 200);
+        centerRect.height = CENTER_MULT.height * rect.height;
+
+        offsetRect.x = OFFSET_MULT.x * (rect.width - 200);
+        offsetRect.y = OFFSET_MULT.y * rect.height;
+        offsetRect.width = OFFSET_MULT.width * (rect.width - 200);
+        offsetRect.height = OFFSET_MULT.height * rect.height;
     }
 
 

@@ -7,6 +7,8 @@ import com.company.assembleegameclient.tutorial.Tutorial;
 import flash.display.Sprite;
 import flash.geom.Rectangle;
 
+import kabam.lib.resizing.view.Resizable;
+
 import kabam.rotmg.core.model.PlayerModel;
 import kabam.rotmg.messaging.impl.GameServerConnection;
 import kabam.rotmg.messaging.impl.incoming.MapInfo;
@@ -14,7 +16,7 @@ import kabam.rotmg.ui.view.HUDView;
 
 import org.osflash.signals.Signal;
 
-public class AGameSprite extends Sprite {
+public class AGameSprite extends Sprite implements Resizable {
 
     public const closed:Signal = new Signal();
 

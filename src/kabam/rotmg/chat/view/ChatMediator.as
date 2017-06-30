@@ -49,8 +49,6 @@ public class ChatMediator extends Mediator {
     public var closeDialog:CloseDialogsSignal;
     [Inject]
     public var register:RegisterSignal;
-    [Inject]
-    public var resize:Resize;
     private var stage:Stage;
     private var scrollDirection:int;
     private var scrollBuffer:int;
@@ -67,7 +65,6 @@ public class ChatMediator extends Mediator {
         this.openDialog.add(this.onOpenDialog);
         this.closeDialog.add(this.onCloseDialog);
         this.register.add(this.onRegister);
-        this.resize.add(this.onResize);
     }
 
     private function onOpenDialog(_arg1:Sprite):void {
@@ -101,7 +98,6 @@ public class ChatMediator extends Mediator {
         this.openDialog.remove(this.onOpenDialog);
         this.closeDialog.remove(this.onCloseDialog);
         this.register.remove(this.onRegister);
-        this.resize.remove(this.onResize);
         this.stage = null;
     }
 
@@ -187,11 +183,6 @@ public class ChatMediator extends Mediator {
                 this.openDialog.dispatch(new RegisterPromptDialog(TextKey.CHAT_REGISTER_TO_CHAT));
             }
         }
-    }
-
-    private function onResize(rect:Rectangle):void {
-        this.model.setBounds(rect.width, rect.height);
-        this.view.resize(rect);
     }
 
 

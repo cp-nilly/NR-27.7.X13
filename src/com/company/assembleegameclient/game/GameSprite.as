@@ -506,9 +506,16 @@ public class GameSprite extends AGameSprite {
     }
 
     override public function resize(rect:Rectangle):void {
-        this.hudView.resize(rect);
-        this.hudView.x = rect.width - 200;
-        this.creditDisplay_.x = rect.width - 206;
+        this.camera_.resize(rect);
+
+        if (hudView) {
+            this.hudView.resize(rect);
+            this.hudView.x = rect.width - 200;
+        }
+
+        if (creditDisplay_) {
+            this.creditDisplay_.x = rect.width - 206;
+        }
     }
 
 

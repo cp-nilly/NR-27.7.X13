@@ -2,9 +2,11 @@
 import flash.display.Sprite;
 import flash.geom.Rectangle;
 
+import kabam.lib.resizing.view.Resizable;
+
 import kabam.rotmg.chat.model.ChatModel;
 
-public class Chat extends Sprite {
+public class Chat extends Sprite implements Resizable {
 
     public var list:ChatList;
     private var input:ChatInput;
@@ -51,9 +53,10 @@ public class Chat extends Sprite {
     }
 
     public function resize(rect:Rectangle):void {
+        this.model.setBounds(rect.width, rect.height);
+        this.input.resize(model);
         this.y = rect.height - this.model.bounds.height;
         this.list.y = model.bounds.height;
-        this.input.resize(model);
     }
 
 
