@@ -2,6 +2,7 @@
 import com.company.assembleegameclient.parameters.Parameters;
 
 import kabam.rotmg.application.api.ApplicationSetup;
+import kabam.rotmg.text.model.TextKey;
 
 public class LocalhostSetup implements ApplicationSetup {
 
@@ -48,6 +49,14 @@ public class LocalhostSetup implements ApplicationSetup {
 
     public function isDebug():Boolean {
         return (true);
+    }
+
+    public function getCopyrightLabel():String {
+        return TextKey.COPYRIGHT;
+    }
+
+    public function getSupportLink():String {
+        return "http://rotmg.decagames.io";
     }
 
 

@@ -33,7 +33,7 @@ import kabam.rotmg.ui.view.components.ScreenBase;
 
 import org.osflash.signals.Signal;
 
-public class TextureView extends Sprite {
+public class SpriteView extends Sprite {
 
     private static const MODE_DROPDOWN_X:int = 240;
     private static const MODE_DROPDOWN_Y:int = 32;
@@ -55,7 +55,7 @@ public class TextureView extends Sprite {
     private var tags_:String = "";
     private var tempEvent_:PixelEvent = null;
 
-    public function TextureView() {
+    public function SpriteView() {
         addChild(new ScreenBase());
         addChild(new AccountScreen());
         this.commandMenu_ = new TMCommandMenu();

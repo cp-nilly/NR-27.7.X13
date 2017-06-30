@@ -12,7 +12,7 @@ import robotlegs.bender.bundles.mvcs.Mediator;
 public class TextureMediator extends Mediator {
 
     [Inject]
-    public var view:TextureView;
+    public var view:SpriteView;
     [Inject]
     public var model:PlayerModel;
     [Inject]

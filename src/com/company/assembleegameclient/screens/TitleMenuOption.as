@@ -150,10 +150,10 @@ public class TitleMenuOption extends Sprite {
         return ((("[TitleMenuOption " + this.textField.getText()) + "]"));
     }
 
-    public function createNoticeTag(_arg1:String, _arg2:int, _arg3:uint, _arg4:Boolean):void {
+    public function createNoticeTag(text:String, size:int, color:uint, bold:Boolean):void {
         var _local5:TextFieldDisplayConcrete = new TextFieldDisplayConcrete();
-        _local5.setSize(_arg2).setColor(_arg3).setBold(_arg4);
-        _local5.setStringBuilder(new LineBuilder().setParams(_arg1));
+        _local5.setSize(size).setColor(color).setBold(bold);
+        _local5.setStringBuilder(new LineBuilder().setParams(text));
         _local5.x = (this.textField.x - 4);
         _local5.y = (this.textField.y - 20);
         addChild(_local5);

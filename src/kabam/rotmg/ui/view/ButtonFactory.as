@@ -34,7 +34,7 @@ public class ButtonFactory {
         return ((playButton = ((playButton) || (makeButton(ScreenTypes.PLAY, BUTTON_SIZE_LARGE, CENTER, true)))));
     }
 
-    public static function getTextureEditorButton():TitleMenuOption {
+    public static function getSpriteButton():TitleMenuOption {
         return textureEditorButton = textureEditorButton || makeButton(ScreenTypes.TEXTURE_EDITOR, BUTTON_SIZE_SMALL, LEFT, false, 0x007BA7);
     }
 
@@ -70,7 +70,7 @@ public class ButtonFactory {
         return supportButton = supportButton || makeButton(ScreenTypes.SUPPORT, BUTTON_SIZE_SMALL, RIGHT, false, 0xFFA500);
     }
 
-    public static function getEditorButton():TitleMenuOption {
+    public static function getMapButton():TitleMenuOption {
         return editorButton = editorButton || makeButton(ScreenTypes.EDITOR, BUTTON_SIZE_SMALL, RIGHT, false, 0x007BA7);
     }
 

@@ -4,14 +4,12 @@ import com.company.assembleegameclient.screens.TitleMenuOption;
 import com.company.assembleegameclient.ui.SoundIcon;
 
 import flash.display.Sprite;
-import flash.events.MouseEvent;
 import flash.filters.DropShadowFilter;
 import flash.text.TextFieldAutoSize;
 
 import kabam.rotmg.account.transfer.view.KabamLoginView;
 import kabam.rotmg.core.StaticInjectorContext;
 import kabam.rotmg.dialogs.control.OpenDialogSignal;
-import kabam.rotmg.text.model.TextKey;
 import kabam.rotmg.text.view.TextFieldDisplayConcrete;
 import kabam.rotmg.text.view.stringBuilder.LineBuilder;
 import kabam.rotmg.text.view.stringBuilder.StaticStringBuilder;
@@ -21,7 +19,6 @@ import kabam.rotmg.ui.view.components.MapBackground;
 import kabam.rotmg.ui.view.components.MenuOptionsBar;
 
 import org.osflash.signals.Signal;
-import org.osflash.signals.natives.NativeMappedSignal;
 
 public class TitleView extends Sprite {
 
@@ -45,11 +42,10 @@ public class TitleView extends Sprite {
     public var languagesClicked:Signal;
     public var supportClicked:Signal;
     public var kabamTransferClicked:Signal;
-    public var editorClicked:Signal;
-    public var textureEditorClicked:Signal;
+    public var mapClicked:Signal;
+    public var spriteClicked:Signal;
     public var quitClicked:Signal;
     public var optionalButtonsAdded:Signal;
-    private var migrateButton:TitleMenuOption;
 
     public function TitleView() {
         this.menuOptionsBar = this.makeMenuOptionsBar();
@@ -65,91 +61,100 @@ public class TitleView extends Sprite {
     }
 
     public function openKabamTransferView():void {
-        var _local1:OpenDialogSignal = StaticInjectorContext.getInjector().getInstance(OpenDialogSignal);
-        _local1.dispatch(new KabamLoginView());
+        var openDialogSig:OpenDialogSignal = StaticInjectorContext.getInjector().getInstance(OpenDialogSignal);
+        openDialogSig.dispatch(new KabamLoginView());
     }
 
     private function makeMenuOptionsBar():MenuOptionsBar {
-        var _local1:TitleMenuOption = ButtonFactory.getPlayButton();
-        var _local2:TitleMenuOption = ButtonFactory.getServersButton();
-        var _local3:TitleMenuOption = ButtonFactory.getAccountButton();
-        var _local4:TitleMenuOption = ButtonFactory.getLegendsButton();
-        var _local5:TitleMenuOption = ButtonFactory.getSupportButton();
-        var _local6:TitleMenuOption = ButtonFactory.getTextureEditorButton();
-        this.playClicked = _local1.clicked;
-        this.serversClicked = _local2.clicked;
-        this.accountClicked = _local3.clicked;
-        this.legendsClicked = _local4.clicked;
-        this.supportClicked = _local5.clicked;
-        this.textureEditorClicked = _local6.clicked;
-        var _local7:MenuOptionsBar = new MenuOptionsBar();
-        _local7.addButton(_local1, MenuOptionsBar.CENTER);
-        _local7.addButton(_local2, MenuOptionsBar.LEFT);
-        _local7.addButton(_local5, MenuOptionsBar.LEFT);
-        _local7.addButton(_local3, MenuOptionsBar.RIGHT);
-        _local7.addButton(_local4, MenuOptionsBar.RIGHT);
-        _local7.addButton(_local6, MenuOptionsBar.LEFT);
-        return (_local7);
+        var play:TitleMenuOption = ButtonFactory.getPlayButton();
+        this.playClicked = play.clicked;
+
+        var server:TitleMenuOption = ButtonFactory.getServersButton();
+        this.serversClicked = server.clicked;
+
+        var account:TitleMenuOption = ButtonFactory.getAccountButton();
+        this.accountClicked = account.clicked;
+
+        var legends:TitleMenuOption = ButtonFactory.getLegendsButton();
+        this.legendsClicked = legends.clicked;
+
+        var support:TitleMenuOption = ButtonFactory.getSupportButton();
+        this.supportClicked = support.clicked;
+
+        var bar:MenuOptionsBar = new MenuOptionsBar();
+        bar.addButton(play, MenuOptionsBar.CENTER);
+        bar.addButton(server, MenuOptionsBar.LEFT);
+        bar.addButton(support, MenuOptionsBar.LEFT);
+        bar.addButton(account, MenuOptionsBar.RIGHT);
+        bar.addButton(legends, MenuOptionsBar.RIGHT);
+        return bar;
     }
 
     private function makeChildren():void {
-        this.versionText = this.makeText().setHTML(true).setAutoSize(TextFieldAutoSize.LEFT).setVerticalAlign(TextFieldDisplayConcrete.MIDDLE);
+        this.versionText = this.makeText()
+                .setHTML(true)
+                .setAutoSize(TextFieldAutoSize.LEFT)
+                .setVerticalAlign(TextFieldDisplayConcrete.MIDDLE);
         this.versionText.y = MIDDLE_OF_BOTTOM_BAND;
         addChild(this.versionText);
-        this.copyrightText = this.makeText().setAutoSize(TextFieldAutoSize.RIGHT).setVerticalAlign(TextFieldDisplayConcrete.MIDDLE);
-        this.copyrightText.setStringBuilder(new LineBuilder().setParams(TextKey.COPYRIGHT));
-        this.copyrightText.filters = [new DropShadowFilter(0, 0, 0)];
+
+        this.copyrightText = this.makeText()
+                .setAutoSize(TextFieldAutoSize.RIGHT)
+                .setVerticalAlign(TextFieldDisplayConcrete.MIDDLE);
         this.copyrightText.x = 800;
         this.copyrightText.y = MIDDLE_OF_BOTTOM_BAND;
         addChild(this.copyrightText);
     }
 
     public function makeText():TextFieldDisplayConcrete {
-        var _local1:TextFieldDisplayConcrete = new TextFieldDisplayConcrete().setSize(12).setColor(0x7F7F7F);
-        _local1.filters = [new DropShadowFilter(0, 0, 0)];
-        return (_local1);
+        var txtField:TextFieldDisplayConcrete = new TextFieldDisplayConcrete().setSize(12).setColor(0x7F7F7F);
+        txtField.filters = [new DropShadowFilter(0, 0, 0)];
+        return txtField;
     }
 
     public function initialize(_arg1:EnvironmentData):void {
         this.data = _arg1;
         this.updateVersionText();
+        this.updateCopyrightText();
         this.handleOptionalButtons();
     }
 
-    public function putNoticeTagToOption(_arg1:TitleMenuOption, _arg2:String, _arg3:int = 14, _arg4:uint = 10092390, _arg5:Boolean = true):void {
-        _arg1.createNoticeTag(_arg2, _arg3, _arg4, _arg5);
+    public function putNoticeTagToOption(menuOpt:TitleMenuOption, text:String, size:int = 14, color:uint = 10092390, bold:Boolean = true):void {
+        menuOpt.createNoticeTag(text, size, color, bold);
     }
 
     private function updateVersionText():void {
         this.versionText.setStringBuilder(new StaticStringBuilder(this.data.buildLabel));
     }
 
+    private function updateCopyrightText():void {
+        this.copyrightText.setStringBuilder(new LineBuilder().setParams(this.data.copyrightLabel));
+        this.copyrightText.filters = [new DropShadowFilter(0, 0, 0)];
+    }
+
     private function handleOptionalButtons():void {
-        //((this.data.canMapEdit) && (this.createEditorButton()));
-        this.createEditorButton();
-        ((this.data.isDesktop) && (this.createQuitButton()));
+        this.data.canMapEdit && this.createMapButton();
+        this.data.canSprite && this.createSpriteButton();
+        this.data.isDesktop && this.createQuitButton();
         this.optionalButtonsAdded.dispatch();
     }
 
     private function createQuitButton():void {
-        var _local1:TitleMenuOption = ButtonFactory.getQuitButton();
-        this.menuOptionsBar.addButton(_local1, MenuOptionsBar.RIGHT);
-        this.quitClicked = _local1.clicked;
+        var menuOpt:TitleMenuOption = ButtonFactory.getQuitButton();
+        this.menuOptionsBar.addButton(menuOpt, MenuOptionsBar.RIGHT);
+        this.quitClicked = menuOpt.clicked;
     }
 
-    private function createEditorButton():void {
-        var _local1:TitleMenuOption = ButtonFactory.getEditorButton();
-        this.menuOptionsBar.addButton(_local1, MenuOptionsBar.RIGHT);
-        this.editorClicked = _local1.clicked;
+    private function createMapButton():void {
+        var menuOpt:TitleMenuOption = ButtonFactory.getMapButton();
+        this.menuOptionsBar.addButton(menuOpt, MenuOptionsBar.RIGHT);
+        this.mapClicked = menuOpt.clicked;
     }
 
-    private function makeMigrateButton():void {
-        this.migrateButton = new TitleMenuOption("Want to migrate your Kabam.com account?", 16, false);
-        this.migrateButton.setAutoSize(TextFieldAutoSize.CENTER);
-        this.kabamTransferClicked = new NativeMappedSignal(this.migrateButton, MouseEvent.CLICK);
-        this.migrateButton.setTextKey("Want to migrate your Kabam.com account?");
-        this.migrateButton.x = 400;
-        this.migrateButton.y = 500;
+    private function createSpriteButton():void {
+        var menuOpt:TitleMenuOption = ButtonFactory.getSpriteButton();
+        this.menuOptionsBar.addButton(menuOpt, MenuOptionsBar.LEFT);
+        this.spriteClicked = menuOpt.clicked;
     }
 
 
