@@ -5,6 +5,7 @@ import com.company.assembleegameclient.objects.GameObject;
 import com.company.assembleegameclient.tutorial.Tutorial;
 
 import flash.display.Sprite;
+import flash.geom.Rectangle;
 
 import kabam.rotmg.core.model.PlayerModel;
 import kabam.rotmg.messaging.impl.GameServerConnection;
@@ -45,6 +46,9 @@ public class AGameSprite extends Sprite {
 
     public function evalIsNotInCombatMapArea():Boolean {
         return (false);
+    }
+
+    public function resize(rect:Rectangle):void {
     }
 
 

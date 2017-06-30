@@ -23,6 +23,7 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.external.ExternalInterface;
 import flash.filters.ColorMatrixFilter;
+import flash.geom.Rectangle;
 import flash.utils.ByteArray;
 import flash.utils.getTimer;
 
@@ -502,6 +503,12 @@ public class GameSprite extends AGameSprite {
     }
 
     public function showPetToolTip(_arg1:Boolean):void {
+    }
+
+    override public function resize(rect:Rectangle):void {
+        this.hudView.resize(rect);
+        this.hudView.x = rect.width - 200;
+        this.creditDisplay_.x = rect.width - 206;
     }
 
 

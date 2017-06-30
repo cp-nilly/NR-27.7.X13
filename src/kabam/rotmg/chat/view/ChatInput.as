@@ -24,11 +24,10 @@ public class ChatInput extends Sprite {
         this.enteredText = false;
     }
 
-    public function setup(_arg1:ChatModel, _arg2:TextField):void {
-        addChild((this.input = _arg2));
-        _arg2.width = (_arg1.bounds.width - 2);
-        _arg2.height = _arg1.lineHeight;
-        _arg2.y = (_arg1.bounds.height - _arg1.lineHeight);
+    public function setup(cm:ChatModel, tf:TextField):void {
+        addChild(this.input = tf);
+        input.height = cm.lineHeight;
+        resize(cm);
     }
 
     public function activate(_arg1:String, _arg2:Boolean):void {
@@ -96,6 +95,11 @@ public class ChatInput extends Sprite {
             }
             _arg1.stopImmediatePropagation();
         }
+    }
+
+    public function resize(cm:ChatModel):void {
+        input.width = cm.bounds.width - 2;
+        input.y = cm.bounds.height - cm.lineHeight;
     }
 
 

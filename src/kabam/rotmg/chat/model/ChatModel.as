@@ -25,6 +25,11 @@ public class ChatModel {
         }
     }
 
+    public function setBounds(stageWidth:int, stageHeight:int) {
+        this.bounds.width = stageWidth - 200;
+        this.bounds.height = stageHeight / 2;
+    }
+
 
 }
 }

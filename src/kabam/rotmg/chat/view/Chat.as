@@ -1,5 +1,6 @@
 ﻿package kabam.rotmg.chat.view {
 import flash.display.Sprite;
+import flash.geom.Rectangle;
 
 import kabam.rotmg.chat.model.ChatModel;
 
@@ -47,6 +48,12 @@ public class Chat extends Sprite {
         if ((((this.input == null)) || (!(contains(this.input))))) {
             this.addChatInput();
         }
+    }
+
+    public function resize(rect:Rectangle):void {
+        this.y = rect.height - this.model.bounds.height;
+        this.list.y = model.bounds.height;
+        this.input.resize(model);
     }
 
 

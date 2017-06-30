@@ -16,6 +16,7 @@ import flash.display.IGraphicsData;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.geom.Point;
+import flash.geom.Rectangle;
 
 import kabam.rotmg.game.view.components.TabStripView;
 import kabam.rotmg.messaging.impl.incoming.TradeAccepted;
@@ -176,9 +177,15 @@ public class HUDView extends Sprite implements UnFocusAble {
         }
     }
 
-    public function setMiniMapFocus(object:GameObject) : void {
+    public function setMiniMapFocus(object:GameObject):void {
         this.miniMap.setFocus(object);
     }
+
+    public function resize(rect:Rectangle):void {
+        this.background.height = rect.height;
+        this.gradientOverlay.height = rect.height;
+    }
+
 
 }
 }
