@@ -26,6 +26,7 @@ import kabam.rotmg.core.signals.SetScreenWithValidDataSignal;
 import kabam.rotmg.core.view.Layers;
 import kabam.rotmg.dialogs.control.CloseDialogsSignal;
 import kabam.rotmg.dialogs.control.OpenDialogSignal;
+import kabam.rotmg.editor.view.TextureView;
 import kabam.rotmg.legends.view.LegendsView;
 import kabam.rotmg.ui.model.EnvironmentData;
 import kabam.rotmg.ui.signals.EnterGameSignal;
@@ -74,6 +75,7 @@ public class TitleMediator extends Mediator {
         this.view.accountClicked.add(this.handleIntentionToReviewAccount);
         this.view.legendsClicked.add(this.showLegendsScreen);
         this.view.supportClicked.add(this.openSupportPage);
+        this.view.textureEditorClicked.add(this.showTextureEditor);
         if (this.playerModel.isNewToEditing()) {
             this.view.putNoticeTagToOption(ButtonFactory.getEditorButton(), "new");
         }
@@ -152,6 +154,7 @@ public class TitleMediator extends Mediator {
         this.view.supportClicked.remove(this.openSupportPage);
         this.view.optionalButtonsAdded.remove(this.onOptionalButtonsAdded);
         ((this.view.editorClicked) && (this.view.editorClicked.remove(this.showMapEditor)));
+        this.view.textureEditorClicked.remove(this.showTextureEditor);
         ((this.view.quitClicked) && (this.view.quitClicked.remove(this.attemptToCloseClient)));
     }
 
@@ -177,6 +180,10 @@ public class TitleMediator extends Mediator {
 
     private function showMapEditor():void {
         this.setScreen.dispatch(new MapEditor());
+    }
+
+    private function showTextureEditor():void {
+        this.setScreen.dispatch(new TextureView());
     }
 
     private function attemptToCloseClient():void {

@@ -44,7 +44,7 @@ public class GameServerConnection {
     public static const USEPORTAL:int = 6;
     public static const DEATH:int = 83;
     public static const BUY:int = 93;
-    public static const BUYRESULT:int = 93;
+    public static const BUYRESULT:int = 50;
     public static const AOE:int = 89;
     public static const GROUNDDAMAGE:int = 98;
     public static const PLAYERHIT:int = 10;
