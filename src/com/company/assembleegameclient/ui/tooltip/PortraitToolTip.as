@@ -72,22 +72,22 @@ public class PortraitToolTip extends ToolTip {
         return (0xFFFF00 - (0x0500 * int((50 - _arg1))));
     }
 
-    public function drawBar(_arg1:int, _arg2:int, _arg3:Number = 100, _arg4:Number = 3, _arg5:uint = 0x545454, _arg6:uint = 0xFF00) {
-        var _local7:Number = (_arg1 / _arg2);
+    public function drawBar(hp:int, maxhp:int, _arg3:Number = 100, _arg4:Number = 3, color:uint = 0x545454) {
         this.bar.graphics.clear();
         var bar:Graphics = this.bar.graphics;
         bar.lineStyle(0, 0x545454);
-        bar.beginFill(_arg5);
+        bar.beginFill(color);
         bar.lineTo(_arg3, 0);
         bar.lineTo(_arg3, _arg4);
         bar.lineTo(0, _arg4);
         bar.lineTo(0, 0);
         bar.endFill();
-        _arg3 = (_arg3 * _local7);
+        var hpDec:Number = (hp / maxhp);
+        _arg3 = (_arg3 * hpDec);
         this.hMeter.graphics.clear();
         var hMeter:Graphics = this.hMeter.graphics;
         hMeter.lineStyle(0, 0x545454);
-        hMeter.beginFill(this.getHpColor(_local7 * 100));
+        hMeter.beginFill(this.getHpColor(hpDec * 100));
         hMeter.lineTo(_arg3, 0);
         hMeter.lineTo(_arg3, _arg4);
         hMeter.lineTo(0, _arg4);
