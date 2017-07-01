@@ -95,7 +95,7 @@ public class QuestToolTip extends ToolTip {
         var dist:int;
         var map:Map = this.questObj.map_;
         this.dist = int.MAX_VALUE;
-        for each (gameObject in map) {
+        for each (gameObject in map.goDict_) {
             if (gameObject is Player) {
                 dist = this.getDist(gameObject.x_, gameObject.y_, this.questObj.x_, this.questObj.y_);
                 if (dist < this.dist) {

@@ -44,9 +44,9 @@ public class PortraitToolTip extends ToolTip {
         }
     }
 
-    public function getDist(x1:Number, y1:Number, x2:Number, y2:Number):Number {
-        var x_:* = (x1 - x2);
-        var y_:* = (y1 - y2);
+    public function getDist(playerX:Number, playerY:Number, questX:Number, QuestY:Number):Number {
+        var x_:* = (playerX - questX);
+        var y_:* = (playerY - QuestY);
         return (Math.sqrt(((y_ * y_)) + ((x_ * x_))));
     }
 
