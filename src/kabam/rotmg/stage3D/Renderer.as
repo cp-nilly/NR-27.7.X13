@@ -5,7 +5,6 @@ import com.company.assembleegameclient.map.Camera;
 import flash.display.GraphicsBitmapFill;
 import flash.display.GraphicsGradientFill;
 import flash.display.IGraphicsData;
-import flash.display.StageScaleMode;
 import flash.display3D.Context3D;
 import flash.display3D.Context3DProgramType;
 import flash.display3D.Context3DTextureFormat;
@@ -16,6 +15,7 @@ import flash.display3D.Program3D;
 import flash.display3D.VertexBuffer3D;
 import flash.display3D.textures.Texture;
 import flash.geom.Matrix3D;
+import flash.geom.Rectangle;
 import flash.geom.Vector3D;
 
 import kabam.rotmg.stage3D.Object3D.Object3DStage3D;
@@ -68,14 +68,16 @@ public class Renderer {
     private var rd_:Vector.<Number> = new Vector.<Number>(16, true);
     protected var widthOffset_:Number;
     protected var heightOffset_:Number;
-    private var stageWidth:Number = 600;
-    private var stageHeight:Number = 600;
     private var sceneTexture_:Texture;
     private var blurFactor:Number = 0.01;
     private var postFilterVertexBuffer_:VertexBuffer3D;
     private var postFilterIndexBuffer_:IndexBuffer3D;
     private var blurFragmentConstants_:Vector.<Number> = Vector.<Number>([0.4, 0.6, 0.4, 1.5]);
     private var finalTransform:Matrix3D = new Matrix3D();
+    private var width:int;
+    private var halfWidth:int;
+    private var height:int;
+    private var halfHeight:int;
 
     public function Renderer(r3d:Render3D) {
         Renderer.inGame = false;
@@ -190,8 +192,8 @@ public class Renderer {
             gfxData:Vector.<IGraphicsData>, obj3dStage:Vector.<Object3DStage3D>,
             mapWidth:Number, mapHeight:Number, camera:Camera, postEffect:uint):void {
 
-        if (WebMain.STAGE.stageWidth != this.stageWidth || WebMain.STAGE.stageHeight != this.stageHeight) {
-            this.resizeStage3DBackBuffer(camera);
+        if (width != camera.clipRect_.width || height != camera.clipRect_.height) {
+            resize(camera.clipRect_);
         }
 
         Renderer.inGame == true ?
@@ -205,18 +207,19 @@ public class Renderer {
         this.context3D.present();
     }
 
-    private function resizeStage3DBackBuffer(camera:Camera):void {
-        var w:int = WebMain.STAGE.stageWidth;
-        var h:int = WebMain.STAGE.stageHeight;
-        var widthPlayable:Number = w * camera.clipRect_.width / (camera.clipRect_.width + 200);
-        if (widthPlayable - 100 < 1 || h - 100 < 1) {
+    public function resize(rect:Rectangle):void {
+        width = rect.width;
+        height = rect.height;
+        halfWidth = width / 2;
+        halfHeight = height / 2;
+        resizeStage3DBackBuffer();
+    }
+
+    private function resizeStage3DBackBuffer():void {
+        if (width - 100 < 1 || height - 100 < 1) {
             return;
         }
-        WebMain.STAGE.stage3Ds[0]
-                .context3D
-                .configureBackBuffer(widthPlayable, h, 2, false);
-        this.stageWidth = w;
-        this.stageHeight = h;
+        context3D.configureBackBuffer(width, height, 2, true);
     }
 
     private function renderWithPostEffect(
@@ -302,10 +305,10 @@ public class Renderer {
                 }
                 this.graphic3D_.setGraphic(GraphicsBitmapFill(data), this.context3D);
                 finalTransform.copyFrom(this.graphic3D_.getMatrix3D());
-                finalTransform.appendScale(1 / Stage3DConfig.HALF_WIDTH, 1 / Stage3DConfig.HALF_HEIGHT, 1);
+                finalTransform.appendScale(1 / halfWidth, 1 / halfHeight, 1);
                 finalTransform.appendTranslation(
-                        this.tX / Stage3DConfig.WIDTH,
-                        this.tY / Stage3DConfig.HEIGHT, 0);
+                        this.tX / width,
+                        this.tY / height, 0);
                 this.context3D.setProgramConstantsFromMatrix(
                         Context3DProgramType.VERTEX, 0, finalTransform, true);
                 this.graphic3D_.render(this.context3D);
@@ -316,11 +319,11 @@ public class Renderer {
                 this.graphic3D_.setGradientFill(
                         GraphicsGradientFill(data),
                         this.context3D,
-                        Stage3DConfig.HALF_WIDTH, Stage3DConfig.HALF_HEIGHT);
+                        halfWidth, halfHeight);
                 finalTransform.copyFrom(this.graphic3D_.getMatrix3D());
                 finalTransform.appendTranslation(
-                        this.tX / Stage3DConfig.WIDTH,
-                        this.tY / Stage3DConfig.HEIGHT, 0);
+                        this.tX / width,
+                        this.tY / height, 0);
                 this.context3D.setProgramConstantsFromMatrix(
                         Context3DProgramType.VERTEX, 0, finalTransform, true);
                 this.context3D.setProgramConstantsFromVector(
@@ -337,8 +340,8 @@ public class Renderer {
                     finalTransform.append(this.cameraMatrix_);
                     finalTransform.append(this._projection);
                     finalTransform.appendTranslation(
-                            this.tX / Stage3DConfig.WIDTH,
-                            this.tY / Stage3DConfig.HEIGHT * 11.5, 0);
+                            this.tX / width,
+                            this.tY / height * 11.5, 0);
                     this.context3D.setProgramConstantsFromMatrix(
                             Context3DProgramType.VERTEX, 0, finalTransform, true);
                     this.context3D.setProgramConstantsFromMatrix(

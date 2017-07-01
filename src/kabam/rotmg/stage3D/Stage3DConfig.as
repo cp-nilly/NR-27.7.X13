@@ -21,11 +21,6 @@ import robotlegs.bender.framework.api.IConfig;
 
 public class Stage3DConfig implements IConfig {
 
-    public static var WIDTH:int = 600;
-    public static var HALF_WIDTH:int = (WIDTH / 2);
-    public static var HEIGHT:int = 600;
-    public static var HALF_HEIGHT:int = (HEIGHT / 2);
-
     [Inject]
     public var stageProxy:StageProxy;
     [Inject]
@@ -50,24 +45,19 @@ public class Stage3DConfig implements IConfig {
     }
 
     private function onContextCreate(_arg1:Event):void {
-        WIDTH = WebMain.STAGE.stageWidth - 200;
-        HEIGHT = WebMain.STAGE.stageHeight;
-        HALF_WIDTH = WIDTH / 2;
-        HALF_HEIGHT = HEIGHT / 2;
-
         this.stage3D.removeEventListener(Event.CONTEXT3D_CREATE, this.onContextCreate);
-        var _local2:Context3DProxy = this.stage3D.getContext3D();
-        if (_local2.GetContext3D().driverInfo.toLowerCase().indexOf("software") != -1) {
+
+        var ctxProxy:Context3DProxy = this.stage3D.getContext3D();
+        if (ctxProxy.GetContext3D().driverInfo.toLowerCase().indexOf("software") != -1) {
             Parameters.clearGpuRender();
         }
-        _local2.configureBackBuffer(WIDTH, HEIGHT, 2, true);
-        _local2.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
-        _local2.setDepthTest(false, Context3DCompareMode.LESS_EQUAL);
-        this.injector.map(Context3DProxy).toValue(_local2);
+        ctxProxy.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
+        ctxProxy.setDepthTest(false, Context3DCompareMode.LESS_EQUAL);
+        this.injector.map(Context3DProxy).toValue(ctxProxy);
         Graphic3DHelper.map(this.injector);
         this.renderer = this.injector.getInstance(Renderer);
-        this.renderer.init(_local2.GetContext3D());
-        Model3D.Create3dBuffer(_local2.GetContext3D());
+        this.renderer.init(ctxProxy.GetContext3D());
+        Model3D.Create3dBuffer(ctxProxy.GetContext3D());
     }
 
 
