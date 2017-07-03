@@ -866,12 +866,13 @@ public class GameServerConnectionConcrete extends GameServerConnection {
         var _local8:int;
         var _local3:Number = -1;
         var _local4:Number = -1;
-        if (((_arg2) && (!(_arg2.isPaused())))) {
-            _local3 = _arg2.x_;
-            _local4 = _arg2.y_;
+        var controlled:GameObject = _arg2 != null && _arg2.commune != null && !(_arg2.commune is Player) ? _arg2.commune : _arg2;
+        if (controlled && !controlled.isPaused()) {
+            _local3 = controlled.x_;
+            _local4 = controlled.y_;
         }
         var _local5:Move = (this.messages.require(MOVE) as Move);
-        _local5.objectId_ = _arg2.objectId_;
+        _local5.objectId_ = controlled != null ? controlled.objectId_ : 0;
         _local5.tickId_ = _arg1;
         _local5.time_ = gs_.lastUpdate_;
         _local5.newPosition_.x_ = _local3;
@@ -1744,7 +1745,8 @@ public class GameServerConnectionConcrete extends GameServerConnection {
             return;
         }
         var _local6 = (_arg1.objectId_ == this.playerId_);
-        if (((!((_arg2 == 0))) && (!(_local6)))) {
+        var isControlled = player != null && player.commune != null && !(player.commune is Player) && _arg1.objectId_ == player.commune.objectId_;
+        if (_arg2 != 0 && !_local6 && !isControlled) {
             _local5.onTickPos(_arg1.pos_.x_, _arg1.pos_.y_, _arg2, _arg3);
         }
         var _local7:Player = (_local5 as Player);
@@ -2224,6 +2226,7 @@ public class GameServerConnectionConcrete extends GameServerConnection {
             var go:GameObject = goDict[pkt.objectId_];
             gs_.setFocus(go);
             gs_.hudView.setMiniMapFocus(go);
+            player.commune = playerId_ == pkt.objectId_ ? null : go;
         }
     }
 

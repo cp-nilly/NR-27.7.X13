@@ -60,9 +60,11 @@ public class GameObject extends BasicObject {
     protected static const CURSED_FILTER:ColorMatrixFilter = new ColorMatrixFilter(MoreColorUtil.redFilterMatrix);
     protected static const SHOCKED_FILTER:ColorMatrixFilter = new ColorMatrixFilter(MoreColorUtil.greyscaleFilterMatrix);
     protected static const IDENTITY_MATRIX:Matrix = new Matrix();
+    private static const MOVE_THRESHOLD:Number = 0.4;
     private static const ZERO_LIMIT:Number = 1E-5;
     private static const NEGATIVE_ZERO_LIMIT:Number = -(ZERO_LIMIT);
     public static const ATTACK_PERIOD:int = 300;
+    private static var newP:Point = new Point();
 
     public var nameBitmapData_:BitmapData = null;
     private var nameFill_:GraphicsBitmapFill = null;
@@ -113,6 +115,8 @@ public class GameObject extends BasicObject {
     private var isParalyzeImmune_:Boolean = false;
     private var isDazedImmune_:Boolean = false;
     private var ishpScaleSet:Boolean = false;
+    public var movDir:Point = null;
+    public var rotateDir:Number = 0;
     protected var lastTickUpdateTime_:int = 0;
     protected var myLastTickId_:int = -1;
     protected var posAtTick_:Point;
@@ -130,6 +134,7 @@ public class GameObject extends BasicObject {
     private var icons_:Vector.<BitmapData> = null;
     private var iconFills_:Vector.<GraphicsBitmapFill> = null;
     private var iconPaths_:Vector.<GraphicsPath> = null;
+    private var slideVec_:Vector3D;
     protected var shadowGradientFill_:GraphicsGradientFill = null;
     protected var shadowPath_:GraphicsPath = null;
     protected var glowColor_:int = 0;
@@ -146,6 +151,7 @@ public class GameObject extends BasicObject {
         this.vS_ = new Vector.<Number>();
         this.uvt_ = new Vector.<Number>();
         this.fillMatrix_ = new Matrix();
+        this.slideVec_ = new Vector3D();
         super();
         if (_arg1 == null) {
             return;
@@ -637,18 +643,20 @@ public class GameObject extends BasicObject {
         var _local5:Number;
         var _local6:Number;
         var _local3:Boolean;
-        if (!(((this.moveVec_.x == 0)) && ((this.moveVec_.y == 0)))) {
-            if (this.myLastTickId_ < map_.gs_.gsc_.lastTickId_) {
-                this.moveVec_.x = 0;
-                this.moveVec_.y = 0;
-                this.moveTo(this.tickPosition_.x, this.tickPosition_.y);
-            }
-            else {
-                _local4 = (_arg1 - this.lastTickUpdateTime_);
-                _local5 = (this.posAtTick_.x + (_local4 * this.moveVec_.x));
-                _local6 = (this.posAtTick_.y + (_local4 * this.moveVec_.y));
-                this.moveTo(_local5, _local6);
-                _local3 = true;
+        if (map_.player_.commune != this || map_.player_.commune is Player) {
+            if (!(((this.moveVec_.x == 0)) && ((this.moveVec_.y == 0)))) {
+                if (this.myLastTickId_ < map_.gs_.gsc_.lastTickId_) {
+                    this.moveVec_.x = 0;
+                    this.moveVec_.y = 0;
+                    this.moveTo(this.tickPosition_.x, this.tickPosition_.y);
+                }
+                else {
+                    _local4 = (_arg1 - this.lastTickUpdateTime_);
+                    _local5 = (this.posAtTick_.x + (_local4 * this.moveVec_.x));
+                    _local6 = (this.posAtTick_.y + (_local4 * this.moveVec_.y));
+                    this.moveTo(_local5, _local6);
+                    _local3 = true;
+                }
             }
         }
         if (this.props_.whileMoving_ != null) {
@@ -687,6 +695,205 @@ public class GameObject extends BasicObject {
         this.moveVec_.x = ((this.tickPosition_.x - this.posAtTick_.x) / _arg3);
         this.moveVec_.y = ((this.tickPosition_.y - this.posAtTick_.y) / _arg3);
         this.myLastTickId_ = _arg4;
+    }
+
+    private function calcMoveVec(cameraAngle:Number, playerSpeed:Number):void {
+        if (this.movDir.x != 0 || this.movDir.y != 0) {
+            var dirMag:Number = Math.atan2(this.movDir.y, this.movDir.x);
+            if (square_.props_.slideAmount_ > 0) {
+                slideVec_.x = playerSpeed * Math.cos(cameraAngle + dirMag);
+                slideVec_.y = playerSpeed * Math.sin(cameraAngle + dirMag);
+                slideVec_.z = 0;
+                moveVec_.scaleBy(square_.props_.slideAmount_);
+                if (moveVec_.length < slideVec_.length) {
+                    slideVec_.scaleBy(1 - square_.props_.slideAmount_);
+                    moveVec_ = moveVec_.add(slideVec_);
+                }
+            }
+            else {
+                moveVec_.x = playerSpeed * Math.cos(cameraAngle + dirMag);
+                moveVec_.y = playerSpeed * Math.sin(cameraAngle + dirMag);
+            }
+        }
+        else if (moveVec_.length > 0.00012 && square_.props_.slideAmount_ > 0) {
+            moveVec_.scaleBy(square_.props_.slideAmount_);
+        }
+        else {
+            moveVec_.x = 0;
+            moveVec_.y = 0;
+        }
+        if (square_ != null && square_.props_.push_) {
+            moveVec_.x = moveVec_.x - square_.props_.animate_.dx_ / 1000;
+            moveVec_.y = moveVec_.y - square_.props_.animate_.dy_ / 1000;
+        }
+    }
+
+    public function collisionBlockMove(msDelta:int, playerSpeed:Number):Boolean {
+        calcMoveVec(Parameters.data_.cameraAngle, playerSpeed);
+        var x:Number = x_ + msDelta * moveVec_.x;
+        var y:Number = y_ + msDelta * moveVec_.y;
+
+        this.modifyMove(x, y, newP);
+        return this.moveTo(newP.x, newP.y);
+    }
+
+    public function modifyMove(x:Number, y:Number, dest:Point):void {
+        if (isPetrified() || isParalyzed()) {
+            dest.x = x_;
+            dest.y = y_;
+            return;
+        }
+        var dx:Number = (x - x_);
+        var dy:Number = (y - y_);
+        if (dx < MOVE_THRESHOLD && dx > -MOVE_THRESHOLD && dy < MOVE_THRESHOLD && dy > -MOVE_THRESHOLD) {
+            this.modifyStep(x, y, dest);
+            return;
+        }
+        var ds:Number = (MOVE_THRESHOLD / Math.max(Math.abs(dx), Math.abs(dy)));
+        var tds:Number = 0;
+        dest.x = x_;
+        dest.y = y_;
+        var pointFound:Boolean;
+        while (!pointFound) {
+            if (tds + ds >= 1) {
+                ds = (1 - tds);
+                pointFound = true;
+            }
+            this.modifyStep((dest.x + (dx * ds)), (dest.y + (dy * ds)), dest);
+            tds = (tds + ds);
+        }
+    }
+
+    public function modifyStep(x:Number, y:Number, dest:Point):void {
+        var fx:Number;
+        var fy:Number;
+        var isFarX:Boolean = (x_ % 0.5 == 0 && x != x_) || int(x_ / 0.5) != int(x / 0.5);
+        var isFarY:Boolean = (y_ % 0.5 == 0 && y != y_) || int(y_ / 0.5) != int(y / 0.5);
+        if ((!isFarX && !isFarY) || this.isValidPosition(x, y)) {
+            dest.x = x;
+            dest.y = y;
+            return;
+        }
+        if (isFarX) {
+            fx = (x > x_) ? int(x * 2) / 2 : int(x_ * 2) / 2;
+            if (int(fx) > int(x_))
+                fx = (fx - 0.01);
+        }
+        if (isFarY) {
+            fy = (y > y_) ? int(y * 2) / 2 : int(y_ * 2) / 2;
+            if (int(fy) > int(y_))
+                fy = (fy - 0.01);
+        }
+        if (!isFarX) {
+            dest.x = x;
+            dest.y = fy;
+            if (!(square_ == null) && !(square_.props_.slideAmount_ == 0)) {
+                this.resetMoveVector(false);
+            }
+            return;
+        }
+        if (!isFarY) {
+            dest.x = fx;
+            dest.y = y;
+            if (!(square_ == null) && !(square_.props_.slideAmount_ == 0)) {
+                this.resetMoveVector(true);
+            }
+            return;
+        }
+        var ax:Number = (x > x_) ? x - fx : fx - x;
+        var ay:Number = (y > y_) ? y - fy : fy - y;
+        if (ax > ay) {
+            if (this.isValidPosition(x, fy)) {
+                dest.x = x;
+                dest.y = fy;
+                return;
+            }
+            if (this.isValidPosition(fx, y)) {
+                dest.x = fx;
+                dest.y = y;
+                return;
+            }
+        }
+        else {
+            if (this.isValidPosition(fx, y)) {
+                dest.x = fx;
+                dest.y = y;
+                return;
+            }
+            if (this.isValidPosition(x, fy)) {
+                dest.x = x;
+                dest.y = fy;
+                return;
+            }
+        }
+        dest.x = fx;
+        dest.y = fy;
+    }
+
+    private function resetMoveVector(isFarY:Boolean):void {
+        moveVec_.scaleBy(-0.5);
+        if (isFarY) {
+            moveVec_.y = (moveVec_.y * -1);
+        }
+        else {
+            moveVec_.x = (moveVec_.x * -1);
+        }
+    }
+
+    public function isValidPosition(x:Number, y:Number):Boolean {
+        var square:Square = map_.getSquare(x, y);
+        if (square_ != square && (square == null || !square.isWalkable()))
+            return false;
+
+        var xFrac:Number = x - int(x);
+        var yFrac:Number = y - int(y);
+        if (xFrac < 0.5) {
+            if (this.isFullOccupy((x - 1), y))
+                return false;
+
+            if (yFrac < 0.5) {
+                if (this.isFullOccupy(x, y - 1) || this.isFullOccupy(x - 1, y - 1))
+                    return false;
+            }
+            else {
+                if (yFrac > 0.5)
+                    if (this.isFullOccupy(x, y + 1) || this.isFullOccupy(x - 1, y + 1))
+                        return false;
+            }
+        }
+        else {
+            if (xFrac > 0.5) {
+                if (this.isFullOccupy((x + 1), y))
+                    return false;
+                if (yFrac < 0.5) {
+                    if (this.isFullOccupy(x, y - 1) || this.isFullOccupy(x + 1, y - 1))
+                        return false;
+                }
+                else {
+                    if (yFrac > 0.5)
+                        if (this.isFullOccupy(x, y + 1) || this.isFullOccupy(x + 1, y + 1))
+                            return false;
+                }
+            }
+            else {
+                if (yFrac < 0.5) {
+                    if (this.isFullOccupy(x, (y - 1)))
+                        return false;
+                }
+                else {
+                    if (yFrac > 0.5) {
+                        if (this.isFullOccupy(x, (y + 1)))
+                            return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public function isFullOccupy(x:Number, y:Number):Boolean {
+        var square:Square = map_.lookupSquare(x, y);
+        return square == null || square.tileType_ == 0xFF || (square.obj_ != null && square.obj_.props_.fullOccupy_);
     }
 
     public function damage(_arg1:int, _arg2:int, _arg3:Vector.<uint>, _arg4:Boolean, _arg5:Projectile):void {

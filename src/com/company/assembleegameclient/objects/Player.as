@@ -56,7 +56,6 @@ import org.swiftsuspenders.Injector;
 public class Player extends Character {
 
     public static const MS_BETWEEN_TELEPORT:int = 10000;
-    private static const MOVE_THRESHOLD:Number = 0.4;
     private static const NEARBY:Vector.<Point> = new <Point>[new Point(0, 0), new Point(1, 0), new Point(0, 1), new Point(1, 1)];
     private static const RANK_OFFSET_MATRIX:Matrix = new Matrix(1, 0, 0, 1, 2, 2);
     private static const NAME_OFFSET_MATRIX:Matrix = new Matrix(1, 0, 0, 1, 20, 1);
@@ -72,7 +71,6 @@ public class Player extends Character {
     public static var rank:int = 0;
     public static var isAdmin:Boolean = false;
     public static var isMod:Boolean = false;
-    private static var newP:Point = new Point();
 
     public var xpTimer:int;
     public var skinId:int;
@@ -124,14 +122,13 @@ public class Player extends Character {
     public var starred_:Boolean = false;
     public var ignored_:Boolean = false;
     public var distSqFromThisPlayer_:Number = 0;
-    protected var rotate_:Number = 0;
-    protected var relMoveVec_:Point = null;
     protected var moveMultiplier_:Number = 1;
     public var attackPeriod_:int = 0;
     public var nextAltAttack_:int = 0;
     public var nextTeleportAt_:int = 0;
     public var dropBoost:int = 0;
     public var tierBoost:int = 0;
+    public var commune:GameObject;
     protected var healingEffect_:HealingEffect = null;
     protected var nearestMerchant_:Merchant = null;
     public var isDefaultAnimatedChar:Boolean = true;
@@ -145,7 +142,6 @@ public class Player extends Character {
     private var breathFill_:GraphicsSolidFill = null;
     private var breathPath_:GraphicsPath = null;
     private var hallucinatingMaskedImage_:MaskedImage = null;
-    private var slideVec_:Vector3D;
 
     public function Player(_arg1:XML) {
         this.ip_ = new IntPoint();
@@ -162,7 +158,6 @@ public class Player extends Character {
         this.maxHPMax_ = int(_arg1.MaxHitPoints.@max);
         this.maxMPMax_ = int(_arg1.MaxMagicPoints.@max);
         texturingCache_ = new Dictionary();
-        this.slideVec_ = new Vector3D();
     }
 
     public static function fromPlayerXML(_arg1:String, _arg2:XML):Player {
@@ -190,19 +185,19 @@ public class Player extends Character {
     }
 
 
-    public function setRelativeMovement(_arg1:Number, _arg2:Number, _arg3:Number):void {
+    public function setRelativeMovement(angle:Number, x:Number, y:Number):void {
+        var controlled:GameObject = commune != null && !(commune is Player) ? commune : this;
         var _local4:Number;
-        if (this.relMoveVec_ == null) {
-            this.relMoveVec_ = new Point();
-        }
-        this.rotate_ = _arg1;
-        this.relMoveVec_.x = _arg2;
-        this.relMoveVec_.y = _arg3;
+        if (controlled.movDir == null)
+            controlled.movDir = new Point();
+        controlled.rotateDir = angle;
+        controlled.movDir.x = x;
+        controlled.movDir.y = y;
         if (isConfused()) {
-            _local4 = this.relMoveVec_.x;
-            this.relMoveVec_.x = -(this.relMoveVec_.y);
-            this.relMoveVec_.y = -(_local4);
-            this.rotate_ = -(this.rotate_);
+            _local4 = controlled.movDir.x;
+            controlled.rotateDir = -(controlled.rotateDir);
+            controlled.movDir.x = -(controlled.movDir.y);
+            controlled.movDir.y = -(_local4);
         }
     }
 
@@ -322,187 +317,12 @@ public class Player extends Character {
         return (null);
     }
 
-    public function walkTo(_arg1:Number, _arg2:Number):Boolean {
-        this.modifyMove(_arg1, _arg2, newP);
-        return (this.moveTo(newP.x, newP.y));
-    }
-
     override public function moveTo(_arg1:Number, _arg2:Number):Boolean {
         var _local3:Boolean = super.moveTo(_arg1, _arg2);
         if (map_.gs_.evalIsNotInCombatMapArea()) {
             this.nearestMerchant_ = this.getNearbyMerchant();
         }
         return (_local3);
-    }
-
-    public function modifyMove(_arg1:Number, _arg2:Number, _arg3:Point):void {
-        if (((isParalyzed()) || (isPetrified()))) {
-            _arg3.x = x_;
-            _arg3.y = y_;
-            return;
-        }
-        var _local4:Number = (_arg1 - x_);
-        var _local5:Number = (_arg2 - y_);
-        if ((((((((_local4 < MOVE_THRESHOLD)) && ((_local4 > -(MOVE_THRESHOLD))))) && ((_local5 < MOVE_THRESHOLD)))) && ((_local5 > -(MOVE_THRESHOLD))))) {
-            this.modifyStep(_arg1, _arg2, _arg3);
-            return;
-        }
-        var _local6:Number = (MOVE_THRESHOLD / Math.max(Math.abs(_local4), Math.abs(_local5)));
-        var _local7:Number = 0;
-        _arg3.x = x_;
-        _arg3.y = y_;
-        var _local8:Boolean;
-        while (!(_local8)) {
-            if ((_local7 + _local6) >= 1) {
-                _local6 = (1 - _local7);
-                _local8 = true;
-            }
-            this.modifyStep((_arg3.x + (_local4 * _local6)), (_arg3.y + (_local5 * _local6)), _arg3);
-            _local7 = (_local7 + _local6);
-        }
-    }
-
-    public function modifyStep(_arg1:Number, _arg2:Number, _arg3:Point):void {
-        var _local6:Number;
-        var _local7:Number;
-        var _local4:Boolean = ((((((x_ % 0.5) == 0)) && (!((_arg1 == x_))))) || (!((int((x_ / 0.5)) == int((_arg1 / 0.5))))));
-        var _local5:Boolean = ((((((y_ % 0.5) == 0)) && (!((_arg2 == y_))))) || (!((int((y_ / 0.5)) == int((_arg2 / 0.5))))));
-        if (((((!(_local4)) && (!(_local5)))) || (this.isValidPosition(_arg1, _arg2)))) {
-            _arg3.x = _arg1;
-            _arg3.y = _arg2;
-            return;
-        }
-        if (_local4) {
-            _local6 = (((_arg1) > x_) ? (int((_arg1 * 2)) / 2) : (int((x_ * 2)) / 2));
-            if (int(_local6) > int(x_)) {
-                _local6 = (_local6 - 0.01);
-            }
-        }
-        if (_local5) {
-            _local7 = (((_arg2) > y_) ? (int((_arg2 * 2)) / 2) : (int((y_ * 2)) / 2));
-            if (int(_local7) > int(y_)) {
-                _local7 = (_local7 - 0.01);
-            }
-        }
-        if (!_local4) {
-            _arg3.x = _arg1;
-            _arg3.y = _local7;
-            if (((!((square_ == null))) && (!((square_.props_.slideAmount_ == 0))))) {
-                this.resetMoveVector(false);
-            }
-            return;
-        }
-        if (!_local5) {
-            _arg3.x = _local6;
-            _arg3.y = _arg2;
-            if (((!((square_ == null))) && (!((square_.props_.slideAmount_ == 0))))) {
-                this.resetMoveVector(true);
-            }
-            return;
-        }
-        var _local8:Number = (((_arg1) > x_) ? (_arg1 - _local6) : (_local6 - _arg1));
-        var _local9:Number = (((_arg2) > y_) ? (_arg2 - _local7) : (_local7 - _arg2));
-        if (_local8 > _local9) {
-            if (this.isValidPosition(_arg1, _local7)) {
-                _arg3.x = _arg1;
-                _arg3.y = _local7;
-                return;
-            }
-            if (this.isValidPosition(_local6, _arg2)) {
-                _arg3.x = _local6;
-                _arg3.y = _arg2;
-                return;
-            }
-        }
-        else {
-            if (this.isValidPosition(_local6, _arg2)) {
-                _arg3.x = _local6;
-                _arg3.y = _arg2;
-                return;
-            }
-            if (this.isValidPosition(_arg1, _local7)) {
-                _arg3.x = _arg1;
-                _arg3.y = _local7;
-                return;
-            }
-        }
-        _arg3.x = _local6;
-        _arg3.y = _local7;
-    }
-
-    private function resetMoveVector(_arg1:Boolean):void {
-        moveVec_.scaleBy(-0.5);
-        if (_arg1) {
-            moveVec_.y = (moveVec_.y * -1);
-        }
-        else {
-            moveVec_.x = (moveVec_.x * -1);
-        }
-    }
-
-    public function isValidPosition(_arg1:Number, _arg2:Number):Boolean {
-        var _local3:Square = map_.getSquare(_arg1, _arg2);
-        if (((!((square_ == _local3))) && ((((_local3 == null)) || (!(_local3.isWalkable())))))) {
-            return (false);
-        }
-        var _local4:Number = (_arg1 - int(_arg1));
-        var _local5:Number = (_arg2 - int(_arg2));
-        if (_local4 < 0.5) {
-            if (this.isFullOccupy((_arg1 - 1), _arg2)) {
-                return (false);
-            }
-            if (_local5 < 0.5) {
-                if (((this.isFullOccupy(_arg1, (_arg2 - 1))) || (this.isFullOccupy((_arg1 - 1), (_arg2 - 1))))) {
-                    return (false);
-                }
-            }
-            else {
-                if (_local5 > 0.5) {
-                    if (((this.isFullOccupy(_arg1, (_arg2 + 1))) || (this.isFullOccupy((_arg1 - 1), (_arg2 + 1))))) {
-                        return (false);
-                    }
-                }
-            }
-        }
-        else {
-            if (_local4 > 0.5) {
-                if (this.isFullOccupy((_arg1 + 1), _arg2)) {
-                    return (false);
-                }
-                if (_local5 < 0.5) {
-                    if (((this.isFullOccupy(_arg1, (_arg2 - 1))) || (this.isFullOccupy((_arg1 + 1), (_arg2 - 1))))) {
-                        return (false);
-                    }
-                }
-                else {
-                    if (_local5 > 0.5) {
-                        if (((this.isFullOccupy(_arg1, (_arg2 + 1))) || (this.isFullOccupy((_arg1 + 1), (_arg2 + 1))))) {
-                            return (false);
-                        }
-                    }
-                }
-            }
-            else {
-                if (_local5 < 0.5) {
-                    if (this.isFullOccupy(_arg1, (_arg2 - 1))) {
-                        return (false);
-                    }
-                }
-                else {
-                    if (_local5 > 0.5) {
-                        if (this.isFullOccupy(_arg1, (_arg2 + 1))) {
-                            return (false);
-                        }
-                    }
-                }
-            }
-        }
-        return (true);
-    }
-
-    public function isFullOccupy(_arg1:Number, _arg2:Number):Boolean {
-        var _local3:Square = map_.lookupSquare(_arg1, _arg2);
-        return ((((((_local3 == null)) || ((_local3.tileType_ == 0xFF)))) || (((!((_local3.obj_ == null))) && (_local3.obj_.props_.fullOccupy_)))));
     }
 
     override public function update(currentTime:int, deltaMS:int):Boolean {
@@ -538,55 +358,25 @@ public class Player extends Character {
             }
         }
 
+        var controlled:GameObject = commune != null && !(commune is Player) ? commune : this;
         var angle:Number = Parameters.data_.cameraAngle;
-        if (this.rotate_ != 0) {
-            angle = angle + deltaMS * Parameters.PLAYER_ROTATE_SPEED * this.rotate_;
+        if (controlled.rotateDir != 0) {
+            angle = angle + deltaMS * Parameters.PLAYER_ROTATE_SPEED * controlled.rotateDir;
             Parameters.data_.cameraAngle = angle;
         }
 
-        if (map_.player_ == this && isPaused()) {
+        if (map_.player_ == this && isPaused() && (this.commune == null || this.commune is Player))
             return true;
-        }
 
-        if (this.relMoveVec_ != null) {
-            if (this.relMoveVec_.x != 0 || this.relMoveVec_.y != 0) {
-                var mvSpd:Number = this.getMoveSpeed();
-                var mvAngle:Number = Math.atan2(this.relMoveVec_.y, this.relMoveVec_.x);
-                if (square_.props_.slideAmount_ > 0) {
-                    slideVec_.x = mvSpd * Math.cos(angle + mvAngle);
-                    slideVec_.y = mvSpd * Math.sin(angle + mvAngle);
-                    slideVec_.z = 0;
-                    moveVec_.scaleBy(square_.props_.slideAmount_);
-                    if (moveVec_.length < slideVec_.length) {
-                        slideVec_.scaleBy(1 - square_.props_.slideAmount_);
-                        moveVec_ = moveVec_.add(slideVec_);
-                    }
-                }
-                else {
-                    moveVec_.x = mvSpd * Math.cos(angle + mvAngle);
-                    moveVec_.y = mvSpd * Math.sin(angle + mvAngle);
-                }
-            }
-            else {
-                if (moveVec_.length > 0.00012 && square_.props_.slideAmount_ > 0) {
-                    moveVec_.scaleBy(square_.props_.slideAmount_);
-                }
-                else {
-                    moveVec_.x = 0;
-                    moveVec_.y = 0;
-                }
-            }
-            if (square_ != null && square_.props_.push_) {
-                moveVec_.x = moveVec_.x - square_.props_.animate_.dx_ / 1000;
-                moveVec_.y = moveVec_.y - square_.props_.animate_.dy_ / 1000;
-            }
-            this.walkTo(x_ + deltaMS * moveVec_.x, y_ + deltaMS * moveVec_.y);
+        if (controlled.movDir != null) {
+            controlled.collisionBlockMove(deltaMS, getMoveSpeed());
         }
-        else {
-            if (!super.update(currentTime, deltaMS)) {
-                return false;
-            }
-        }
+        else if (!super.update(currentTime, deltaMS))
+            return false;
+
+        if (map_.player_ == this && isPaused())
+            return true;
+
         if (map_.player_ == this &&
                 square_.props_.maxDamage_ > 0 &&
                 (square_.lastDamage_ + 500) < currentTime &&
