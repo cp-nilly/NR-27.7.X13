@@ -479,14 +479,15 @@ public class Player extends Character {
     }
 
     private function getMoveSpeed():Number {
-        if (isSlowed()) {
-            return ((MIN_MOVE_SPEED * this.moveMultiplier_));
-        }
-        var _local1:Number = (MIN_MOVE_SPEED + ((this.speed_ / 75) * (MAX_MOVE_SPEED - MIN_MOVE_SPEED)));
-        if (((isSpeedy()) || (isNinjaSpeedy()))) {
-            _local1 = (_local1 * 1.5);
-        }
-        return ((_local1 * this.moveMultiplier_));
+        var controlled:GameObject = commune != null && !(commune is Player) ? commune : this;
+        if (controlled.isSlowed())
+            return MIN_MOVE_SPEED * this.moveMultiplier_;
+
+        var speed:Number = MIN_MOVE_SPEED + this.speed_ / 75 * (MAX_MOVE_SPEED - MIN_MOVE_SPEED);
+        if (controlled.isSpeedy() || controlled.isNinjaSpeedy())
+            speed = (speed * 1.5);
+
+        return speed * this.moveMultiplier_;
     }
 
     public function attackFrequency():Number {
