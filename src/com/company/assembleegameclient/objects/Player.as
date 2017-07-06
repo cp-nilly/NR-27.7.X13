@@ -535,7 +535,7 @@ public class Player extends Character {
         var pos:Number = 0;
         var action:int = AnimatedChar.STAND;
 
-        if (this.isShooting || currentTime < (attackStart_ + this.attackPeriod_)) {
+        if ((this.isShooting || currentTime < (attackStart_ + this.attackPeriod_)) && !(isPaused())) {
             facing_ = attackAngle_;
             pos = ((currentTime - attackStart_) % this.attackPeriod_) / this.attackPeriod_;
             action = AnimatedChar.ATTACK;
