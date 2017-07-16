@@ -1,4 +1,6 @@
 ﻿package kabam.rotmg.editor.view {
+import com.company.assembleegameclient.ui.dialogs.ConfirmDialog;
+
 import kabam.rotmg.core.model.PlayerModel;
 import kabam.rotmg.core.signals.SetScreenSignal;
 import kabam.rotmg.dialogs.control.OpenDialogSignal;
@@ -28,14 +30,14 @@ public class TextureMediator extends Mediator {
     override public function initialize():void {
         this.view.saveDialog.add(this.onSave);
         this.view.loadDialog.add(this.onLoad);
-        this.view.gotoTitle.add(this.onGotoTitle);
+        this.view.gotoTitle.add(this.onGotoTitle1);
         this.setTexture.add(this.onSetTexture);
     }
 
     override public function destroy():void {
         this.view.loadDialog.remove(this.onLoad);
         this.view.saveDialog.remove(this.onSave);
-        this.view.gotoTitle.remove(this.onGotoTitle);
+        this.view.gotoTitle.remove(this.onGotoTitle1);
         this.setTexture.remove(this.onSetTexture);
     }
 
@@ -49,6 +51,11 @@ public class TextureMediator extends Mediator {
 
     private function onSave(_arg_1:TextureData):void {
         this.openDialog.dispatch(new SaveTextureDialog(_arg_1));
+    }
+
+    private function onGotoTitle1():void {
+        var confirmDialog:ConfirmDialog = new ConfirmDialog("Go Back", "Are you sure you want to return to the title screen? This will erase your sprite data.", this.onGotoTitle);
+        this.openDialog.dispatch(confirmDialog);
     }
 
     private function onGotoTitle():void {

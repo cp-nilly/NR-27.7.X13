@@ -18,11 +18,7 @@ public class TMCommandMenu extends CommandMenu {
         addCommandMenuItem("(U)ndo", KeyCodes.U, this.onUndo, NONE_COMMAND);
         addCommandMenuItem("(R)edo", KeyCodes.R, this.onRedo, NONE_COMMAND);
         addCommandMenuItem("(C)lear", KeyCodes.C, this.onClear, NONE_COMMAND);
-        addBreak();
-        addBreak();//addCommandMenuItem("(L)oad", KeyCodes.L, this.onLoad, NONE_COMMAND);
-        addBreak();//addCommandMenuItem("(S)ave", KeyCodes.S, this.onSave, NONE_COMMAND);
-        addCommandMenuItem("E(X)port", KeyCodes.X, this.onExport, NONE_COMMAND);
-        addBreak();
+        addCommandMenuItem("(S)ave", KeyCodes.S, this.onSave, NONE_COMMAND);
         addCommandMenuItem("(Q)uit", KeyCodes.Q, this.onQuit, NONE_COMMAND);
     }
 
@@ -50,16 +46,8 @@ public class TMCommandMenu extends CommandMenu {
         dispatchEvent(new CommandEvent(CommandEvent.CLEAR_COMMAND_EVENT));
     }
 
-    private function onLoad(_arg_1:CommandMenuItem):void {
-        dispatchEvent(new CommandEvent(CommandEvent.LOAD_COMMAND_EVENT));
-    }
-
     private function onSave(_arg_1:CommandMenuItem):void {
         dispatchEvent(new CommandEvent(CommandEvent.SAVE_COMMAND_EVENT));
-    }
-
-    private function onExport(_arg_1:CommandMenuItem):void {
-        dispatchEvent(new CommandEvent(CommandEvent.EXPORT_COMMAND_EVENT));
     }
 
     private function onQuit(_arg_1:CommandMenuItem):void {
