@@ -10,6 +10,7 @@ import flash.events.MouseEvent;
 
 import kabam.rotmg.chat.control.ShowChatInputSignal;
 import kabam.rotmg.core.StaticInjectorContext;
+import kabam.rotmg.dialogs.control.OpenDialogSignal;
 import kabam.rotmg.friends.controller.FriendActionSignal;
 import kabam.rotmg.friends.model.FriendConstant;
 import kabam.rotmg.friends.model.FriendRequestVO;
@@ -59,21 +60,19 @@ public class PlayerMenu extends Menu {
         this.yOffset = (this.yOffset + 7);
         addChild(this.playerPanel_);
         if (((Player.isAdmin) || (Player.isMod))) {
-            _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 10), 0xFFFFFF, "Ban MultiBoxer");
-            _local3.addEventListener(MouseEvent.CLICK, this.onKickMultiBox);
+            _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 10), 0xFFFFFF, "Ban Menu");
+            _local3.addEventListener(MouseEvent.CLICK, this.openBanMenu);
             addOption(_local3);
-            _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 10), 0xFFFFFF, "Ban RWT");
-            _local3.addEventListener(MouseEvent.CLICK, this.onKickRWT);
-            addOption(_local3);
-            _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 10), 0xFFFFFF, "Ban Cheat");
-            _local3.addEventListener(MouseEvent.CLICK, this.onKickCheat);
-            addOption(_local3);
-            _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 4), 0xFFFFFF, TextKey.PLAYERMENU_MUTE);
-            _local3.addEventListener(MouseEvent.CLICK, this.onMute);
-            addOption(_local3);
-            _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 3), 0xFFFFFF, TextKey.PLAYERMENU_UNMUTE);
-            _local3.addEventListener(MouseEvent.CLICK, this.onUnMute);
-            addOption(_local3);
+            if (!this.player_.isMuted()) {
+                _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 4), 0xFFFFFF, "Mute Menu");
+                _local3.addEventListener(MouseEvent.CLICK, this.openMuteMenu);
+                addOption(_local3);
+            }
+            else {
+                _local3 = new MenuOption(AssetLibrary.getImageFromSet("lofiInterfaceBig", 3), 0xFFFFFF, TextKey.PLAYERMENU_UNMUTE);
+                _local3.addEventListener(MouseEvent.CLICK, this.onUnMute);
+                addOption(_local3);
+            }
         }
         if (((this.gs_.map.allowPlayerTeleport()) && (this.player_.isTeleportEligible(this.player_)))) {
             _local3 = new TeleportMenuOption(this.gs_.map.player_);
@@ -121,23 +120,13 @@ public class PlayerMenu extends Menu {
         addOption(_local3);
     }
 
-    private function onKickMultiBox(_arg1:Event):void {
-        this.gs_.gsc_.playerText((("/kick " + this.player_.name_) + " Multiboxing"));
+    private function openBanMenu(_arg1:MouseEvent):void {
+        StaticInjectorContext.getInjector().getInstance(OpenDialogSignal).dispatch(new BanMenu(this.player_));
         remove();
     }
 
-    private function onKickRWT(_arg1:Event):void {
-        this.gs_.gsc_.playerText((("/kick " + this.player_.name_) + " RWT"));
-        remove();
-    }
-
-    private function onKickCheat(_arg1:Event):void {
-        this.gs_.gsc_.playerText((("/kick " + this.player_.name_) + " Cheating"));
-        remove();
-    }
-
-    private function onMute(_arg1:Event):void {
-        this.gs_.gsc_.playerText(("/mute " + this.player_.name_));
+    private function openMuteMenu(_arg1:MouseEvent):void {
+        StaticInjectorContext.getInjector().getInstance(OpenDialogSignal).dispatch(new MuteMenu(this.player_));
         remove();
     }
 

@@ -1,6 +1,9 @@
 ﻿package kabam.rotmg.ui.view {
+import com.adobe.tvsdk.mediacore.info.ClosedCaptionsTrack;
 import com.company.assembleegameclient.mapeditor.MapEditor;
 import com.company.assembleegameclient.screens.ServersScreen;
+import com.company.assembleegameclient.ui.dialogs.Dialog;
+import com.company.assembleegameclient.ui.dialogs.FancyDialog;
 import com.company.assembleegameclient.ui.language.LanguageOptionOverlay;
 
 import flash.events.Event;
@@ -21,6 +24,7 @@ import kabam.rotmg.core.model.PlayerModel;
 import kabam.rotmg.core.signals.SetScreenSignal;
 import kabam.rotmg.core.signals.SetScreenWithValidDataSignal;
 import kabam.rotmg.core.view.Layers;
+import kabam.rotmg.dialogs.control.CloseDialogsSignal;
 import kabam.rotmg.dialogs.control.OpenDialogSignal;
 import kabam.rotmg.editor.view.TextureView;
 import kabam.rotmg.legends.view.LegendsView;
@@ -51,6 +55,8 @@ public class TitleMediator extends Mediator {
     [Inject]
     public var openDialog:OpenDialogSignal;
     [Inject]
+    public var closeDialog:CloseDialogsSignal;
+    [Inject]
     public var setup:ApplicationSetup;
     [Inject]
     public var layers:Layers;
@@ -61,6 +67,7 @@ public class TitleMediator extends Mediator {
 
 
     override public function initialize():void {
+        var dialog:FancyDialog = null;
         this.view.optionalButtonsAdded.add(this.onOptionalButtonsAdded);
         this.view.initialize(this.makeEnvironmentData());
         this.view.playClicked.add(this.handleIntentionToPlay);
@@ -74,6 +81,14 @@ public class TitleMediator extends Mediator {
         }
         if (this.securityQuestionsModel.showSecurityQuestionsOnStartup) {
             this.openDialog.dispatch(new SecurityQuestionsInfoDialog());
+        }
+        if(this.playerModel.isBanned()) {
+            dialog = new FancyDialog("Banned", "This account has been banned for the following reasons:\n\n<font color=\'#ff0000\'>" + this.playerModel.getBanReasons() + "</font>\n\nDate when the ban will be lifted:\n" + this.playerModel.getBanLiftTime(), "Ok", null, "/banned");
+            dialog.addEventListener(Dialog.LEFT_BUTTON,
+            function(_arg1:Event):void {
+                closeDialog.dispatch();
+            });
+            this.openDialog.dispatch(dialog);
         }
     }
 

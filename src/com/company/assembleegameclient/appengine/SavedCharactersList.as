@@ -53,6 +53,9 @@ public class SavedCharactersList extends Event {
     public var rank_:int;
     public var menuMusic_:String;
     public var deadMusic_:String;
+    public var isBanned:Boolean;
+    public var banReasons:String;
+    public var banLiftTime:int;
     private var account:Account;
 
     public function SavedCharactersList(_arg1:String) {
@@ -66,6 +69,7 @@ public class SavedCharactersList extends Event {
         this.charsXML_ = new XML(this.origData_);
         var _local2:XML = XML(this.charsXML_.Account);
         this.parseUserData(_local2);
+        this.parseBanned(_local2);
         this.parseBeginnersPackageData(_local2);
         this.parseGuildData(_local2);
         this.parseCharacterData();
@@ -120,6 +124,12 @@ public class SavedCharactersList extends Event {
         this.hasPlayerDied = true;
         this.menuMusic_ = _arg1.MenuMusic;
         this.deadMusic_ = _arg1.DeadMusic;
+    }
+
+    private function parseBanned(_arg1:XML):void {
+        this.isBanned = _arg1.hasOwnProperty("Banned");
+        this.banReasons = _arg1.Banned;
+        this.banLiftTime = _arg1.Banned.@liftTime;
     }
 
     private function parseBeginnersPackageData(_arg1:XML):void {
