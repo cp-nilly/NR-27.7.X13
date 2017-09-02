@@ -9,12 +9,14 @@ import com.company.assembleegameclient.sound.SoundEffectLibrary;
 import com.company.assembleegameclient.tutorial.Tutorial;
 import com.company.assembleegameclient.tutorial.doneAction;
 import com.company.assembleegameclient.util.AnimatedChar;
+import com.company.assembleegameclient.util.AnimatedChars;
 import com.company.assembleegameclient.util.ConditionEffect;
 import com.company.assembleegameclient.util.FameUtil;
 import com.company.assembleegameclient.util.FreeList;
 import com.company.assembleegameclient.util.MaskedImage;
 import com.company.assembleegameclient.util.TextureRedrawer;
 import com.company.assembleegameclient.util.redrawers.GlowRedrawer;
+import com.company.util.AssetLibrary;
 import com.company.util.CachingColorTransformer;
 import com.company.util.ConversionUtil;
 import com.company.util.GraphicsUtil;
@@ -73,6 +75,10 @@ public class Player extends Character {
     public static var isAdmin:Boolean = false;
     public static var isMod:Boolean = false;
     private static var newP:Point = new Point();
+
+    public static var partySkin:AnimatedChar;
+    public static var reindeerSkin:AnimatedChar;
+    public static var santaSkin:AnimatedChar;
 
     public var xpTimer:int;
     public var skinId:int;
@@ -774,7 +780,23 @@ public class Player extends Character {
             maskImg = getHallucinatingMaskedImage();
         }
         else {
-            maskImg = animatedChar_.imageFromFacing(facing_, camera, action, pos);
+            if (camera.isPartyVision_) {
+                if (partySkin == null)
+                    partySkin = AnimatedChars.getAnimatedChar("partySkin", 0);
+                maskImg = partySkin.imageFromFacing(facing_, camera, action, pos);
+            }
+                    else if (camera.isXMasVision_) {
+                if (reindeerSkin == null)
+                    reindeerSkin = AnimatedChars.getAnimatedChar("reindeerSkin", 0);
+                if (santaSkin == null)
+                    santaSkin =     AnimatedChars.getAnimatedChar("santaSkin", 0);
+                if (this.admin_)
+                    maskImg = santaSkin.imageFromFacing(facing_, camera, action, pos);
+                else
+                    maskImg = reindeerSkin.imageFromFacing(facing_, camera, action, pos);
+            }
+            else
+                maskImg = animatedChar_.imageFromFacing(facing_, camera, action, pos);
         }
 
         var tex1Id:int = tex1Id_;
@@ -996,7 +1018,7 @@ public class Player extends Character {
     }
 
     public function isHexed():Boolean {
-        return (!(((condition_[ConditionEffect.CE_FIRST_BATCH] & ConditionEffect.HEXED_BIT) == 0)));
+        return (!(((condition_[ConditionEffect.CE_SECOND_BATCH] & ConditionEffect.HEXED_BIT) == 0)));
     }
 
     public function isInventoryFull():Boolean {
