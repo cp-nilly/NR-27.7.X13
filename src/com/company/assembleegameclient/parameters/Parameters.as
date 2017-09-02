@@ -213,6 +213,7 @@ public class Parameters {
         setDefault("chatGuild", true);
         setDefault("chatTrade", true);
         setDefault("toggleBarText", false);
+        setDefault("enhancedQuestToolTip", true);
         setDefault("particleEffect", true);
         if (((data_.hasOwnProperty("playMusic")) && ((data_.playMusic == true)))) {
             setDefault("musicVolume", 1);

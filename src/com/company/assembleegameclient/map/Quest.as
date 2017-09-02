@@ -28,9 +28,6 @@ public class Quest {
     }
 
     public function getObject(_arg1:int):GameObject {
-        if (_arg1 < this.questAvailableAt_) {
-            return (null);
-        }
         return (this.map_.goDict_[this.objectId_]);
     }
 

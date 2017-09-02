@@ -132,6 +132,8 @@ public class TextKey {
     public static const OPTIONS_TOGGLE_PARTICLE_EFFECT_DESC:String = "Options.ToggleParticleEffectDesc";
     public static const OPTIONS_TOGGLE_UI_QUALITY:String = "Options.ToggleUIQuality";
     public static const OPTIONS_TOGGLE_UI_QUALITY_DESC:String = "Options.ToggleUIQualityDesc";
+    public static const OPTIONS_TOGGLE_ENHANCED_QUEST_PORTRAIT:String = "Enhanced Quest Portrait";
+    public static const OPTIONS_TOGGLE_ENHANCED_QUEST_PORTRAIT_DESC:String = "Adds hp bar, neartest player to quest distance, and right click teleportation to the quest's portrait and tool tip. The hp bar on the quest's portrait will flash when a player is within 20 tiles of it.";
     public static const OPTIONS_ON:String = "Options.On";
     public static const OPTIONS_OFF:String = "Options.Off";
     public static const OPTIONS_SWITCH_ITEM_IN_BACKPACK:String = "Options.SwitchItemInBackpack";
