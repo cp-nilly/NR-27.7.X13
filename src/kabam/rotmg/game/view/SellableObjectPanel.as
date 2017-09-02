@@ -181,7 +181,7 @@ public class SellableObjectPanel extends Panel implements TooltipAble {
             }
             else {
                 this.buyButton_.setPrice(this.owner_.price_, this.owner_.currency_);
-                this.buyButton_.setEnabled(gs_.gsc_.outstandingBuy_);
+                this.buyButton_.setEnabled(!gs_.gsc_.outstandingBuy_);
                 this.buyButton_.x = int(((WIDTH / 2) - (this.buyButton_.width / 2)));
                 this.buyButton_.y = ((HEIGHT - (this.buyButton_.height / 2)) - this.BUTTON_OFFSET);
                 if (!contains(this.buyButton_)) {

@@ -46,6 +46,7 @@ public class TitleView extends Sprite {
     public var supportClicked:Signal;
     public var kabamTransferClicked:Signal;
     public var editorClicked:Signal;
+    public var textureEditorClicked:Signal;
     public var quitClicked:Signal;
     public var optionalButtonsAdded:Signal;
     private var migrateButton:TitleMenuOption;
@@ -74,18 +75,21 @@ public class TitleView extends Sprite {
         var _local3:TitleMenuOption = ButtonFactory.getAccountButton();
         var _local4:TitleMenuOption = ButtonFactory.getLegendsButton();
         var _local5:TitleMenuOption = ButtonFactory.getSupportButton();
+        var _local6:TitleMenuOption = ButtonFactory.getTextureEditorButton();
         this.playClicked = _local1.clicked;
         this.serversClicked = _local2.clicked;
         this.accountClicked = _local3.clicked;
         this.legendsClicked = _local4.clicked;
         this.supportClicked = _local5.clicked;
-        var _local6:MenuOptionsBar = new MenuOptionsBar();
-        _local6.addButton(_local1, MenuOptionsBar.CENTER);
-        _local6.addButton(_local2, MenuOptionsBar.LEFT);
-        _local6.addButton(_local5, MenuOptionsBar.LEFT);
-        _local6.addButton(_local3, MenuOptionsBar.RIGHT);
-        _local6.addButton(_local4, MenuOptionsBar.RIGHT);
-        return (_local6);
+        this.textureEditorClicked = _local6.clicked;
+        var _local7:MenuOptionsBar = new MenuOptionsBar();
+        _local7.addButton(_local1, MenuOptionsBar.CENTER);
+        _local7.addButton(_local2, MenuOptionsBar.LEFT);
+        _local7.addButton(_local5, MenuOptionsBar.LEFT);
+        _local7.addButton(_local3, MenuOptionsBar.RIGHT);
+        _local7.addButton(_local4, MenuOptionsBar.RIGHT);
+        _local7.addButton(_local6, MenuOptionsBar.LEFT);
+        return (_local7);
     }
 
     private function makeChildren():void {
