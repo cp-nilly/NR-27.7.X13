@@ -7,7 +7,7 @@ import com.company.assembleegameclient.editor.CommandQueue;
 import com.company.assembleegameclient.map.GroundLibrary;
 import com.company.assembleegameclient.map.RegionLibrary;
 import com.company.assembleegameclient.objects.ObjectLibrary;
-import com.company.assembleegameclient.screens.TitleMenuOption;
+import com.company.assembleegameclient.screens.AccountScreen;
 import com.company.assembleegameclient.ui.DeprecatedClickableText;
 import com.company.assembleegameclient.ui.dropdown.DropDown;
 import com.company.util.IntPoint;
@@ -30,12 +30,14 @@ import kabam.lib.json.JsonParser;
 import kabam.rotmg.core.StaticInjectorContext;
 import kabam.rotmg.ui.view.components.ScreenBase;
 
-import net.hires.debug.Stats;
+import org.osflash.signals.Signal;
 
 public class EditingScreen extends Sprite {
 
     private static const MAP_Y:int = ((600 - MEMap.SIZE) - 10);//78
-    public static const stats_:Stats = new Stats();
+
+    public const gotoTitleDialog:Signal = new Signal();
+    public const gotoTitle:Signal = new Signal();
 
     public var commandMenu_:MECommandMenu;
     private var commandQueue_:CommandQueue;
@@ -54,12 +56,9 @@ public class EditingScreen extends Sprite {
     public var dungeonChooser_:DungeonChooser;
     public var search:TextInputField;
     public var filter:Filter;
-    public var returnButton_:TitleMenuOption;
     public var chooser_:Chooser;
     public var filename_:String = null;
     public var checkBoxArray:Array;
-    public var showAllBtn:DeprecatedClickableText;
-    public var hideAllBtn:DeprecatedClickableText;
     private var json:JsonParser;
     private var pickObjHolder:Sprite;
     private var tilesBackup:Vector.<METile>;
@@ -69,18 +68,19 @@ public class EditingScreen extends Sprite {
         var _local3:int;
         super();
         addChild(new ScreenBase());
+        addChild(new AccountScreen());
         this.json = StaticInjectorContext.getInjector().getInstance(JsonParser);
         this.commandMenu_ = new MECommandMenu();
         this.commandMenu_.x = 15;
-        this.commandMenu_.y = (MAP_Y - 60);
+        this.commandMenu_.y = MAP_Y - 40;
         this.commandMenu_.addEventListener(CommandEvent.UNDO_COMMAND_EVENT, this.onUndo);
         this.commandMenu_.addEventListener(CommandEvent.REDO_COMMAND_EVENT, this.onRedo);
         this.commandMenu_.addEventListener(CommandEvent.CLEAR_COMMAND_EVENT, this.onClear);
         this.commandMenu_.addEventListener(CommandEvent.LOAD_COMMAND_EVENT, this.onLoad);
         this.commandMenu_.addEventListener(CommandEvent.SAVE_COMMAND_EVENT, this.onSave);
-        this.commandMenu_.addEventListener(CommandEvent.SUBMIT_COMMAND_EVENT, this.onSubmit);
         this.commandMenu_.addEventListener(CommandEvent.TEST_COMMAND_EVENT, this.onTest);
         this.commandMenu_.addEventListener(CommandEvent.SELECT_COMMAND_EVENT, this.onMenuSelect);
+        this.commandMenu_.addEventListener(CommandEvent.QUIT_COMMAND_EVENT, this.onQuit);
         addChild(this.commandMenu_);
         this.commandQueue_ = new CommandQueue();
         this.meMap_ = new MEMap();
@@ -90,7 +90,7 @@ public class EditingScreen extends Sprite {
         addChild(this.meMap_);
         this.infoPane_ = new InfoPane(this.meMap_);
         this.infoPane_.x = 4;
-        this.infoPane_.y = ((600 - InfoPane.HEIGHT) - 10);
+        this.infoPane_.y = (600 - InfoPane.HEIGHT) + 10;
         addChild(this.infoPane_);
         this.chooserDropDown_ = new DropDown(GroupDivider.GROUP_LABELS, Chooser.WIDTH, 26);
         addChild(this.chooserDropDown_);
@@ -112,16 +112,11 @@ public class EditingScreen extends Sprite {
         this.createCheckboxes();
         this.filter = new Filter();
         this.filter.x = ((this.meMap_.x + MEMap.SIZE) + 4);
-        this.filter.y = MAP_Y;
+        this.filter.y = MAP_Y - 10;
         addChild(this.filter);
         this.filter.addEventListener(Event.CHANGE, this.onFilterChange);
         this.filter.enableDropDownFilter(true);
         this.filter.enableValueFilter(false);
-        this.returnButton_ = new TitleMenuOption("Screens.back", 18, false);
-        this.returnButton_.setAutoSize(TextFieldAutoSize.RIGHT);
-        this.returnButton_.x = ((this.chooserDropDown_.x + this.chooserDropDown_.width) - 7);
-        this.returnButton_.y = 2;
-        addChild(this.returnButton_);
         GroupDivider.divideObjects();
         this.choosers_ = new Dictionary(true);
         _local3 = ((MAP_Y + this.mapSizeDropDown_.height) + 50);
@@ -597,16 +592,6 @@ public class EditingScreen extends Sprite {
         new FileReference().save(_local2, (((this.filename_ == null)) ? "map.jm" : this.filename_));
     }
 
-    private function onSubmit(_arg1:CommandEvent):void {
-        var _local2:String = this.createMapJSON();
-        if (_local2 == null) {
-            return;
-        }
-        this.meMap_.setMinZoom();
-        this.meMap_.draw();
-        dispatchEvent(new SubmitJMEvent(_local2, this.meMap_.getMapStatistics()));
-    }
-
     private function getEntry(_arg1:METile):Object {
         var _local3:Vector.<int>;
         var _local4:String;
@@ -728,7 +713,19 @@ public class EditingScreen extends Sprite {
     }
 
     private function onTest(_arg1:Event):void {
+        var json:String = this.createMapJSON();
+        if (json == null) {
+            return;
+        }
         dispatchEvent(new MapTestEvent(this.createMapJSON()));
+    }
+
+    private function onQuit(_arg1:Event):void {
+        var json:String = this.createMapJSON();
+        if (json == null)
+            this.gotoTitle.dispatch();
+        else
+            this.gotoTitleDialog.dispatch();
     }
 
     private function onMenuSelect(_arg1:Event):void {

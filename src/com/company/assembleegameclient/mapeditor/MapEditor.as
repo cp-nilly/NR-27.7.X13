@@ -17,7 +17,6 @@ public class MapEditor extends Sprite {
     private var server:Server;
     public var editingScreen_:EditingScreen;
     private var gameSprite_:GameSprite;
-    public var returnButton_:TitleMenuOption;
     private var blackBackground:Sprite;
 
     public function MapEditor() {
@@ -68,11 +67,6 @@ public class MapEditor extends Sprite {
     private function onSubmitClose():void {
         this.hideCurtain();
         this.editingScreen_.enableInput();
-    }
-
-    private function onClientUpdate(_arg1:Event):void {
-        this.cleanupGameSprite();
-        addChild(this.editingScreen_);
     }
 
     private function showCurtain():void {

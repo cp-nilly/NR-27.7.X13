@@ -2,9 +2,8 @@
 import com.company.assembleegameclient.mapeditor.MapEditor;
 import com.company.assembleegameclient.ui.dialogs.ConfirmDialog;
 
-import flash.events.MouseEvent;
-
 import kabam.rotmg.core.model.PlayerModel;
+import kabam.rotmg.core.signals.SetScreenSignal;
 import kabam.rotmg.dialogs.control.OpenDialogSignal;
 import kabam.rotmg.game.signals.GameClosedSignal;
 import kabam.rotmg.servers.api.ServerModel;
@@ -23,24 +22,28 @@ public class MapEditorMediator extends Mediator {
     public var gameClosed:GameClosedSignal;
     [Inject]
     public var openDialog:OpenDialogSignal;
+    [Inject]
+    public var setScreen:SetScreenSignal;
 
 
     override public function initialize():void {
         this.view.initialize(this.model, this.servers.getServer());
-        this.view.editingScreen_.returnButton_.addEventListener(MouseEvent.CLICK, this.onReturnPhase1);
+        this.view.editingScreen_.gotoTitleDialog.add(this.onReturnPhase1);
+        this.view.editingScreen_.gotoTitle.add(this.onReturn);
     }
 
     override public function destroy():void {
-        this.view.editingScreen_.returnButton_.removeEventListener(MouseEvent.CLICK, this.onReturnPhase1);
+        this.view.editingScreen_.gotoTitleDialog.remove(this.onReturnPhase1);
+        this.view.editingScreen_.gotoTitle.remove(this.onReturn);
     }
 
-    private function onReturnPhase1(_arg1:MouseEvent):void {
-        var _local2:ConfirmDialog = new ConfirmDialog("Go Back", "Are you sure you want to return to the title screen? This will erase your map data.", this.onReturn);
-        this.openDialog.dispatch(_local2);
+    private function onReturnPhase1():void {
+        var confirmDialog:ConfirmDialog = new ConfirmDialog("Go Back", "Are you sure you want to return to the title screen? This will erase your map data.", this.onReturn);
+        this.openDialog.dispatch(confirmDialog);
     }
 
     private function onReturn():void {
-        this.gameClosed.dispatch();
+        this.setScreen.dispatch(new TitleView());
     }
 
 

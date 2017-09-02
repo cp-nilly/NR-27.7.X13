@@ -32,11 +32,11 @@ public class TitleMenuOption extends Sprite {
     private var color:uint = 0xFFFFFF;
     private var hoverColor:uint;
 
-    public function TitleMenuOption(_arg1:String, _arg2:int, _arg3:Boolean) {
-        this.size = _arg2;
-        this.isPulse = _arg3;
-        this.textField.setSize(_arg2).setColor(0xFFFFFF).setBold(true);
-        this.setTextKey(_arg1);
+    public function TitleMenuOption(text:String, size:int, pulse:Boolean, color:uint = 0xFFFFFF) {
+        this.size = size;
+        this.isPulse = pulse;
+        this.textField.setSize(size).setColor(color).setBold(true);
+        this.setTextKey(text);
         this.originalWidth = width;
         this.originalHeight = height;
         this.activate();
@@ -150,10 +150,10 @@ public class TitleMenuOption extends Sprite {
         return ((("[TitleMenuOption " + this.textField.getText()) + "]"));
     }
 
-    public function createNoticeTag(_arg1:String, _arg2:int, _arg3:uint, _arg4:Boolean):void {
+    public function createNoticeTag(text:String, size:int, color:uint, bold:Boolean):void {
         var _local5:TextFieldDisplayConcrete = new TextFieldDisplayConcrete();
-        _local5.setSize(_arg2).setColor(_arg3).setBold(_arg4);
-        _local5.setStringBuilder(new LineBuilder().setParams(_arg1));
+        _local5.setSize(size).setColor(color).setBold(bold);
+        _local5.setStringBuilder(new LineBuilder().setParams(text));
         _local5.x = (this.textField.x - 4);
         _local5.y = (this.textField.y - 20);
         addChild(_local5);

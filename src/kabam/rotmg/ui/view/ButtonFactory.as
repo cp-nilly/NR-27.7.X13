@@ -34,8 +34,8 @@ public class ButtonFactory {
         return ((playButton = ((playButton) || (makeButton(ScreenTypes.PLAY, BUTTON_SIZE_LARGE, CENTER, true)))));
     }
 
-    public static function getTextureEditorButton():TitleMenuOption {
-        return ((textureEditorButton = ((textureEditorButton) || (makeButton(ScreenTypes.TEXTURE_EDITOR, BUTTON_SIZE_SMALL, LEFT)))));
+    public static function getSpriteButton():TitleMenuOption {
+        return textureEditorButton = textureEditorButton || makeButton(ScreenTypes.TEXTURE_EDITOR, BUTTON_SIZE_SMALL, LEFT, false, 0x007BA7);
     }
 
     public static function getClassesButton():TitleMenuOption {
@@ -67,11 +67,11 @@ public class ButtonFactory {
     }
 
     public static function getSupportButton():TitleMenuOption {
-        return ((supportButton = ((supportButton) || (makeButton(ScreenTypes.SUPPORT, BUTTON_SIZE_SMALL, RIGHT)))));
+        return supportButton = supportButton || makeButton(ScreenTypes.SUPPORT, BUTTON_SIZE_SMALL, RIGHT, false, 0xFFA500);
     }
 
-    public static function getEditorButton():TitleMenuOption {
-        return ((editorButton = ((editorButton) || (makeButton(ScreenTypes.EDITOR, BUTTON_SIZE_SMALL, RIGHT)))));
+    public static function getMapButton():TitleMenuOption {
+        return editorButton = editorButton || makeButton(ScreenTypes.EDITOR, BUTTON_SIZE_SMALL, RIGHT, false, 0x007BA7);
     }
 
     public static function getQuitButton():TitleMenuOption {
@@ -82,9 +82,9 @@ public class ButtonFactory {
         return ((transferAccountButton = ((transferAccountButton) || (makeButton(ScreenTypes.TRANSFER_ACCOUNT, BUTTON_SIZE_SMALL, RIGHT)))));
     }
 
-    private static function makeButton(_arg1:String, _arg2:int, _arg3:String, _arg4:Boolean = false):TitleMenuOption {
-        var _local5:TitleMenuOption = new TitleMenuOption(_arg1, _arg2, _arg4);
-        _local5.setAutoSize(_arg3);
+    private static function makeButton(text:String, size:int, autoSize:String, pulse:Boolean = false, color:uint = 0xFFFFFF):TitleMenuOption {
+        var _local5:TitleMenuOption = new TitleMenuOption(text, size, pulse, color);
+        _local5.setAutoSize(autoSize);
         _local5.setVerticalAlign(TextFieldDisplayConcrete.MIDDLE);
         return (_local5);
     }

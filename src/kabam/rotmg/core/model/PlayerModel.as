@@ -185,10 +185,6 @@ public class PlayerModel {
         return (this.charList.isAdmin_);
     }
 
-    public function mapEditor():Boolean {
-        return (this.charList.canMapEdit_);
-    }
-
     public function getNews():Vector.<SavedNewsItem> {
         return (this.charList.news_);
     }
@@ -272,5 +268,15 @@ public class PlayerModel {
     public function getDeadMusic():String {
         return this.charList.deadMusic_;
     }
+
+    public function getMapMinRank():int {
+        return this.charList.mapMinRank;
+    }
+
+    public function getSpriteMinRank():int {
+        return this.charList.spriteMinRank;
+    }
+
+
 }
 }

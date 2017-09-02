@@ -1,9 +1,17 @@
 ﻿package kabam.rotmg.editor.view.components.preview {
 import com.company.ui.BaseSimpleText;
+import com.company.util.GraphicsUtil;
 import com.company.util.MoreColorUtil;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;
+import flash.display.CapsStyle;
+import flash.display.GraphicsPath;
+import flash.display.GraphicsSolidFill;
+import flash.display.GraphicsStroke;
+import flash.display.IGraphicsData;
+import flash.display.JointStyle;
+import flash.display.LineScaleMode;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
 import flash.filters.ColorMatrixFilter;
@@ -16,6 +24,11 @@ public class Preview extends Sprite {
     private static const MIN_ZOOM:int = 40;
     protected static const GREY_MATRIX:Array = MoreColorUtil.singleColorFilterMatrix(0x4F4F4F);
 
+    private var outlineFill_:GraphicsSolidFill = new GraphicsSolidFill(0xFFFFFF, 1);
+    private var lineStyle_:GraphicsStroke = new GraphicsStroke(1, false, LineScaleMode.NORMAL, CapsStyle.NONE, JointStyle.ROUND, 3, outlineFill_);
+    private var backgroundFill_:GraphicsSolidFill = new GraphicsSolidFill(0x363636, 1);
+    private var path_:GraphicsPath = new GraphicsPath(new Vector.<int>(), new Vector.<Number>());
+    private const graphicsData_:Vector.<IGraphicsData> = new <IGraphicsData>[lineStyle_, backgroundFill_, path_, GraphicsUtil.END_FILL, GraphicsUtil.END_STROKE];
     protected var w_:int;
     protected var h_:int;
     protected var size_:int;
@@ -29,11 +42,7 @@ public class Preview extends Sprite {
         this.w_ = _arg_1;
         this.h_ = _arg_2;
         this.size_ = 100;
-        graphics.lineStyle(1, 0xFFFFFF);
-        graphics.beginFill(0x7F7F7F, 1);
-        graphics.drawRect(0, 0, this.w_, this.h_);
-        graphics.lineStyle();
-        graphics.endFill();
+        this.drawBackground();
         this.bitmap_ = new Bitmap();
         addChild(this.bitmap_);
         this.sizeText_ = new BaseSimpleText(16, 0xFFFFFF, false, 0, 0);
@@ -77,6 +86,12 @@ public class Preview extends Sprite {
             return;
         }
         this.size_ = (this.size_ - 20);
+    }
+
+    private function drawBackground():void {
+        GraphicsUtil.clearPath(this.path_);
+        GraphicsUtil.drawCutEdgeRect(0, 0, w_, h_, 4, [1, 1, 1, 1], this.path_);
+        graphics.drawGraphicsData(this.graphicsData_);
     }
 
     public function redraw():void {

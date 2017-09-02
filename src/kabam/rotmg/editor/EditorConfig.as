@@ -24,10 +24,10 @@ import kabam.rotmg.editor.view.LoadTextureDialog;
 import kabam.rotmg.editor.view.LoadTextureMediator;
 import kabam.rotmg.editor.view.SaveTextureDialog;
 import kabam.rotmg.editor.view.SaveTextureMediator;
+import kabam.rotmg.editor.view.SpriteView;
 import kabam.rotmg.editor.view.TermsMediator;
 import kabam.rotmg.editor.view.TermsView;
 import kabam.rotmg.editor.view.TextureMediator;
-import kabam.rotmg.editor.view.TextureView;
 import kabam.rotmg.editor.view.components.loaddialog.ResultsBox;
 import kabam.rotmg.editor.view.components.loaddialog.ResultsBoxMediator;
 import kabam.rotmg.startup.control.StartupSequence;
@@ -92,7 +92,7 @@ public class EditorConfig implements IConfig {
         this.mediatorMap.map(DialogsView).toMediator(DialogsMediator);
         this.mediatorMap.map(ResultsBox).toMediator(ResultsBoxMediator);
         this.mediatorMap.map(TermsView).toMediator(TermsMediator);
-        this.mediatorMap.map(TextureView).toMediator(TextureMediator);
+        this.mediatorMap.map(SpriteView).toMediator(TextureMediator);
         this.mediatorMap.map(SaveTextureDialog).toMediator(SaveTextureMediator);
         this.mediatorMap.map(LoadTextureDialog).toMediator(LoadTextureMediator);
     }

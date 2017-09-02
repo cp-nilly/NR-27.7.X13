@@ -22,7 +22,7 @@ import kabam.rotmg.core.signals.SetScreenSignal;
 import kabam.rotmg.core.signals.SetScreenWithValidDataSignal;
 import kabam.rotmg.core.view.Layers;
 import kabam.rotmg.dialogs.control.OpenDialogSignal;
-import kabam.rotmg.editor.view.TextureView;
+import kabam.rotmg.editor.view.SpriteView;
 import kabam.rotmg.legends.view.LegendsView;
 import kabam.rotmg.ui.model.EnvironmentData;
 import kabam.rotmg.ui.signals.EnterGameSignal;
@@ -68,55 +68,22 @@ public class TitleMediator extends Mediator {
         this.view.accountClicked.add(this.handleIntentionToReviewAccount);
         this.view.legendsClicked.add(this.showLegendsScreen);
         this.view.supportClicked.add(this.openSupportPage);
-        this.view.textureEditorClicked.add(this.showTextureEditor);
-        if (this.playerModel.isNewToEditing()) {
-            this.view.putNoticeTagToOption(ButtonFactory.getEditorButton(), "new");
-        }
         if (this.securityQuestionsModel.showSecurityQuestionsOnStartup) {
             this.openDialog.dispatch(new SecurityQuestionsInfoDialog());
         }
     }
 
     private function openSupportPage():void {
-        var _local1:URLVariables = new URLVariables();
-        var _local2:URLRequest = new URLRequest();
-        var _local3:Boolean;
-        if (((DynamicSettings.settingExists("SalesforceMobile")) && ((DynamicSettings.getSettingValue("SalesforceMobile") == 1)))) {
-            _local3 = true;
-        }
-        var _local4:String = this.playerModel.getSalesForceData();
-        if ((((_local4 == "unavailable")) || (!(_local3)))) {
-            _local1.language = "en_US";
-            _local1.game = "a0Za000000jIBFUEA4";
-            _local1.issue = "Other_Game_Issues";
-            _local2.url = "http://rotmg.decagames.io";
-            _local2.method = URLRequestMethod.GET;
-            _local2.data = _local1;
-            navigateToURL(_local2, "_blank");
-        }
-        else {
-            if ((((Capabilities.playerType == "PlugIn")) || ((Capabilities.playerType == "ActiveX")))) {
-                if (!supportCalledBefore) {
-                    ExternalInterface.call("openSalesForceFirstTime", _local4);
-                    supportCalledBefore = true;
-                }
-                else {
-                    ExternalInterface.call("reopenSalesForce");
-                }
-            }
-            else {
-                _local1.data = _local4;
-                _local2.url = "http://rotmg.decagames.io";
-                _local2.method = URLRequestMethod.GET;
-                _local2.data = _local1;
-                navigateToURL(_local2, "_blank");
-            }
-        }
+        var urlRequest:URLRequest = new URLRequest();
+        urlRequest.method = URLRequestMethod.GET;
+        urlRequest.url = this.setup.getSupportLink();
+        navigateToURL(urlRequest, "_blank");
     }
 
     private function onOptionalButtonsAdded():void {
-        ((this.view.editorClicked) && (this.view.editorClicked.add(this.showMapEditor)));
-        ((this.view.quitClicked) && (this.view.quitClicked.add(this.attemptToCloseClient)));
+        this.view.mapClicked && this.view.mapClicked.add(this.showMapEditor);
+        this.view.spriteClicked && this.view.spriteClicked.add(this.showSpriteEditor);
+        this.view.quitClicked && this.view.quitClicked.add(this.attemptToCloseClient);
     }
 
     private function showLanguagesScreen():void {
@@ -124,11 +91,14 @@ public class TitleMediator extends Mediator {
     }
 
     private function makeEnvironmentData():EnvironmentData {
-        var _local1:EnvironmentData = new EnvironmentData();
-        _local1.isDesktop = (Capabilities.playerType == "Desktop");
-        _local1.canMapEdit = ((this.playerModel.isAdmin()) || (this.playerModel.mapEditor()));
-        _local1.buildLabel = this.setup.getBuildLabel();
-        return (_local1);
+        var ed:EnvironmentData = new EnvironmentData();
+        var rank:int = this.playerModel.getRank();
+        ed.isDesktop = Capabilities.playerType == "Desktop";
+        ed.canMapEdit = rank >= this.playerModel.getMapMinRank();
+        ed.canSprite = rank >= this.playerModel.getSpriteMinRank();
+        ed.buildLabel = this.setup.getBuildLabel();
+        ed.copyrightLabel = this.setup.getCopyrightLabel();
+        return ed;
     }
 
     override public function destroy():void {
@@ -138,9 +108,9 @@ public class TitleMediator extends Mediator {
         this.view.legendsClicked.remove(this.showLegendsScreen);
         this.view.supportClicked.remove(this.openSupportPage);
         this.view.optionalButtonsAdded.remove(this.onOptionalButtonsAdded);
-        ((this.view.editorClicked) && (this.view.editorClicked.remove(this.showMapEditor)));
-        this.view.textureEditorClicked.remove(this.showTextureEditor);
-        ((this.view.quitClicked) && (this.view.quitClicked.remove(this.attemptToCloseClient)));
+        this.view.mapClicked && this.view.mapClicked.remove(this.showMapEditor);
+        this.view.spriteClicked && this.view.spriteClicked.remove(this.showSpriteEditor);
+        this.view.quitClicked && this.view.quitClicked.remove(this.attemptToCloseClient);
     }
 
     private function openKabamTransferView():void {
@@ -167,8 +137,8 @@ public class TitleMediator extends Mediator {
         this.setScreen.dispatch(new MapEditor());
     }
 
-    private function showTextureEditor():void {
-        this.setScreen.dispatch(new TextureView());
+    private function showSpriteEditor():void {
+        this.setScreen.dispatch(new SpriteView());
     }
 
     private function attemptToCloseClient():void {
