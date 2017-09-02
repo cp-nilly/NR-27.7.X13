@@ -2,6 +2,7 @@
 import com.company.assembleegameclient.parameters.Parameters;
 import com.company.assembleegameclient.util.AssetLoader;
 import com.company.assembleegameclient.util.StageProxy;
+import com.demonsters.debugger.MonsterDebugger;
 
 import flash.display.LoaderInfo;
 import flash.display.Sprite;
@@ -26,6 +27,7 @@ import kabam.rotmg.core.StaticInjectorContext;
 import kabam.rotmg.dailyLogin.config.DailyLoginConfig;
 import kabam.rotmg.death.DeathConfig;
 import kabam.rotmg.dialogs.DialogsConfig;
+import kabam.rotmg.editor.EditorConfig;
 import kabam.rotmg.errors.ErrorConfig;
 import kabam.rotmg.external.ExternalConfig;
 import kabam.rotmg.fame.FameConfig;
@@ -58,6 +60,7 @@ import robotlegs.bender.extensions.signalCommandMap.SignalCommandMapExtension;
 import robotlegs.bender.framework.api.IContext;
 import robotlegs.bender.framework.api.LogLevel;
 
+[SWF(frameRate="60", backgroundColor="#000000", width="800", height="600")]
 public class WebMain extends Sprite {
 
     public static var ENV:String;
@@ -66,6 +69,7 @@ public class WebMain extends Sprite {
     protected var context:IContext;
 
     public function WebMain() {
+        //MonsterDebugger.initialize(this);
         if (stage) {
             this.setup();
         }
@@ -129,6 +133,7 @@ public class WebMain extends Sprite {
                 .configure(CharactersConfig)
                 .configure(ServersConfig)
                 .configure(GameConfig)
+                .configure(EditorConfig)
                 .configure(UIConfig)
                 .configure(MiniMapConfig)
                 .configure(LegendsConfig)
