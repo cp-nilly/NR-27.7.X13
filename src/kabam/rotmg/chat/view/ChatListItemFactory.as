@@ -11,6 +11,8 @@ import flash.geom.Matrix;
 import flash.text.TextField;
 import flash.text.TextFormat;
 
+import kabam.rotmg.assets.emotes.Emotes;
+
 import kabam.rotmg.chat.model.ChatMessage;
 import kabam.rotmg.chat.model.ChatModel;
 import kabam.rotmg.text.model.FontModel;
@@ -190,10 +192,38 @@ public class ChatListItemFactory {
         }
     }
 
-    private function makeMessageLine(_arg1:String):void {
-        var _local2:StringBuilder = new StaticStringBuilder(_arg1);
-        var _local3:BitmapData = this.getBitmapData(_local2, this.getTextColor());
-        this.buffer.push(new Bitmap(_local3));
+    private function containsEmotes(text:String):Boolean {
+        var words:Array = text.split(' ');
+        for each (var word:String in words)
+            if (Emotes.hasEmote(word))
+                return true;
+
+        return false;
+    }
+
+    private function getAllWords(text:String):Array {
+        return text.split(' ');
+    }
+
+    private function makeMessageLine(text:String):void {
+        var sb:StringBuilder = new StaticStringBuilder(text);
+        var bmd:BitmapData;
+
+        if (containsEmotes(text)) {
+            for each (var word:String in getAllWords(text)) {
+                if (Emotes.hasEmote(word)) {
+                    this.buffer.push(Emotes.getEmote(word));
+                    continue;
+                }
+                sb = new StaticStringBuilder(text);
+                bmd = this.getBitmapData(sb, this.getTextColor());
+                this.buffer.push(new Bitmap(bmd));
+            }
+            return;
+        }
+        sb = new StaticStringBuilder(text);
+        bmd = this.getBitmapData(sb, this.getTextColor());
+        this.buffer.push(new Bitmap(bmd));
     }
 
     private function getNameColor():uint {

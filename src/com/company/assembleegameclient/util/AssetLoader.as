@@ -15,6 +15,7 @@ import flash.utils.getQualifiedClassName;
 
 import kabam.rotmg.assets.EmbeddedAssets;
 import kabam.rotmg.assets.EmbeddedData;
+import kabam.rotmg.assets.emotes.Emotes;
 
 public class AssetLoader {
 
@@ -31,6 +32,7 @@ public class AssetLoader {
         this.parseObjectFiles();
         this.parseRegionFiles();
         Parameters.load();
+        Emotes.load();
         Options.refreshCursor();
         SFX.load();
     }
@@ -89,6 +91,7 @@ public class AssetLoader {
         AssetLibrary.addImageSet("SakuraEnvironment16x16", new EmbeddedAssets.SakuraEnvironment16x16Embed_().bitmapData, 16, 16);
         AssetLibrary.addImageSet("SakuraEnvironment8x8", new EmbeddedAssets.SakuraEnvironment8x8Embed_().bitmapData, 8, 8);
         AssetLibrary.addImageSet("HanamiParts", new EmbeddedAssets.HanamiParts8x8Embed_().bitmapData, 8, 8);
+        AssetLibrary.addImageSet("emotes", new EmbeddedAssets.EmotesEmbed_().bitmapData, 16, 16);
     }
 
     private function addAnimatedCharacters():void {
