@@ -27,10 +27,7 @@ public class WebRegisterDialog extends Frame {
     private var emailInput:LabeledField;
     private var passwordInput:LabeledField;
     private var retypePasswordInput:LabeledField;
-    private var checkbox:CheckBoxField;
-    private var ageVerificationInput:DateField;
     private var signInText:TextFieldDisplayConcrete;
-    private var tosText:TextFieldDisplayConcrete;
     private var endLink:String = "</a></font>";
 
     public function WebRegisterDialog() {
@@ -43,18 +40,10 @@ public class WebRegisterDialog extends Frame {
         this.emailInput = new LabeledField(TextKey.REGISTER_WEB_ACCOUNT_EMAIL, false, 275);
         this.passwordInput = new LabeledField(TextKey.REGISTER_WEB_ACCOUNT_PASSWORD, true, 275);
         this.retypePasswordInput = new LabeledField(TextKey.RETYPE_PASSWORD, true, 275);
-        this.ageVerificationInput = new DateField();
-        this.ageVerificationInput.setTitle(TextKey.BIRTHDAY);
         addLabeledField(this.emailInput);
         addLabeledField(this.passwordInput);
         addLabeledField(this.retypePasswordInput);
-        addComponent(this.ageVerificationInput, 17);
-        addSpace(35);
-        this.checkbox = new CheckBoxField(TextKey.CHECK_BOX_TEXT, false, 12);
-        addCheckBox(this.checkbox);
         addSpace(17);
-        this.makeTosText();
-        addSpace((17 * 2));
         this.makeSignInText();
     }
 
@@ -67,19 +56,6 @@ public class WebRegisterDialog extends Frame {
         }));
         this.signInText.addEventListener(TextEvent.LINK, this.linkEvent);
         this.configureTextAndAdd(this.signInText);
-    }
-
-    public function makeTosText():void {
-        this.tosText = new TextFieldDisplayConcrete();
-        var _local1 = (('<font color="#7777EE"><a href="' + Parameters.TERMS_OF_USE_URL) + '" target="_blank">');
-        var _local2 = (('<font color="#7777EE"><a href="' + Parameters.PRIVACY_POLICY_URL) + '" target="_blank">');
-        this.tosText.setStringBuilder(new LineBuilder().setParams(TextKey.TOS_TEXT, {
-            "tou": _local1,
-            "_tou": this.endLink,
-            "policy": _local2,
-            "_policy": this.endLink
-        }));
-        this.configureTextAndAdd(this.tosText);
     }
 
     public function configureTextAndAdd(_arg1:TextFieldDisplayConcrete):void {
@@ -115,28 +91,7 @@ public class WebRegisterDialog extends Frame {
         var _local1:Boolean = true;
         _local1 = ((this.isEmailValid()) && (_local1));
         _local1 = ((this.isPasswordValid()) && (_local1));
-        _local1 = ((this.isPasswordVerified()) && (_local1));
-        _local1 = ((this.isAgeVerified()) && (_local1));
-        return (((this.isAgeValid()) && (_local1)));
-    }
-
-    private function isAgeVerified():Boolean {
-        var _local1:uint = DateFieldValidator.getPlayerAge(this.ageVerificationInput);
-        var _local2 = (_local1 >= 13);
-        this.ageVerificationInput.setErrorHighlight(!(_local2));
-        if (!_local2) {
-            this.errors.push(TextKey.INELIGIBLE_AGE);
-        }
-        return (_local2);
-    }
-
-    private function isAgeValid():Boolean {
-        var _local1:Boolean = this.ageVerificationInput.isValidDate();
-        this.ageVerificationInput.setErrorHighlight(!(_local1));
-        if (!_local1) {
-            this.errors.push(TextKey.INVALID_BIRTHDATE);
-        }
-        return (_local1);
+        return (((this.isPasswordVerified()) && (_local1)));
     }
 
     private function isEmailValid():Boolean {
@@ -193,7 +148,6 @@ public class WebRegisterDialog extends Frame {
         var _local1:AccountData = new AccountData();
         _local1.username = this.emailInput.text();
         _local1.password = this.passwordInput.text();
-        _local1.signedUpKabamEmail = ((this.checkbox.isChecked()) ? 1 : 0);
         this.register.dispatch(_local1);
     }
 
