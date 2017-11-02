@@ -31,7 +31,7 @@ public class GameObjectArrow extends Sprite {
     public var mouseOver_:Boolean = false;
     private var big_:Boolean;
     private var arrow_:Shape;
-    protected var tooltip_:ToolTip = null;
+    public var tooltip_:ToolTip = null;
     private var tempPoint:Point;
 
     public function GameObjectArrow(_arg1:uint, _arg2:uint, _arg3:Boolean) {
