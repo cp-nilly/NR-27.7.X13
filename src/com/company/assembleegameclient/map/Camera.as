@@ -28,6 +28,8 @@ public class Camera {
     public var maxDist_:Number;
     public var maxDistSq_:Number;
     public var isHallucinating_:Boolean = false;
+    public var isPartyVision_:Boolean = false;
+    public var isXMasVision_:Boolean = false;
     public var wToS_:Matrix3D;
     public var wToV_:Matrix3D;
     public var vToS_:Matrix3D;
@@ -60,7 +62,7 @@ public class Camera {
         this.f_.z = -1;
     }
 
-    public function configureCamera(_arg1:GameObject, _arg2:Boolean):void {
+    public function configureCamera(gameObject:GameObject, isHallucinating:Boolean, isPartyVision:Boolean, isXMasVision:Boolean):void {
         var _local3:Rectangle = ((Parameters.data_.centerOnPlayer) ? CENTER_SCREEN_RECT : OFFSET_SCREEN_RECT);
         if (Parameters.screenShotMode_) {
             if (!Parameters.screenShotSlimMode_) {
@@ -71,8 +73,10 @@ public class Camera {
             }
         }
         var _local4:Number = Parameters.data_.cameraAngle;
-        this.configure(_arg1.x_, _arg1.y_, 12, _local4, _local3);
-        this.isHallucinating_ = _arg2;
+        this.configure(gameObject.x_, gameObject.y_, 12, _local4, _local3);
+        this.isHallucinating_ = isHallucinating;
+        this.isPartyVision_ = isPartyVision;
+        this.isXMasVision_ = isXMasVision;
     }
 
     public function startJitter():void {
