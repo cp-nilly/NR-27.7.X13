@@ -4,10 +4,6 @@ import com.company.assembleegameclient.editor.CommandMenu;
 import com.company.assembleegameclient.editor.CommandMenuItem;
 import com.company.util.KeyCodes;
 
-import kabam.rotmg.application.DynamicSettings;
-import kabam.rotmg.core.StaticInjectorContext;
-import kabam.rotmg.core.model.PlayerModel;
-
 public class MECommandMenu extends CommandMenu {
 
     public static const NONE_COMMAND:int = 0;
@@ -22,12 +18,9 @@ public class MECommandMenu extends CommandMenu {
     public static const DROP_COMMAND:int = 9;
 
     public function MECommandMenu() {
-        var _local1:PlayerModel = StaticInjectorContext.getInjector().getInstance(PlayerModel);
         addCommandMenuItem("(D)raw", KeyCodes.D, this.select, DRAW_COMMAND);
         addCommandMenuItem("(E)rase", KeyCodes.E, this.select, ERASE_COMMAND);
-        if (((!((_local1 == null))) && (_local1.isAdmin()))) {
-            addCommandMenuItem("S(A)mple", KeyCodes.A, this.select, SAMPLE_COMMAND);
-        }
+        addCommandMenuItem("S(A)mple", KeyCodes.A, this.select, SAMPLE_COMMAND);
         addCommandMenuItem("(P)ick Up", KeyCodes.P, this.select, PICK_UP_COMMAND);
         addCommandMenuItem("Drop", -1, this.select, DROP_COMMAND);
         addCommandMenuItem("(U)ndo", KeyCodes.U, this.onUndo, NONE_COMMAND);
@@ -39,12 +32,7 @@ public class MECommandMenu extends CommandMenu {
         addCommandMenuItem("(L)oad", KeyCodes.L, this.onLoad, NONE_COMMAND);
         addCommandMenuItem("(S)ave", KeyCodes.S, this.onSave, NONE_COMMAND);
         addCommandMenuItem("(T)est", KeyCodes.T, this.onTest, NONE_COMMAND);
-        if (((_local1.isAdmin()) || (((DynamicSettings.settingExists("UGDOpenSubmission")) && ((DynamicSettings.getSettingValue("UGDOpenSubmission") == 1)))))) {
-            addCommandMenuItem("Submit", -1, this.onSubmit, NONE_COMMAND);
-        }
-        else {
-            addBreak();
-        }
+        addCommandMenuItem("(Q)uit", KeyCodes.Q, this.onQuit, NONE_COMMAND);
     }
 
     private function select(_arg1:CommandMenuItem):void {
@@ -72,12 +60,12 @@ public class MECommandMenu extends CommandMenu {
         dispatchEvent(new CommandEvent(CommandEvent.SAVE_COMMAND_EVENT));
     }
 
-    private function onSubmit(_arg1:CommandMenuItem):void {
-        dispatchEvent(new CommandEvent(CommandEvent.SUBMIT_COMMAND_EVENT));
-    }
-
     private function onTest(_arg1:CommandMenuItem):void {
         dispatchEvent(new CommandEvent(CommandEvent.TEST_COMMAND_EVENT));
+    }
+
+    private function onQuit(_arg1:CommandMenuItem):void {
+        dispatchEvent(new CommandEvent(CommandEvent.QUIT_COMMAND_EVENT));
     }
 
 

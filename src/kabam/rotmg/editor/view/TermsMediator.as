@@ -17,7 +17,7 @@ public class TermsMediator extends Mediator {
 
     private function onResponse(_arg_1:Boolean):void {
         if (_arg_1) {
-            this.setScreen.dispatch(new TextureView());
+            this.setScreen.dispatch(new SpriteView());
         }
     }
 

@@ -6,13 +6,13 @@ public class ScreenTypes {
     public static const LEGENDS:String = "Screens.legends";
     public static const CREDITS:String = "Screens.credits";
     public static const ACCOUNT:String = "Screens.account";
-    public static const EDITOR:String = "Screens.editor";
+    public static const EDITOR:String = "map";
     public static const QUIT:String = "Screens.quit";
     public static const BACK:String = "Screens.back";
     public static const LANGUAGES:String = "Screens.languages";
     public static const SUPPORT:String = "Screens.support";
     public static const TRANSFER_ACCOUNT:String = "Screens.migrate";
-    public static const TEXTURE_EDITOR:String = "texture";
+    public static const TEXTURE_EDITOR:String = "sprite";
 
 
 }

@@ -33,10 +33,10 @@ import kabam.rotmg.ui.view.components.ScreenBase;
 
 import org.osflash.signals.Signal;
 
-public class TextureView extends Sprite {
+public class SpriteView extends Sprite {
 
     private static const MODE_DROPDOWN_X:int = 240;
-    private static const MODE_DROPDOWN_Y:int = 32;
+    private static const MODE_DROPDOWN_Y:int = 52;
 
     public const loadDialog:Signal = new Signal();
     public const saveDialog:Signal = new Signal(TextureData);
@@ -49,24 +49,21 @@ public class TextureView extends Sprite {
     private var sizeDropDown_:SizeDropDown;
     private var pixelDrawer_:PixelDrawer;
     private var preview_:Preview;
-    private var loadDialog_:LoadTextureDialog;
     private var name_:String = "";
     private var type_:int = 0;
     private var tags_:String = "";
     private var tempEvent_:PixelEvent = null;
 
-    public function TextureView() {
+    public function SpriteView() {
         addChild(new ScreenBase());
         addChild(new AccountScreen());
         this.commandMenu_ = new TMCommandMenu();
         this.commandMenu_.x = 15;
-        this.commandMenu_.y = 40;
+        this.commandMenu_.y = 100;
         this.commandMenu_.addEventListener(CommandEvent.UNDO_COMMAND_EVENT, this.onUndo);
         this.commandMenu_.addEventListener(CommandEvent.REDO_COMMAND_EVENT, this.onRedo);
         this.commandMenu_.addEventListener(CommandEvent.CLEAR_COMMAND_EVENT, this.onClear);
-        this.commandMenu_.addEventListener(CommandEvent.LOAD_COMMAND_EVENT, this.onLoad);
         this.commandMenu_.addEventListener(CommandEvent.SAVE_COMMAND_EVENT, this.onSave);
-        this.commandMenu_.addEventListener(CommandEvent.EXPORT_COMMAND_EVENT, this.onExport);
         this.commandMenu_.addEventListener(CommandEvent.QUIT_COMMAND_EVENT, this.onQuit);
         addChild(this.commandMenu_);
         this.commandQueue_ = new CommandQueue();
@@ -267,31 +264,7 @@ public class TextureView extends Sprite {
         this.pixelDrawer_.clear();
     }
 
-    private function onLoad(_arg_1:CommandEvent):void {
-        this.loadDialog.dispatch();
-    }
-
     private function onSave(_arg_1:CommandEvent):void {
-        var _local_2:TextureData = new TextureData();
-        _local_2.name = this.name_;
-        _local_2.type = this.type_;
-        _local_2.tags = this.tags_;
-        _local_2.bitmapData = this.pixelDrawer_.getBitmapData();
-        switch (this.modeDropDown_.getValue()) {
-            case ModeDropDown.OBJECTS:
-                _local_2.types = new <int>[PictureType.INVALID, PictureType.CHARACTER, PictureType.ITEM, PictureType.ENVIRONMENT, PictureType.PROJECTILE, PictureType.INTERFACE, PictureType.MISCELLANEOUS];
-                break;
-            case ModeDropDown.CHARACTERS:
-                _local_2.types = new <int>[PictureType.CHARACTER];
-                break;
-            case ModeDropDown.TEXTILES:
-                _local_2.types = new <int>[PictureType.TEXTILE];
-                break;
-        }
-        this.saveDialog.dispatch(_local_2);
-    }
-
-    private function onExport(_arg_1:CommandEvent):void {
         var _local_2:TextureData = new TextureData();
         _local_2.name = this.name_;
         _local_2.bitmapData = this.pixelDrawer_.getBitmapData();

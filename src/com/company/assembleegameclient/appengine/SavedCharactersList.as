@@ -43,7 +43,6 @@ public class SavedCharactersList extends Event {
     public var nameChosen_:Boolean;
     public var converted_:Boolean;
     public var isAdmin_:Boolean;
-    public var canMapEdit_:Boolean;
     public var news_:Vector.<SavedNewsItem>;
     public var myPos_:LatLong;
     public var salesForceData_:String = "unavailable";
@@ -53,6 +52,8 @@ public class SavedCharactersList extends Event {
     public var rank_:int;
     public var menuMusic_:String;
     public var deadMusic_:String;
+    public var mapMinRank:int;
+    public var spriteMinRank:int;
     private var account:Account;
 
     public function SavedCharactersList(_arg1:String) {
@@ -99,27 +100,28 @@ public class SavedCharactersList extends Event {
         return (null);
     }
 
-    private function parseUserData(_arg1:XML):void {
-        this.accountId_ = _arg1.AccountId;
-        this.name_ = _arg1.Name;
-        this.nameChosen_ = _arg1.hasOwnProperty("NameChosen");
-        this.converted_ = _arg1.hasOwnProperty("Converted");
-        this.isAdmin_ = _arg1.hasOwnProperty("Admin");
-        this.rank_ = int(_arg1.Rank);
+    private function parseUserData(xml:XML):void {
+        this.accountId_ = xml.AccountId;
+        this.name_ = xml.Name;
+        this.nameChosen_ = xml.hasOwnProperty("NameChosen");
+        this.converted_ = xml.hasOwnProperty("Converted");
+        this.isAdmin_ = xml.hasOwnProperty("Admin");
+        this.rank_ = int(xml.Rank);
         Player.isAdmin = this.isAdmin_;
         Player.rank = this.rank_;
-        Player.isMod = _arg1.hasOwnProperty("Mod");
-        this.canMapEdit_ = _arg1.hasOwnProperty("MapEditor");
-        this.totalFame_ = int(_arg1.Stats.TotalFame);
-        this.fame_ = int(_arg1.Stats.Fame);
-        this.credits_ = int(_arg1.Credits);
-        this.tokens_ = int(_arg1.FortuneToken);
-        this.nextCharSlotPrice_ = int(_arg1.NextCharSlotPrice);
-        this.charSlotCurrency_ = int(_arg1.CharSlotCurrency);
-        this.isAgeVerified = ((!((this.accountId_ == ""))) && ((_arg1.IsAgeVerified == 1)));
+        Player.isMod = xml.hasOwnProperty("Mod");
+        this.totalFame_ = int(xml.Stats.TotalFame);
+        this.fame_ = int(xml.Stats.Fame);
+        this.credits_ = int(xml.Credits);
+        this.tokens_ = int(xml.FortuneToken);
+        this.nextCharSlotPrice_ = int(xml.NextCharSlotPrice);
+        this.charSlotCurrency_ = int(xml.CharSlotCurrency);
+        this.isAgeVerified = ((!((this.accountId_ == ""))) && ((xml.IsAgeVerified == 1)));
         this.hasPlayerDied = true;
-        this.menuMusic_ = _arg1.MenuMusic;
-        this.deadMusic_ = _arg1.DeadMusic;
+        this.menuMusic_ = xml.MenuMusic;
+        this.deadMusic_ = xml.DeadMusic;
+        this.mapMinRank = xml.MapMinRank;
+        this.spriteMinRank = xml.SpriteMinRank;
     }
 
     private function parseBeginnersPackageData(_arg1:XML):void {

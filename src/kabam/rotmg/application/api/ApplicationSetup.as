@@ -1,6 +1,10 @@
 ﻿package kabam.rotmg.application.api {
 public interface ApplicationSetup extends DebugSetup {
 
+    function getSupportLink():String;
+
+    function getCopyrightLabel():String;
+
     function getBuildLabel():String;
 
     function getAppEngineUrl(_arg1:Boolean = false):String;
